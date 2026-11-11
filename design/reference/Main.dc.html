@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vantage — arena page, desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+body{margin:0;background:#0A0D12;color:#F3F5F8;font-family:Inter,system-ui,sans-serif}
+a{color:#38E1FF}a:hover{color:#8BEDFF}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid #38E1FF;outline-offset:2px}
+.chip{clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.ctl{width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:#F3F5F8;display:inline-flex;align-items:center;justify-content:center}
+.ctl:hover{background:rgba(255,255,255,.08)}
+.marker{position:absolute;top:50%;transform:translate(-50%,-50%)}
+</style>
+</helmet>
+
+<div style="max-width: 1440px; margin: 0 auto; box-sizing: border-box; padding: 0 48px 56px; display: flex; flex-direction: column; gap: 40px">
+
+  <!-- top bar -->
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 72px; border-bottom: 1px solid rgba(255,255,255,.10)">
+    <div style="display: flex; align-items: center; gap: 14px">
+      <div class="chip" style="background: #38E1FF; color: #0A0D12; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: .14em; padding: 8px 18px">VANTAGE</div>
+      <span style="color: #9AA3B2; font-size: 13px">a Video.js v10 skin for watching play</span>
+    </div>
+    <nav style="display: flex; gap: 28px; font-size: 14px; font-weight: 500">
+      <a href="#details" style="text-decoration: none; color: #F3F5F8">Details</a>
+      <a href="#recap" style="text-decoration: none; color: #F3F5F8">Recap</a>
+      <a href="https://github.com" style="text-decoration: none; color: #F3F5F8">GitHub</a>
+    </nav>
+  </header>
+
+  <!-- hero: stage 70 / angles 30 -->
+  <section aria-label="Player" style="display: flex; gap: 20px; align-items: stretch; flex-wrap: wrap">
+
+    <!-- STAGE -->
+    <div style="flex: 7 1 640px; min-width: 0; display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid rgba(255,255,255,.10)">
+      <div style="position: relative; aspect-ratio: 16 / 9; background: radial-gradient(120% 90% at 30% 20%, #1E2A3A 0%, #0D1219 55%, #05070A 100%); background-size: 100% 100%">
+        <!-- faux footage texture -->
+        <div aria-hidden="true" style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 64px 64px"></div>
+        <div aria-hidden="true" style="position: absolute; left: 44%; top: 38%; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(56,225,255,.22), transparent 62%)"></div>
+
+        <!-- scoreboard strip -->
+        <div style="position: absolute; top: 16px; left: 16px; display: flex; align-items: center; gap: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .06em">
+          <div class="chip" style="background: rgba(18,22,29,.86); padding: 8px 16px 8px 14px; border-top: 2px solid #38E1FF">RND 07</div>
+          <div class="chip" style="background: rgba(18,22,29,.86); padding: 8px 16px; margin-left: -4px; font-family: 'JetBrains Mono', monospace">03:24</div>
+          <div class="chip" style="background: rgba(18,22,29,.86); padding: 8px 16px; margin-left: -4px"><span style="color: #38E1FF">AZURE</span> 11 · 9 <span style="color: #FFB020">EMBER</span></div>
+        </div>
+
+        <!-- current angle + sync -->
+        <div style="position: absolute; top: 16px; right: 16px; display: flex; align-items: center; gap: 10px">
+          <div class="chip" style="background: #38E1FF; color: #0A0D12; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .12em; padding: 7px 14px">ANGLE 1 · PLAYER POV</div>
+          <div style="display: flex; align-items: center; gap: 6px; background: rgba(18,22,29,.86); border-radius: 999px; padding: 6px 10px; font-size: 11px; font-weight: 600; letter-spacing: .08em; color: #9AA3B2"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #5CF2A0; display: inline-block"></span>SYNC</div>
+        </div>
+
+        <!-- event toast -->
+        <div style="position: absolute; left: 50%; bottom: 112px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; background: rgba(18,22,29,.9); border-left: 3px solid #FFB020; padding: 8px 14px 8px 12px; font-size: 13px; font-weight: 500; border-radius: 6px">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14"><path d="M7 1l6 6-6 6-6-6z" fill="#FFB020"/></svg>
+          Elimination · Player 1 → Ember 3 <span style="color: #9AA3B2; font-family: 'JetBrains Mono', monospace">12:04</span>
+        </div>
+
+        <!-- control band -->
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 16px 12px; background: linear-gradient(to top, rgba(10,13,18,.96) 0%, rgba(10,13,18,.82) 70%, rgba(10,13,18,0) 100%); display: flex; flex-direction: column; gap: 8px">
+          <!-- event timeline -->
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">12:04</span>
+            <div role="presentation" style="position: relative; flex: 1 1 auto; height: 24px; display: flex; align-items: center">
+              <div style="position: absolute; left: 0; right: 0; height: 4px; border-radius: 2px; background: rgba(255,255,255,.18)"></div>
+              <div style="position: absolute; left: 0; width: 61%; height: 4px; border-radius: 2px; background: rgba(56,225,255,.35)"></div>
+              <div style="position: absolute; left: 0; width: 49%; height: 4px; border-radius: 2px; background: #38E1FF"></div>
+              <div class="marker" style="left: 13%"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M6 0l6 6-6 6-6-6z" fill="#FFB020"/></svg></div>
+              <div class="marker" style="left: 22%"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M6 0l6 6-6 6-6-6z" fill="#FFB020"/></svg></div>
+              <div class="marker" style="left: 31%"><div style="width: 9px; height: 9px; background: #38E1FF; border-radius: 2px"></div></div>
+              <div class="marker" style="left: 40%"><div style="width: 2px; height: 16px; background: #FF4D5E"></div></div>
+              <div class="marker" style="left: 49%"><div style="width: 16px; height: 16px; border-radius: 50%; background: #F3F5F8; box-shadow: 0 0 0 3px rgba(56,225,255,.45)"></div></div>
+              <div class="marker" style="left: 58%"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M6 0l6 6-6 6-6-6z" fill="#FFB020"/></svg></div>
+              <div class="marker" style="left: 71%"><div style="width: 9px; height: 9px; background: #38E1FF; border-radius: 2px"></div></div>
+              <div class="marker" style="left: 80%"><div style="width: 2px; height: 16px; background: #FF4D5E"></div></div>
+              <div class="marker" style="left: 90%"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M6 0l6 6-6 6-6-6z" fill="#FFB020"/></svg></div>
+            </div>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: #9AA3B2; font-variant-numeric: tabular-nums">24:37</span>
+          </div>
+          <!-- buttons -->
+          <div style="display: flex; align-items: center; gap: 4px">
+            <button class="ctl" aria-label="Pause"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="4" height="14"/><rect x="12" y="3" width="4" height="14"/></svg></button>
+            <button class="ctl" aria-label="Previous highlight"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4l-8 6 8 6"/><path d="M5 4v12"/></svg></button>
+            <button class="ctl" aria-label="Next highlight"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l8 6-8 6"/><path d="M15 4v12"/></svg></button>
+            <button class="ctl" aria-label="Mute" style="width: auto; padding: 0 10px; gap: 8px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h3l4-3v10l-4-3H3z"/><path d="M13 7a4 4 0 010 6"/></svg><span aria-hidden="true" style="width: 72px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #F3F5F8 70%, rgba(255,255,255,.2) 70%); display: inline-block"></span></button>
+            <div style="flex: 1 1 auto"></div>
+            <div style="display: flex; gap: 6px; margin-right: 8px; font-size: 11px; color: #9AA3B2; font-weight: 600; letter-spacing: .08em">
+              <span style="border: 1px solid rgba(255,255,255,.18); border-radius: 4px; padding: 2px 6px; font-family: 'JetBrains Mono', monospace">1–3</span><span style="align-self: center">angles</span>
+              <span style="border: 1px solid rgba(255,255,255,.18); border-radius: 4px; padding: 2px 6px; font-family: 'JetBrains Mono', monospace; margin-left: 8px">N</span><span style="align-self: center">next highlight</span>
+            </div>
+            <button class="ctl" aria-label="Captions"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M8 9.5a1.5 1.5 0 10 0 1M14 9.5a1.5 1.5 0 10 0 1"/></svg></button>
+            <button class="ctl" aria-label="Settings"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="3"/><path d="M10 2v3M10 15v3M2 10h3M15 10h3M4.3 4.3l2.2 2.2M13.5 13.5l2.2 2.2M4.3 15.7l2.2-2.2M13.5 6.5l2.2-2.2"/></svg></button>
+            <button class="ctl" aria-label="Picture in picture"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="16" height="12" rx="2"/><rect x="10" y="9" width="6" height="5" fill="currentColor" stroke="none"/></svg></button>
+            <button class="ctl" aria-label="Fullscreen"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8V3h5M12 3h5v5M17 12v5h-5M8 17H3v-5"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANGLES column -->
+    <div style="flex: 3 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+      <button aria-label="Switch to angle 2, Player 2 point of view" style="position: relative; aspect-ratio: 16 / 9; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; overflow: hidden; background: radial-gradient(110% 80% at 70% 30%, #2A1F3A 0%, #0F1219 60%, #06080B 100%); padding: 0; text-align: left; color: #F3F5F8">
+        <span class="chip" style="position: absolute; top: 10px; left: 10px; background: rgba(18,22,29,.9); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .12em; padding: 6px 12px"><span style="color: #9AA3B2; margin-right: 6px">2</span>PLAYER 2 POV</span>
+        <span style="position: absolute; right: 10px; top: 10px; display: inline-flex; align-items: center; gap: 6px; background: rgba(18,22,29,.9); border-radius: 999px; padding: 5px 9px; font-size: 10px; font-weight: 600; letter-spacing: .08em; color: #9AA3B2"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5CF2A0; display: inline-block"></span>MUTED</span>
+        <span style="position: absolute; left: 10px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9AA3B2">12:04</span>
+      </button>
+      <button aria-label="Switch to angle 3, map overview" style="position: relative; aspect-ratio: 16 / 9; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; overflow: hidden; background: #0C1016; padding: 0; text-align: left; color: #F3F5F8">
+        <span aria-hidden="true" style="position: absolute; inset: 0; background-image: linear-gradient(rgba(56,225,255,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(56,225,255,.10) 1px, transparent 1px); background-size: 28px 28px"></span>
+        <span aria-hidden="true" style="position: absolute; left: 38%; top: 44%; width: 10px; height: 10px; border-radius: 50%; background: #38E1FF; box-shadow: 0 0 0 4px rgba(56,225,255,.25)"></span>
+        <span aria-hidden="true" style="position: absolute; left: 62%; top: 30%; width: 10px; height: 10px; border-radius: 50%; background: #FFB020"></span>
+        <span aria-hidden="true" style="position: absolute; left: 70%; top: 62%; width: 10px; height: 10px; border-radius: 50%; background: #FFB020"></span>
+        <span class="chip" style="position: absolute; top: 10px; left: 10px; background: rgba(18,22,29,.9); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .12em; padding: 6px 12px"><span style="color: #9AA3B2; margin-right: 6px">3</span>MAP OVERVIEW</span>
+        <span style="position: absolute; left: 10px; bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9AA3B2">12:04</span>
+      </button>
+      <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #9AA3B2; padding: 0 2px">
+        <span>Click a tile to swap it onto the stage</span>
+        <button style="background: transparent; border: 1px solid rgba(255,255,255,.18); color: #F3F5F8; border-radius: 6px; padding: 8px 12px; font-size: 12px; font-weight: 600">Layout: 70 / 30</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- recap -->
+  <section id="recap" aria-label="Match recap" style="display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: baseline; gap: 14px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Match recap</h2>
+      <span style="font-size: 13px; color: #9AA3B2">every event is a seek — click to jump</span>
+    </div>
+    <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px">
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #FFB020; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">03:12</span>Elimination · P1</button>
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #FFB020; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">05:30</span>Elimination · P2</button>
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #38E1FF; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">07:40</span>Objective captured</button>
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #FF4D5E; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">09:50</span>Round 8 starts</button>
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #FFB020; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">12:04</span>Elimination · P1</button>
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #FFB020; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">14:20</span>Clutch · 1v3</button>
+      <button style="display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; background: #12161D; border: 1px solid rgba(255,255,255,.10); border-left: 3px solid #38E1FF; color: #F3F5F8; border-radius: 8px; padding: 10px 14px; font-size: 13px"><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">17:35</span>Objective captured</button>
+    </div>
+  </section>
+
+  <!-- why -->
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.10)">
+    <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 24px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; line-height: 1.15">Players don't watch a film. They watch a match.</h2>
+    </div>
+    <p style="margin: 0; padding-top: 28px; color: #C5CBD6; font-size: 15px; line-height: 1.6">Every video player is designed for a story that goes one way. Gameplay has angles, rounds and moments you want to jump between. Vantage is a Video.js v10 skin built for that.</p>
+    <p style="margin: 0; padding-top: 28px; color: #C5CBD6; font-size: 15px; line-height: 1.6">One stage, two synced angles you can swap with a click or the keys 1–3, and a timeline where every elimination, objective and round is a marker you can seek to. Everything works by keyboard, touch and mouse.</p>
+  </section>
+
+  <!-- details -->
+  <section id="details" aria-label="Details" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#38E1FF" stroke-width="2"><rect x="3" y="6" width="22" height="16" rx="2"/><path d="M3 11h22"/></svg>
+      <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600">Angles are real controls</h3>
+      <p style="margin: 0; color: #9AA3B2; font-size: 14px; line-height: 1.55">The angle chips swap the source on the stage and seek to the same timestamp. Tiles stay muted and resync every 2 seconds.</p>
+    </div>
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FFB020" stroke-width="2"><path d="M3 14h22"/><path d="M14 8l6 6-6 6-6-6z"/></svg>
+      <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600">A timeline of moments</h3>
+      <p style="margin: 0; color: #9AA3B2; font-size: 14px; line-height: 1.55">Eliminations, objectives and rounds come from a WebVTT chapter file. N jumps to the next highlight; markers have tooltips and are keyboard-reachable.</p>
+    </div>
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#F3F5F8" stroke-width="2"><rect x="4" y="8" width="20" height="12" rx="3"/><path d="M9 14h2M13 14h2M17 14h2"/></svg>
+      <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600">Keyboard like a spectator client</h3>
+      <p style="margin: 0; color: #9AA3B2; font-size: 14px; line-height: 1.55">1–3 angles, N next highlight, Space, M, F, arrows. Focus is always visible and the band never hides while something inside it has focus.</p>
+    </div>
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#38E1FF" stroke-width="2"><circle cx="14" cy="14" r="9"/><path d="M14 9v5l3 3"/></svg>
+      <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600">Readable over anything</h3>
+      <p style="margin: 0; color: #9AA3B2; font-size: 14px; line-height: 1.55">Controls sit on a gradient scrim, never on raw footage. Tested over a snow map and a night map: 4.5:1 or better everywhere.</p>
+    </div>
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#FFB020" stroke-width="2"><rect x="5" y="3" width="18" height="22" rx="3"/><path d="M11 21h6"/></svg>
+      <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600">Phone first</h3>
+      <p style="margin: 0; color: #9AA3B2; font-size: 14px; line-height: 1.55">On a phone the angles become a chip row under the stage and tap targets grow to 48 px. Swipe the recap to jump between moments.</p>
+    </div>
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#F3F5F8" stroke-width="2"><path d="M5 14h18"/><path d="M14 5v18"/></svg>
+      <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600">Calm on request</h3>
+      <p style="margin: 0; color: #9AA3B2; font-size: 14px; line-height: 1.55">Under reduced motion the event toast and sync pulse go still and swaps cut instead of fade. Under forced colours the markers keep their shapes.</p>
+    </div>
+  </section>
+
+  <footer style="display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.10); font-size: 13px; color: #9AA3B2; flex-wrap: wrap; gap: 12px">
+    <span>Built on Video.js v10 · Footage: [YOUR OWN RECORDED GAMEPLAY, NO LOGOS] · Video hosted on Mux · Made in Beirut</span>
+    <span>Apache 2.0</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#38E1FF","options":["#38E1FF","#5CF2A0","#FFB020","#FF6AD5"]},"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#38E1FF' };
+  }
+}
+</script>
+</body>
+</html>

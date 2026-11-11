@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vantage — controls, states and tokens</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+button{font-family:inherit}
+.ctl{width:44px;height:44px;border:0;border-radius:8px;color:#F3F5F8;display:inline-flex;align-items:center;justify-content:center;background:transparent}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.12em;color:#9AA3B2}
+</style>
+</helmet>
+<div style="width: 1200px; height: 736px; box-sizing: border-box; background: #0A0D12; color: #F3F5F8; padding: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px">
+
+  <!-- tokens -->
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <span class="lbl">COLOUR</span>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 8px; background: #0A0D12; border: 1px solid rgba(255,255,255,.2)"></span><span style="font-size: 13px">Ground <span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">#0A0D12</span></span></div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 8px; background: #12161D"></span><span style="font-size: 13px">Surface <span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">#12161D</span></span></div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 8px; background: #38E1FF"></span><span style="font-size: 13px">Signal (accent, progress, focus) <span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">#38E1FF</span></span></div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 8px; background: #FFB020"></span><span style="font-size: 13px">Highlight events <span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">#FFB020</span></span></div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 8px; background: #FF4D5E"></span><span style="font-size: 13px">Round boundaries <span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">#FF4D5E</span></span></div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 8px; background: #5CF2A0"></span><span style="font-size: 13px">Sync OK <span style="font-family: 'JetBrains Mono', monospace; color: #9AA3B2">#5CF2A0</span></span></div>
+    </div>
+    <span class="lbl" style="margin-top: 8px">TYPE</span>
+    <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: .1em">SPACE GROTESK</div>
+    <div style="font-size: 15px">Inter — interface and body text</div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 15px">12:04 / 24:37 — clocks, tabular</div>
+  </div>
+
+  <!-- markers + buttons -->
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <span class="lbl">TIMELINE MARKERS · SHAPE + COLOUR</span>
+    <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px">
+      <div style="display: flex; align-items: center; gap: 12px"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 12 12"><path d="M6 0l6 6-6 6-6-6z" fill="#FFB020"/></svg>Elimination / clutch</div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 10px; height: 10px; background: #38E1FF; border-radius: 2px; margin: 0 2px"></span>Objective</div>
+      <div style="display: flex; align-items: center; gap: 12px"><span style="width: 2px; height: 16px; background: #FF4D5E; margin: 0 6px"></span>Round start</div>
+    </div>
+    <span class="lbl" style="margin-top: 8px">BUTTON STATES</span>
+    <div style="display: flex; gap: 16px; align-items: flex-end">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button class="ctl" aria-label="Play, rest"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3l12 7-12 7z"/></svg></button><span style="font-size: 11px; color: #9AA3B2">Rest</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button class="ctl" aria-label="Play, hover" style="background: rgba(255,255,255,.08)"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3l12 7-12 7z"/></svg></button><span style="font-size: 11px; color: #9AA3B2">Hover</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button class="ctl" aria-label="Play, focus" style="outline: 2px solid #38E1FF; outline-offset: 2px"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3l12 7-12 7z"/></svg></button><span style="font-size: 11px; color: #9AA3B2">Focus</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button class="ctl" aria-label="Play, active" style="background: rgba(56,225,255,.18); color: #38E1FF"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3l12 7-12 7z"/></svg></button><span style="font-size: 11px; color: #9AA3B2">Active</span></div>
+    </div>
+    <span class="lbl" style="margin-top: 8px">MARKER TOOLTIP</span>
+    <div style="align-self: flex-start; background: #F3F5F8; color: #0A0D12; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 8px 24px rgba(0,0,0,.4)">
+      <span style="font-size: 13px; font-weight: 600">Clutch · 1v3</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4A5260">14:20 · press Enter to jump</span>
+    </div>
+  </div>
+
+  <!-- menu + states -->
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <span class="lbl">SETTINGS MENU</span>
+    <div style="background: #12161D; border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 6px; width: 240px; display: flex; flex-direction: column">
+      <button style="height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; border: 0; color: #F3F5F8; border-radius: 6px; padding: 0 12px; font-size: 14px">Speed<span style="color: #9AA3B2">1×</span></button>
+      <button style="height: 44px; display: flex; align-items: center; justify-content: space-between; background: rgba(56,225,255,.12); border: 0; color: #F3F5F8; border-radius: 6px; padding: 0 12px; font-size: 14px">Layout<span style="color: #38E1FF">70 / 30</span></button>
+      <button style="height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; border: 0; color: #F3F5F8; border-radius: 6px; padding: 0 12px; font-size: 14px">Event toasts<span style="color: #9AA3B2">On</span></button>
+      <button style="height: 44px; display: flex; align-items: center; justify-content: space-between; background: transparent; border: 0; color: #F3F5F8; border-radius: 6px; padding: 0 12px; font-size: 14px">Captions<span style="color: #9AA3B2">English</span></button>
+    </div>
+    <span class="lbl" style="margin-top: 8px">STAGE STATES</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div style="height: 96px; border-radius: 10px; background: #05070A; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px"><span style="width: 56px; height: 56px; border-radius: 50%; background: #38E1FF; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 20 20" fill="#0A0D12"><path d="M6 3l11 7-11 7z"/></svg></span></div>
+      <div style="height: 96px; border-radius: 10px; background: #05070A; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#38E1FF" stroke-width="3"><path d="M14 3a11 11 0 0111 11" stroke-linecap="round"/></svg><span style="font-size: 11px; color: #9AA3B2">Buffering</span></div>
+      <div style="height: 96px; border-radius: 10px; background: #05070A; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #9AA3B2; text-align: center; padding: 0 10px">Switching to Angle 2…</div>
+      <div style="height: 96px; border-radius: 10px; background: #1A0D10; border: 1px solid #FF4D5E; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #FFB3BB; text-align: center; padding: 0 10px">Angle 3 unavailable · staying on Angle 1</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":736}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
