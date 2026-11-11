@@ -1,4 +1,10 @@
-import '../styles/video/scaffold.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/video/vantage.css';
 import './skin.css';
 import '@videojs/html/i18n';
 import '@videojs/html/ui/container';
@@ -12,21 +18,15 @@ import '@videojs/html/ui/dialog-close';
 import '@videojs/html/ui/controls';
 import '@videojs/html/ui/controls-backdrop';
 import '@videojs/html/ui/controls-group';
-import '@videojs/html/ui/buffering-indicator';
 import '@videojs/html/ui/controls-content';
+import '@videojs/html/ui/buffering-indicator';
 import '@videojs/html/ui/tooltip-group';
-import '@videojs/html/ui/title';
-import '@videojs/html/ui/airplay-button';
 import '@videojs/html/ui/tooltip';
 import '@videojs/html/ui/tooltip-label';
 import '@videojs/html/ui/tooltip-shortcut';
-import '@videojs/html/ui/cast-button';
-import '@videojs/html/ui/pip-button';
-import '@videojs/html/ui/fullscreen-button';
-import '@videojs/html/ui/seek-button';
 import '@videojs/html/ui/play-button';
+import '@videojs/html/ui/time';
 import '@videojs/html/ui/time-slider';
-import '@videojs/html/ui/time-slider-chapters';
 import '@videojs/html/ui/slider-track';
 import '@videojs/html/ui/slider-buffer';
 import '@videojs/html/ui/slider-fill';
@@ -34,85 +34,29 @@ import '@videojs/html/ui/slider-thumb';
 import '@videojs/html/ui/slider-preview';
 import '@videojs/html/ui/slider-thumbnail';
 import '@videojs/html/ui/slider-value';
-import '@videojs/html/ui/time-slider-chapter-title';
 import '@videojs/html/ui/mute-button';
-import '@videojs/html/ui/volume-popover';
 import '@videojs/html/ui/volume-slider';
-import '@videojs/html/ui/time-group';
-import '@videojs/html/ui/time';
-import '@videojs/html/ui/time-separator';
 import '@videojs/html/ui/captions-button';
 import '@videojs/html/ui/menu';
 import '@videojs/html/ui/menu-content';
 import '@videojs/html/ui/menu-item';
-import '@videojs/html/ui/menu-separator';
-import '@videojs/html/ui/quality-radio-group';
 import '@videojs/html/ui/menu-radio-item';
+import '@videojs/html/ui/menu-radio-group';
+import '@videojs/html/ui/menu-checkbox-item';
 import '@videojs/html/ui/menu-item-indicator';
-import '@videojs/html/ui/audio-track-radio-group';
 import '@videojs/html/ui/playback-rate-radio-group';
 import '@videojs/html/ui/captions-radio-group';
+import '@videojs/html/ui/popover';
+import '@videojs/html/ui/pip-button';
+import '@videojs/html/ui/fullscreen-button';
 import '@videojs/html/ui/hotkey';
 import '@videojs/html/ui/gesture';
 import '@videojs/html/ui/status-announcer';
-import '@videojs/html/ui/volume-indicator';
-import '@videojs/html/ui/volume-indicator-fill';
-import '@videojs/html/ui/volume-indicator-value';
-import '@videojs/html/ui/status-indicator';
-import '@videojs/html/ui/status-indicator-value';
-import '@videojs/html/ui/seek-indicator';
-import '@videojs/html/ui/seek-indicator-value';
 import { registerIcons } from '@videojs/html/icons';
-import {
-  airPlayEnterIcon as airPlayEnterIconScaffold,
-  airPlayExitIcon as airPlayExitIconScaffold,
-  captionsOffIcon as captionsOffIconScaffold,
-  captionsOnIcon as captionsOnIconScaffold,
-  castEnterIcon as castEnterIconScaffold,
-  castExitIcon as castExitIconScaffold,
-  checkIcon as checkIconScaffold,
-  chevronIcon as chevronIconScaffold,
-  fullscreenEnterIcon as fullscreenEnterIconScaffold,
-  fullscreenExitIcon as fullscreenExitIconScaffold,
-  gearIcon as gearIconScaffold,
-  pauseIcon as pauseIconScaffold,
-  pipEnterIcon as pipEnterIconScaffold,
-  pipExitIcon as pipExitIconScaffold,
-  playIcon as playIconScaffold,
-  restartIcon as restartIconScaffold,
-  seekIcon as seekIconScaffold,
-  speechIcon as speechIconScaffold,
-  speedIcon as speedIconScaffold,
-  spinnerIcon as spinnerIconScaffold,
-  switchesIcon as switchesIconScaffold,
-  volumeHighIcon as volumeHighIconScaffold,
-  volumeLowIcon as volumeLowIconScaffold,
-  volumeOffIcon as volumeOffIconScaffold,
-} from '@videojs/html/icons/scaffold';
+import { vantageIcons } from './icons';
+import './vantage';
 
-registerIcons('scaffold', {
-  'airplay-enter': airPlayEnterIconScaffold,
-  'airplay-exit': airPlayExitIconScaffold,
-  'captions-off': captionsOffIconScaffold,
-  'captions-on': captionsOnIconScaffold,
-  'cast-enter': castEnterIconScaffold,
-  'cast-exit': castExitIconScaffold,
-  check: checkIconScaffold,
-  chevron: chevronIconScaffold,
-  'fullscreen-enter': fullscreenEnterIconScaffold,
-  'fullscreen-exit': fullscreenExitIconScaffold,
-  gear: gearIconScaffold,
-  pause: pauseIconScaffold,
-  'pip-enter': pipEnterIconScaffold,
-  'pip-exit': pipExitIconScaffold,
-  play: playIconScaffold,
-  restart: restartIconScaffold,
-  seek: seekIconScaffold,
-  speech: speechIconScaffold,
-  speed: speedIconScaffold,
-  spinner: spinnerIconScaffold,
-  switches: switchesIconScaffold,
-  'volume-high': volumeHighIconScaffold,
-  'volume-low': volumeLowIconScaffold,
-  'volume-off': volumeOffIconScaffold,
-});
+registerIcons('vantage', vantageIcons);
+
+export { formatTime, getEvents, nextHighlight, prevHighlight, setAngle, setLayout, setScoreboard, setStageState, setSync } from './vantage';
+export type { EventKind, MatchEvent, Scoreboard, Team } from './vantage';

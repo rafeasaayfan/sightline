@@ -17,7 +17,7 @@ export function createPlayer(): HTMLElement {
 
   player.innerHTML = skinTemplate.replace(
     MEDIA_PLACEHOLDER,
-    `<mux-video src="${SRC}" playsinline crossorigin><track kind="chapters" label="English" srclang="en" src="${CHAPTERS}" default></mux-video>`
+    `<mux-video src="${SRC}" playsinline crossorigin><track kind="chapters" label="English" srclang="en" src="${CHAPTERS}" default><track kind="metadata" label="events" src="./vantage-events.vtt"></mux-video>`
   );
 
   return player;

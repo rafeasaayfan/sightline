@@ -15,5 +15,5 @@
       "@preview/*": ["./apps/preview/src/*"]
     }
   },
-  "include": ["src", "apps"]
+  "include": ["src", "apps", "site/src"]
 }
