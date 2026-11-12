@@ -7,6 +7,7 @@
 //   site/public/storyboards/angleN.vtt   WebVTT cues pointing at each frame (#xywh), the format Video.js reads
 //   site/public/posters/angleN.jpg       a 640×360 poster at POSTER_AT seconds
 // and site/public/poster.jpg (the stage poster, 1280×720) from angle 1.
+// Sprite paths in the cues are relative to the page (Video.js loads them as written); the site serves from its root.
 // Angles hosted on Mux don't need these: Mux serves its own storyboard at image.mux.com/<id>/storyboard.vtt.
 
 import { execFileSync } from 'node:child_process';
@@ -48,7 +49,7 @@ for (const n of [1, 2, 3]) {
   for (let i = 0; i < frames; i++) {
     const x = (i % COLS) * W;
     const y = Math.floor(i / COLS) * H;
-    vtt += `\n${stamp(i * STEP)} --> ${stamp(Math.min(DURATION, (i + 1) * STEP))}\nangle${n}.jpg#xywh=${x},${y},${W},${H}\n`;
+    vtt += `\n${stamp(i * STEP)} --> ${stamp(Math.min(DURATION, (i + 1) * STEP))}\n./storyboards/angle${n}.jpg#xywh=${x},${y},${W},${H}\n`;
   }
   writeFileSync(site(`storyboards/angle${n}.vtt`), vtt);
   run(['-ss', String(POSTER_AT), '-i', src, '-frames:v', '1', '-vf', 'scale=640:360', '-q:v', '4', site(`posters/angle${n}.jpg`)]);
