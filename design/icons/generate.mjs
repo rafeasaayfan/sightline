@@ -59,6 +59,12 @@ const icons = {
   /** Instant replay: a turn back with a play mark inside. */
   replay: svg(line('M4.25 10a5.75 5.75 0 1 0 1.9-4.25') + solid('M4 3.5v3.75h3.75Z') + solid('M9 7.75v4.5L12.5 10Z')),
   chevron: svg(line('M7.75 5.25 12.5 10l-4.75 4.75', 2)),
+  /** Rotate (phones in fullscreen): a phone on its side under a quarter turn. */
+  rotate: svg(
+    line('M4.25 10h11.5a1.5 1.5 0 0 1 1.5 1.5v3.25a1.5 1.5 0 0 1-1.5 1.5H4.25a1.5 1.5 0 0 1-1.5-1.5V11.5A1.5 1.5 0 0 1 4.25 10Z', 1.5) +
+      line('M4.75 7A6 6 0 0 1 14.5 4.75') +
+      solid('M15.75 2.75v3.5h-3.5Z'),
+  ),
   keyboard: svg(line('M4 5h12a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 16 15H4a1.5 1.5 0 0 1-1.5-1.5v-7A1.5 1.5 0 0 1 4 5Z') + fill('M5.5 8h1.75v1.75H5.5ZM9.1 8h1.75v1.75H9.1ZM12.75 8h1.75v1.75h-1.75ZM7 11.5h6v1.5H7Z')),
   /** Centre play: a solid glyph drawn on its own 24px grid. */
   'play-large': svg(solid('M8.5 5.5v13L18.75 12Z'), 24),

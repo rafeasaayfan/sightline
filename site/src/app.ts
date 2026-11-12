@@ -187,6 +187,8 @@ export async function start(): Promise<void> {
       m.setAttribute('poster', angle.poster ?? './poster.jpg');
       m.setAttribute('aria-hidden', 'true');
       m.tabIndex = -1;
+      // Mux adds its storyboard track to every stream; a cross-origin track only loads on a CORS-enabled element.
+      if (usesMux(angle)) m.setAttribute('crossorigin', 'anonymous');
       m.src = srcOf(angle);
       applyCrop(m, angle);
       m.addEventListener('error', () => {

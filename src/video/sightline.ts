@@ -432,7 +432,205 @@ function attachMedia(state: State, media: HTMLMediaElement): void {
   media.addEventListener('seeking', () => {
     if (state.replay && Math.abs(media.currentTime - state.replay.from) > 0.3) endReplay(state);
   });
+  attachQuality(state, media);
   refresh();
+}
+
+/* --------------------------------------------------------------------------------------------- Quality (HLS) */
+
+/** The parts of an hls.js instance the skin reads. Video.js's HLS media expose it as `engine`. */
+interface HlsEngine {
+  levels: { width?: number; height?: number }[];
+  manualLevel: number;
+  nextLevel: number;
+  currentLevel: number;
+  on(event: string, listener: (event: string, data: any) => void): void;
+  off(event: string, listener: (event: string, data: any) => void): void;
+}
+
+const STANDARD_SIZES = [144, 240, 360, 480, 540, 720, 1080, 1440, 2160, 4320];
+
+/** A rendition's nominal size (1080 for 1920×1080), worked out the way Video.js labels its quality menu. */
+function renditionSize(level: { width?: number; height?: number } | undefined): number {
+  const w = level?.width ?? 0;
+  const h = level?.height ?? 0;
+  if (w && h && w > h && w * 9 > h * 16) {
+    const wide = Math.round((w * 9) / 16);
+    return STANDARD_SIZES.includes(wide) ? wide : h;
+  }
+  return w && h ? Math.min(w, h) : h || w;
+}
+
+const tierOf = (size: number) => (size >= 4320 ? '8K' : size >= 2160 ? '4K' : size >= 1080 ? 'HD' : '');
+const qualityName = (size: number) => `${size}p${tierOf(size) ? ` ${tierOf(size)}` : ''}`;
+
+/**
+ * Quality on HLS streams. A chosen quality loads behind the picture: the old one keeps playing (hls.js `nextLevel`)
+ * while a pill says the new one is loading, and the pill clears the moment the new quality is on screen. Parts of
+ * the video already buffered in another quality (watched before the change) are fetched again in the chosen one
+ * when playback returns to them, the same way: the old frames play until the new ones arrive. The gear wears an HD
+ * (or 4K) badge while such a rendition plays.
+ */
+function attachQuality(state: State, media: HTMLMediaElement): void {
+  const { root } = state;
+  const pill = root.querySelector<HTMLElement>('.sl-quality');
+  const pillText = root.querySelector<HTMLElement>('.sl-quality-text');
+  const badge = root.querySelector<HTMLElement>('.sl-hd');
+  const badgeLabel = root.querySelector<HTMLElement>('.sl-hd-label');
+  let engine: HlsEngine | undefined;
+  let pending = -1; // the level being loaded, or -1
+  let doneTimer = 0;
+  let giveUp = 0;
+
+  const showPill = (text: string, done: boolean) => {
+    if (!pill || !pillText) return;
+    window.clearTimeout(doneTimer);
+    pillText.textContent = text;
+    pill.toggleAttribute('data-done', done);
+    pill.hidden = false;
+    if (done) doneTimer = window.setTimeout(() => (pill.hidden = true), 1600);
+  };
+
+  const finish = (level: number) => {
+    window.clearTimeout(giveUp);
+    pending = -1;
+    showPill(`Now in ${qualityName(renditionSize(engine?.levels[level]))}`, true);
+  };
+
+  const clear = () => {
+    window.clearTimeout(giveUp);
+    window.clearTimeout(doneTimer);
+    pending = -1;
+    if (pill) pill.hidden = true;
+  };
+
+  const load = (level: number) => {
+    if (!engine?.levels[level]) return;
+    pending = level;
+    showPill(`Loading ${qualityName(renditionSize(engine.levels[level]))}`, false);
+    window.clearTimeout(giveUp);
+    giveUp = window.setTimeout(clear, 20000); // a stalled network shouldn't leave the pill up forever
+  };
+
+  const setBadge = (level: number) => {
+    const tier = tierOf(renditionSize(engine?.levels[level]));
+    if (badge) badge.hidden = !tier;
+    if (badgeLabel) badgeLabel.textContent = tier;
+    root.toggleAttribute('data-hd', !!tier);
+  };
+
+  const onSwitched = (_: string, data: { level: number }) => {
+    setBadge(data.level);
+    if (pending >= 0 && data.level === pending) finish(data.level);
+  };
+
+  // The fragment now on screen. If the viewer picked a quality and this part was buffered in another one, fetch it
+  // again in the chosen quality from the next fragment on; this fragment keeps playing meanwhile.
+  const onFragChanged = (_: string, data: { frag: { level: number; type?: string } }) => {
+    if (!engine || data.frag.type && data.frag.type !== 'main') return;
+    const chosen = engine.manualLevel;
+    if (chosen < 0 || !engine.levels[chosen] || data.frag.level === chosen || pending === chosen) return;
+    load(chosen);
+    engine.nextLevel = chosen;
+  };
+
+  // Paused: nothing plays to confirm the switch, so the new quality being buffered at the playhead is enough.
+  const onFragBuffered = (_: string, data: { frag: { level: number; start: number; duration: number; type?: string } }) => {
+    const f = data.frag;
+    if (pending < 0 || f.level !== pending || !media.paused || (f.type && f.type !== 'main')) return;
+    if (media.currentTime >= f.start - 0.5 && media.currentTime < f.start + f.duration + 0.5) finish(f.level);
+  };
+
+  // hls.js starts loading another level. A manual pick (the viewer chose it in the menu) gets the pill; Auto's own
+  // adaptive switches stay silent.
+  const onSwitching = (_: string, data: { level: number }) => {
+    if (!engine || engine.manualLevel < 0 || data.level !== engine.manualLevel) return;
+    if (data.level === engine.currentLevel) clear();
+    else if (pending !== data.level) load(data.level);
+  };
+
+  // The viewer picked a quality in the menu. Back to Auto clears the pill.
+  const onRenditionChange = () => {
+    queueMicrotask(() => {
+      bind();
+      if (engine && engine.manualLevel < 0) clear();
+    });
+  };
+  let renditions: EventTarget | undefined;
+
+  const bind = () => {
+    // Video.js may replace the renditions list with a new source; follow it.
+    const list = (media as HTMLMediaElement & { videoRenditions?: EventTarget }).videoRenditions;
+    if (list !== renditions) {
+      renditions?.removeEventListener('change', onRenditionChange);
+      renditions = list;
+      renditions?.addEventListener('change', onRenditionChange);
+    }
+    const next = (media as HTMLMediaElement & { engine?: HlsEngine }).engine;
+    if (next === engine || !next || typeof next.on !== 'function') return;
+    if (engine) {
+      engine.off('hlsLevelSwitching', onSwitching);
+      engine.off('hlsLevelSwitched', onSwitched);
+      engine.off('hlsFragChanged', onFragChanged);
+      engine.off('hlsFragBuffered', onFragBuffered);
+    }
+    engine = next;
+    engine.on('hlsLevelSwitching', onSwitching);
+    engine.on('hlsLevelSwitched', onSwitched);
+    engine.on('hlsFragChanged', onFragChanged);
+    engine.on('hlsFragBuffered', onFragBuffered);
+  };
+
+  // A new source (an angle swap) starts over.
+  media.addEventListener('loadstart', () => {
+    clear();
+    bind();
+  });
+  media.addEventListener('loadedmetadata', bind);
+  bind();
+}
+
+/* ------------------------------------------------------------------------------------------- Rotate (phones) */
+
+type OrientationLock = ScreenOrientation & { lock?: (o: string) => Promise<void> };
+
+/**
+ * On phones in fullscreen, a button turns the picture to landscape (and back) with the Screen Orientation API.
+ * Shown only where the browser can lock the orientation (Android Chrome and friends); iPhones play fullscreen in
+ * Safari's own player, where turning the phone does the same job.
+ */
+function setupRotate(root: HTMLElement): void {
+  const button = root.querySelector<HTMLButtonElement>('.sl-rotate');
+  const orientation = screen.orientation as OrientationLock | undefined;
+  if (!button || !orientation || typeof orientation.lock !== 'function') return;
+  const touch = matchMedia('(pointer: coarse)');
+
+  const inFullscreen = () => {
+    const el = document.fullscreenElement ?? (document as Document & { webkitFullscreenElement?: Element }).webkitFullscreenElement;
+    return !!el && (el === root || el.contains(root));
+  };
+  const landscape = () => orientation.type.startsWith('landscape');
+  const label = () => button.setAttribute('aria-label', landscape() ? 'Rotate to portrait' : 'Rotate to landscape');
+
+  const sync = () => {
+    const show = touch.matches && inFullscreen();
+    button.hidden = !show;
+    if (show) label();
+    else orientation.unlock?.();
+  };
+
+  button.addEventListener('click', () => {
+    orientation
+      .lock!(landscape() ? 'portrait' : 'landscape')
+      .then(label)
+      .catch(() => {
+        button.hidden = true; // this browser refuses to lock: leave rotation to the phone
+      });
+  });
+  orientation.addEventListener('change', label);
+  document.addEventListener('fullscreenchange', sync);
+  document.addEventListener('webkitfullscreenchange', sync);
+  sync();
 }
 
 function setup(root: HTMLElement): void {
@@ -447,6 +645,7 @@ function setup(root: HTMLElement): void {
     if (m) attachMedia(state, m);
   }).observe(root, { childList: true, subtree: true });
 
+  setupRotate(root);
   root.querySelector('.sl-prev')?.addEventListener('click', () => prevHighlight(root));
   root.querySelector('.sl-next')?.addEventListener('click', () => nextHighlight(root));
   root.querySelector('.sl-replay')?.addEventListener('click', () => instantReplay(root));

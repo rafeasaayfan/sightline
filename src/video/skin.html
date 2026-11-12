@@ -16,6 +16,7 @@
 </div>
 <div class="sl-state" role="status" hidden></div>
 <div class="sl-replay-badge" role="status" hidden></div>
+<div class="sl-quality" role="status" hidden><span class="sl-quality-ring" aria-hidden="true"></span><span class="sl-quality-text"></span><span class="sl-quality-bar" aria-hidden="true"></span></div>
 <div class="sl-cut" aria-hidden="true"></div>
 <ol class="sl-feed" aria-live="polite" aria-relevant="additions" aria-label="Kill feed"></ol>
 <media-buffering-indicator class="sl-buffering">
@@ -133,6 +134,7 @@
 <button type="button" commandfor="sl-settings-menu" class="sl-button sl-settings" id="sl-settings">
 <media-icon family="sightline" name="gear" class="sl-icon sl-icon-static"></media-icon>
 <media-text class="sl-visually-hidden" token="menu.settings">Settings</media-text>
+<span class="sl-hd" hidden><span class="sl-hd-label" aria-hidden="true">HD</span><span class="sl-visually-hidden">, playing in HD</span></span>
 </button>
 <media-tooltip trigger="sl-settings" side="top" class="media-popup sl-tooltip">
 <media-text token="menu.settings">Settings</media-text>
@@ -254,6 +256,9 @@
 <media-tooltip trigger="sl-multiview" side="top" class="media-popup sl-tooltip">
 <span>Multiview fullscreen</span><kbd class="sl-kbd">W</kbd>
 </media-tooltip>
+<button type="button" class="sl-button sl-rotate" id="sl-rotate" aria-label="Rotate to landscape" hidden>
+<media-icon family="sightline" name="rotate" class="sl-icon sl-icon-static"></media-icon>
+</button>
 <media-fullscreen-button class="sl-button sl-fullscreen" id="sl-fullscreen">
 <media-icon family="sightline" name="fullscreen-enter" class="sl-icon sl-fullscreen-enter-icon"></media-icon>
 <media-icon family="sightline" name="fullscreen-exit" class="sl-icon sl-fullscreen-exit-icon"></media-icon>
