@@ -13,8 +13,18 @@ startTerrain();
 
 const load = () => import('./app').then(({ start }) => start());
 
-if (document.readyState === 'complete') requestAnimationFrame(() => void load());
-else window.addEventListener('load', () => requestAnimationFrame(() => void load()), { once: true });
+// The player starts after the poster (the largest paint) is decoded and on screen: after the load event, the
+// poster's decode, and a frame that painted it. A fast connection fires `load` before the first paint, and parsing
+// the player stack there would hold the poster back on a slow phone.
+const painted = () => new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
+const posterReady = () => {
+  const poster = document.querySelector<HTMLImageElement>('.stage-poster');
+  return poster ? poster.decode().catch(() => undefined) : Promise.resolve();
+};
+const boot = () => void posterReady().then(painted).then(painted).then(load);
+
+if (document.readyState === 'complete') boot();
+else window.addEventListener('load', boot, { once: true });
 
 // Install section: copy buttons.
 for (const button of document.querySelectorAll<HTMLButtonElement>('.copy')) {

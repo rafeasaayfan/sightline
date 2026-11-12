@@ -3718,3 +3718,22 @@ body::after {
   padding: 3px 7px;
   font-size: 11px;
 }
+
+/* Before the player loads on a phone: one column, the video full width, and room for the controls and the angle
+   tabs under it, so the poster neither grows nor moves when the player arrives (and the first paint stays the LCP). */
+@media (width < 640px), (pointer: coarse) and (max-height: 500px) {
+  .stage-player:not(:has(video-player)) {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 204px;
+  }
+
+  .arena[data-layout="stage"] .stage-player:not(:has(video-player)) {
+    padding-bottom: 0;
+  }
+}
+
+/* The stage lands where it stays (the scan line still sweeps it): a stage that slides in grows its visible area
+   after the first paint, and the poster's move into the player then counts as a new, later largest paint. */
+.stage {
+  animation: none;
+}

@@ -2871,3 +2871,92 @@
     }
   }
 }
+
+@layer components {
+  /* The seek knob is a 24px target (WCAG 2.5.8); the visible knob is drawn inside it at its own size, with the
+     accent ring, so it looks the same. */
+  .sl-timeline .sl-thumb {
+    --sl-knob: 14px;
+    /* 26px: still at least 24px when the idle band scales the row down a little. */
+    width: 26px;
+    height: 26px;
+    background:
+      radial-gradient(
+        circle closest-side,
+        #fff calc(var(--sl-knob) / 2 - 0.5px),
+        color-mix(in srgb, var(--sl-signal) 45%, transparent) calc(var(--sl-knob) / 2),
+        color-mix(in srgb, var(--sl-signal) 45%, transparent) calc(var(--sl-knob) / 2 + 3px),
+        transparent calc(var(--sl-knob) / 2 + 3.5px)
+      );
+    background-color: transparent;
+    box-shadow: none;
+    /* Above the event pins lane, so the whole 24px is the knob even under the first pin. */
+    z-index: 3;
+  }
+
+  @media (pointer: coarse) {
+    .sl-timeline .sl-thumb {
+      --sl-knob: 16px;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sl-timeline .sl-thumb {
+      background: Highlight;
+      background-clip: content-box;
+      padding: 5px;
+      box-shadow: none;
+    }
+  }
+}
+
+@layer components {
+  /* Room for the 24px knob: it never overhangs into the buttons row, and on phones not past the panel's edge. */
+  .sl-row-timeline {
+    padding-bottom: 3px;
+  }
+
+  @container media-root (width <= 640px) {
+    .sightline[data-docked]:not([data-layout="stage"]):not(:fullscreen) .sl-row-timeline {
+      padding-inline: 10px;
+    }
+  }
+}
+
+@layer components {
+  /* Before the match starts (no play or seek yet) the line shows without its knob, so at 0:00 it never sits on the
+     first event pin; hovering the line or focusing the slider shows it, and it stays once the video has started. */
+  .sightline:not([data-started]) .sl-timeline .sl-thumb:not(:focus-visible) {
+    opacity: 0;
+  }
+
+  .sightline:not([data-started]) .sl-timeline .sl-slider:is(:hover, [data-interactive]) .sl-thumb {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  /* The centre play's halo, compositor-only: a ring painted once, then scaled and faded. Animating box-shadow
+     repainted the stage every frame for as long as the page sat waiting for play. */
+  .sl-center-play::after {
+    box-shadow: 0 0 0 7px var(--sl-halo);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sl-center-play:not([data-started])::after {
+      animation: sl-breathe-ring 2.2s ease-out infinite;
+    }
+  }
+
+  @keyframes sl-breathe-ring {
+    0% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+      scale: 1.45;
+    }
+  }
+}

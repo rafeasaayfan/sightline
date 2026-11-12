@@ -423,6 +423,11 @@ function attachMedia(state: State, media: HTMLMediaElement): void {
   media.addEventListener('loadedmetadata', refresh);
   media.addEventListener('durationchange', refresh);
   media.addEventListener('timeupdate', () => onTime(state));
+  // The seek knob shows once the video has started (see skin.css).
+  const started = () => state.root.setAttribute('data-started', '');
+  media.addEventListener('play', started);
+  media.addEventListener('seeking', started);
+  if (!media.paused || media.currentTime > 0) started();
   media.addEventListener('seeked', () => {
     state.last = media.currentTime;
     markPast(state);

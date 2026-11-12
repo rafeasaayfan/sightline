@@ -14,15 +14,15 @@ The challenge's audit: *working controls, responsive layout, keyboard access, vi
 | Responsive 320 / 390 / 768 / 1024 / 1440 / 1600 | Pass |
 | Contrast over white and black frames | Pass (31 pairs; table in `design/contrast.md`) |
 | Reduced motion, forced colours, reduced transparency | Pass |
-| Lighthouse, desktop | Accessibility 100 · Best practices 100 · SEO 100 · Performance 99 · FCP 0.5s · LCP 0.9s · CLS 0 |
-| Lighthouse, mobile (slow 4G, 4× CPU) | Accessibility 100 · Best practices 100 · SEO 100 · Performance about 60 · FCP 2.3s · LCP 4.2s · CLS 0.013 |
+| Lighthouse, desktop | Performance 100 · Accessibility 100 · Best practices 100 · SEO 100 · FCP 0.4s · LCP 0.6s · TBT 30ms · CLS 0 |
+| Lighthouse, mobile (slow 4G, 4× CPU) | Performance 92 · Accessibility 100 · Best practices 100 · SEO 100 · FCP 1.5s · LCP 3.0s · TBT 160ms · CLS 0.011 |
 
 ## Details
 
 | Item | How it was tested | Result |
 | --- | --- | --- |
 | Play/pause | Mouse click; Enter and Space on the focused button; Space/K hotkeys | Pass |
-| Seek bar | Click at 50.5% lands at 50.5%; arrow keys on the thumb; ←/→ hotkeys seek 5s; the knob is a 28px target | Pass |
+| Seek bar | Click at 50.5% lands at 50.5%; arrow keys on the thumb; ←/→ hotkeys seek 5s; the knob is a 26px target, shown once the video has started (and on hover or focus) | Pass |
 | Time | Current time advances while playing; duration shown | Pass |
 | Volume / mute | Arrow keys on the volume thumb lower volume; Enter on mute toggles; mouse toggles | Pass |
 | Fullscreen | Enters the player container; in the split layout the angles float on the picture and the controls return over it | Pass |
@@ -63,5 +63,5 @@ The challenge's audit: *working controls, responsive layout, keyboard access, vi
 ## Known limits
 
 - **Fullscreen on iOS Safari and Android Chrome** follows Video.js's own handling (on iPhone, Safari plays fullscreen in its native player). It was not tested on physical phones; check it on yours before submitting.
-- **Mobile performance** (about 60 on Lighthouse's throttled profile) comes from parsing the player stack (Video.js and the HLS engine) after the page paints; desktop scores 99.
+- **Mobile performance** is 92 on Lighthouse's throttled profile: the player stack (Video.js and the HLS engine) loads after the poster has painted, so it no longer delays the first paint; what remains is parsing that stack on a slow CPU.
 - **Footage** is one round of Counter-Strike 2 gameplay recorded by the author (one minute; the aim cam and radar views are crops of the same recording). The game's own HUD is part of the picture, so its minimap and kill feed sit under the skin's scoreboard and kill feed.

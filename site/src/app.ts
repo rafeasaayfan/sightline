@@ -153,13 +153,12 @@ export async function start(): Promise<void> {
     button.type = 'button';
     button.className = 'tile';
     button.dataset.angle = String(angle.id);
-    button.setAttribute('aria-label', `Switch to angle ${angle.id}, ${angle.label}`);
     button.setAttribute('aria-keyshortcuts', String(angle.id));
     button.innerHTML = `
       <span class="tile-video"></span>
-      <span class="chip tile-label"><span class="tile-num">${angle.id}</span>${angle.label}</span>
-      <span class="pill tile-muted"><span class="dot" aria-hidden="true"></span>Muted</span>
-      <span class="tile-clock">00:00</span>`;
+      <span class="chip tile-label"><span class="visually-hidden">Switch to angle </span><span class="tile-num">${angle.id}</span><span class="visually-hidden">, </span>${angle.label}</span>
+      <span class="pill tile-muted" aria-hidden="true"><span class="dot"></span>Muted</span>
+      <span class="tile-clock" aria-hidden="true">00:00</span>`;
     button.addEventListener('click', () => swapTo(angle));
     tilesEl.append(button);
     tiles.set(angle.id, { button, clock: button.querySelector('.tile-clock')!, failed: false });
