@@ -3476,3 +3476,145 @@ html[data-spoilers] .recap-rail::after {
     margin-inline-start: 0;
   }
 }
+
+/* ===============================================================================================================
+ * The console, smoothly. In the split layout it is laid out at the width of the screen and shown scaled down to the
+ * content width until you are on it, then it grows to full size: only a transform animates, so nothing inside
+ * re-lays out while it moves. A negative bottom margin closes the gap the scale leaves. In the stage layout it is
+ * simply the content width.
+ * =============================================================================================================== */
+
+.console,
+.console[data-open] {
+  width: 100%;
+  margin-inline-start: 0;
+  transition: none;
+}
+
+.console[data-wide] {
+  --s: 1;
+  --h: 0px;
+  width: calc(100vw - var(--sbw, 0px) - 2 * var(--edge));
+  margin-inline-start: calc(50% - (100vw - var(--sbw, 0px)) / 2 + var(--edge));
+  margin-bottom: calc((var(--s) - 1) * var(--h));
+  scale: var(--s);
+  transform-origin: 50% 0;
+  transition:
+    scale 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin-bottom 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: scale;
+}
+
+.console[data-wide][data-open] {
+  --s: 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console[data-wide] {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------- Angles */
+
+/* Docked (split, not fullscreen): the column is exactly the video's height; two angles share it. */
+.sightline[data-docked]:not([data-layout="stage"]):not(:fullscreen) .sl-side.angles {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sightline[data-docked]:not(:fullscreen) .sl-side .tiles {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sightline[data-docked]:not(:fullscreen) .tile {
+  flex: 1 1 0;
+  min-height: 0;
+  aspect-ratio: auto;
+  height: auto;
+}
+
+.tile-video mux-video::part(video) {
+  object-fit: cover;
+}
+
+/* Fullscreen (split): the angles float on the picture, 16:9, tilted a little as if pinned. */
+.sightline:fullscreen .sl-side .tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sightline:fullscreen .tile {
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  box-shadow: -18px 22px 40px -14px rgb(0 0 0 / 0.85);
+  transform: perspective(900px) rotateY(-11deg);
+  transform-origin: 100% 50%;
+}
+
+@media (hover: hover) {
+  .sightline:fullscreen .tile:hover {
+    border-color: rgb(255 255 255 / 0.75);
+    transform: perspective(900px) rotateY(-3deg) translateX(-4px);
+  }
+}
+
+.sightline:fullscreen .tile:focus-visible {
+  transform: perspective(900px) rotateY(-3deg) translateX(-4px);
+}
+
+.sightline:fullscreen .chips {
+  display: none;
+}
+
+/* Before the player loads: the same proportions, so nothing moves when it arrives. */
+.stage-player:not(:has(video-player)) {
+  grid-template-columns: minmax(0, 72fr) minmax(0, 28fr);
+  padding-bottom: calc(88px + 14px);
+}
+
+.arena[data-layout="stage"] .stage-player:not(:has(video-player)) {
+  grid-template-columns: minmax(0, 1fr);
+  padding-bottom: 0;
+}
+
+/* Multiview fullscreen: the docked player as large as the screen allows. */
+.arena:fullscreen .stage {
+  width: min(100%, calc((100vh - 200px) / 0.405));
+}
+
+/* ------------------------------------------------------------------------------------------------- Nav */
+
+.top {
+  transition:
+    translate 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 200ms ease;
+}
+
+.top[data-hidden] {
+  translate: 0 -100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top {
+    transition: none;
+  }
+}
+
+/* Player fullscreen in the split layout: the angles float on the picture, top right. */
+.sightline:not([data-layout="stage"]):fullscreen .sl-side.angles {
+  position: absolute;
+  top: 78px;
+  right: 22px;
+  z-index: 26;
+  display: flex;
+  width: clamp(220px, 21%, 420px);
+  height: auto;
+  perspective: none;
+}

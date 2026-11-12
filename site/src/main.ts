@@ -74,6 +74,10 @@ if (consoleEl) {
   let queued = false;
   const update = () => {
     queued = false;
+    if (!consoleEl.hasAttribute('data-wide')) {
+      consoleEl.removeAttribute('data-open');
+      return;
+    }
     const r = consoleEl.getBoundingClientRect();
     const open = consoleEl.hasAttribute('data-open');
     const vh = window.innerHeight;
@@ -88,4 +92,55 @@ if (consoleEl) {
   window.addEventListener('scroll', queue, { passive: true });
   window.addEventListener('resize', queue);
   update();
+}
+
+// The console in the split layout: laid out at screen width, shown scaled to the content width until you are on it.
+const frame = document.querySelector<HTMLElement>('.console');
+const arenaEl = document.querySelector<HTMLElement>('.arena');
+if (frame && arenaEl) {
+  const measure = () => {
+    const wide = arenaEl.dataset.layout !== 'stage' && window.innerWidth >= 640;
+    frame.toggleAttribute('data-wide', wide);
+    if (!wide) {
+      frame.removeAttribute('data-open');
+      return;
+    }
+    const content = frame.parentElement!.clientWidth;
+    const full = frame.offsetWidth;
+    frame.style.setProperty('--s', String(Math.min(1, content / full)));
+    frame.style.setProperty('--h', `${frame.offsetHeight}px`);
+  };
+  measure();
+  new ResizeObserver(measure).observe(frame);
+  window.addEventListener('resize', measure);
+  // The layout buttons and the player's menu both write data-layout on the arena.
+  new MutationObserver(() => {
+    measure();
+    window.dispatchEvent(new Event('scroll'));
+  }).observe(arenaEl, { attributes: true, attributeFilter: ['data-layout'] });
+}
+
+// The nav slides away while you scroll down and comes back as soon as you scroll up.
+const nav = document.querySelector<HTMLElement>('.top');
+if (nav) {
+  let last = window.scrollY;
+  let queued = false;
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        const y = window.scrollY;
+        if (Math.abs(y - last) < 6) return;
+        const hide = y > last && y > 120 && !nav.contains(document.activeElement);
+        nav.toggleAttribute('data-hidden', hide);
+        last = y;
+      });
+    },
+    { passive: true },
+  );
+  // Keyboard users never lose it: focus inside brings it back.
+  nav.addEventListener('focusin', () => nav.removeAttribute('data-hidden'));
 }

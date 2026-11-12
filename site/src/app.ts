@@ -298,6 +298,9 @@ export async function start(): Promise<void> {
   const layoutButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-layout-option]')];
   function applyLayout(value: Layout): void {
     arena.dataset.layout = value;
+    // Stage only is an ordinary player: no multiview there.
+    root.toggleAttribute('data-multiview', canWatch && value !== 'stage');
+    watchButton.hidden = !canWatch || value === 'stage';
     for (const b of layoutButtons) b.setAttribute('aria-pressed', String(b.dataset.layoutOption === value));
     setLayout(root, value);
     renderAngles();
@@ -322,7 +325,7 @@ export async function start(): Promise<void> {
   if (canWatch) root.setAttribute('data-multiview', '');
 
   async function toggleWatch(): Promise<void> {
-    if (!canWatch) return;
+    if (!canWatch || (arena.dataset.layout === 'stage' && !watching())) return;
     if (watching()) {
       await document.exitFullscreen().catch(() => undefined);
       return;
