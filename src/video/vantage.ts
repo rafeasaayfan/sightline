@@ -6,6 +6,8 @@
  * no markers, highlight buttons disabled, no toasts.
  */
 
+export type Layout = 'split' | 'duo' | 'stage';
+
 export type EventKind = 'highlight' | 'objective' | 'round';
 
 export interface MatchEvent {
@@ -100,8 +102,27 @@ function renderMarkers(state: State): void {
   for (const button of root.querySelectorAll<HTMLButtonElement>('.vt-prev, .vt-next')) {
     button.setAttribute('aria-disabled', String(usable.length === 0));
   }
+  renderRounds(root, usable, duration);
   root.toggleAttribute('data-events', usable.length > 0);
   root.dispatchEvent(new CustomEvent('vantage:events', { detail: usable, bubbles: true }));
+}
+
+/** Shade alternate rounds on the timeline, so the bar reads as a map of the match. */
+function renderRounds(root: HTMLElement, events: MatchEvent[], duration: number): void {
+  const layer = root.querySelector<HTMLElement>('.vt-rounds');
+  if (!layer) return;
+  layer.replaceChildren();
+  const starts = events.filter((e) => e.kind === 'round').map((e) => e.time);
+  if (!starts.length || !Number.isFinite(duration)) return;
+  const edges = [0, ...starts, duration];
+  for (let i = 0; i < edges.length - 1; i++) {
+    const band = document.createElement('span');
+    band.className = 'vt-round-band';
+    band.dataset.odd = String(i % 2 === 1);
+    band.style.setProperty('--vt-from', `${(edges[i]! / duration) * 100}%`);
+    band.style.setProperty('--vt-to', `${(edges[i + 1]! / duration) * 100}%`);
+    layer.append(band);
+  }
 }
 
 function showTip(state: State, marker: HTMLElement | null): void {
@@ -339,20 +360,28 @@ function setup(root: HTMLElement): void {
   // with data-layout on the player root.
   const layout = root.querySelector<HTMLElement & { value?: string }>('.vt-layout-group');
   layout?.addEventListener('value-change', () => {
-    const value = layout.value === 'stage' ? 'stage' : 'split';
+    const value = layout.value === 'stage' || layout.value === 'duo' ? layout.value : 'split';
     root.dataset.layout = value;
-    root.querySelector('.vt-layout-value')!.textContent = value === 'stage' ? 'Stage only' : '70 / 30';
+    root.querySelector('.vt-layout-value')!.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
     root.dispatchEvent(new CustomEvent('vantage:layout', { detail: value, bubbles: true }));
   });
 }
 
+/** Play the broadcast cut on the stage: a short sweep when the angle changes. Skipped under reduced motion. */
+export function cut(root: HTMLElement): void {
+  root.removeAttribute('data-cut');
+  void root.offsetWidth;
+  root.setAttribute('data-cut', '');
+  window.setTimeout(() => root.removeAttribute('data-cut'), 420);
+}
+
 /** Reflect a layout chosen outside the menu (the page's own layout button) in the settings menu. */
-export function setLayout(root: HTMLElement, value: 'split' | 'stage'): void {
+export function setLayout(root: HTMLElement, value: Layout): void {
   root.dataset.layout = value;
   const layout = root.querySelector<HTMLElement & { value?: string }>('.vt-layout-group');
   if (layout && layout.value !== value) layout.value = value;
   const label = root.querySelector('.vt-layout-value');
-  if (label) label.textContent = value === 'stage' ? 'Stage only' : '70 / 30';
+  if (label) label.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
 }
 
 /*

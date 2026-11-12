@@ -58,5 +58,5 @@ import './vantage';
 
 registerIcons('vantage', vantageIcons);
 
-export { formatTime, getEvents, nextHighlight, prevHighlight, setAngle, setLayout, setScoreboard, setStageState, setSync } from './vantage';
-export type { EventKind, MatchEvent, Scoreboard, Team } from './vantage';
+export { cut, formatTime, getEvents, nextHighlight, prevHighlight, setAngle, setLayout, setScoreboard, setStageState, setSync } from './vantage';
+export type { EventKind, Layout, MatchEvent, Scoreboard, Team } from './vantage';

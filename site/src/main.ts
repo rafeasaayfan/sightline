@@ -12,3 +12,17 @@ const load = () => import('./app').then(({ start }) => start());
 
 if (document.readyState === 'complete') requestAnimationFrame(() => void load());
 else window.addEventListener('load', () => requestAnimationFrame(() => void load()), { once: true });
+
+// Install section: copy buttons.
+for (const button of document.querySelectorAll<HTMLButtonElement>('.copy')) {
+  button.addEventListener('click', async () => {
+    const code = button.parentElement?.querySelector('code')?.textContent ?? '';
+    try {
+      await navigator.clipboard.writeText(code);
+      button.textContent = 'Copied';
+    } catch {
+      button.textContent = 'Select and copy';
+    }
+    window.setTimeout(() => (button.textContent = 'Copy'), 1600);
+  });
+}

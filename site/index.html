@@ -8,114 +8,328 @@
     <title>Vantage — a Video.js skin for watching play</title>
     <meta
       name="description"
-      content="Vantage is a Video.js 10 skin for watching play, not films: a stage with synced angles you can swap, an event timeline, and a broadcast-style HUD."
+      content="Vantage is a Video.js 10 skin for watching play, not films: a multiview stage with synced angles, an event timeline, a broadcast HUD and a match summary."
     />
+    <meta property="og:title" content="Vantage — a Video.js skin for watching play" />
+    <meta property="og:description" content="Multiview angles, an event timeline and a broadcast HUD for Video.js 10." />
+    <meta property="og:image" content="./og.jpg" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <script type="module" src="./src/main.ts"></script>
   </head>
   <body>
     <a class="skip" href="#stage">Skip to the player</a>
 
-    <div class="page">
-      <header class="top">
-        <div class="brand">
-          <a class="wordmark chip" href="./" aria-label="Vantage, home">VANTAGE</a>
-          <span class="tagline">a Video.js v10 skin for watching play</span>
-        </div>
-        <nav class="nav" aria-label="Page">
-          <a href="#details">Details</a>
-          <a href="#recap">Recap</a>
+    <header class="top">
+      <div class="top-inner">
+        <a class="wordmark chip" href="./" aria-label="Vantage, home">VANTAGE</a>
+        <span class="onair" aria-hidden="true"><span class="onair-dot"></span>On air</span>
+        <nav class="nav" aria-label="Sections">
+          <a href="#multiview">Multiview</a>
+          <a href="#timeline">Timeline</a>
+          <a href="#summary">Summary</a>
+          <a href="#states">States</a>
+          <a href="#customize">Customize</a>
+          <a href="#specs">Specs</a>
+          <a href="#access">Accessibility</a>
+          <a href="#install">Install</a>
           <a href="#" data-repo-link hidden>GitHub</a>
         </nav>
-      </header>
+      </div>
+    </header>
 
-      <main>
-        <h1 class="visually-hidden" data-match-title>Showmatch · Azure vs Ember</h1>
+    <main>
+      <!-- Hero -------------------------------------------------------------------------------------->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="chip eyebrow-chip">Video.js v10 skin</span> for esports, gameplay and multi-camera sport</p>
+          <h1 id="hero-title">Watch the match,<br /><span class="signal">not the movie.</span></h1>
+          <p class="lede">
+            Vantage gives the main angle the stage and keeps two more live beside it. The seek bar is a map of the
+            match — every elimination, objective and round is a marker you can jump to.
+          </p>
+          <ul class="hero-keys" aria-label="Try it">
+            <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> switch angle</li>
+            <li><kbd>N</kbd> next highlight</li>
+            <li><kbd>?</kbd> every shortcut</li>
+          </ul>
+        </div>
 
-        <section class="arena" aria-label="Player" data-layout="split">
+        <p class="visually-hidden" data-match-title>Showmatch · Azure vs Ember</p>
+
+        <div class="arena" aria-label="Player" data-layout="split">
           <div class="stage" id="stage" tabindex="-1">
-            <div class="stage-player" data-stage><img class="stage-poster" src="./poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" /></div>
+            <div class="stage-player" data-stage>
+              <img class="stage-poster" src="./poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
+            </div>
           </div>
-
           <div class="angles" data-angles-column>
             <div class="tiles" data-tiles role="group" aria-label="Angles"></div>
             <div class="chips" data-chips role="group" aria-label="Angles"></div>
-            <div class="angles-foot">
-              <span class="angles-hint">Click a tile to swap it onto the stage</span>
-              <button type="button" class="layout-button" data-layout-toggle aria-pressed="false">
-                Layout: <span data-layout-label>70 / 30</span>
-              </button>
-            </div>
           </div>
-        </section>
+        </div>
+
+        <div class="deck">
+          <div class="layouts" role="group" aria-label="Layout">
+            <span class="deck-label">Layout</span>
+            <button type="button" class="layout-option" data-layout-option="split" aria-pressed="true">
+              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="19" height="16" rx="2" /><rect x="22" y="1" width="7" height="7.5" rx="1.5" /><rect x="22" y="9.5" width="7" height="7.5" rx="1.5" /></svg>
+              70 / 30
+            </button>
+            <button type="button" class="layout-option" data-layout-option="duo" aria-pressed="false">
+              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="13.5" height="16" rx="2" /><rect x="15.5" y="1" width="13.5" height="16" rx="2" /></svg>
+              50 / 50
+            </button>
+            <button type="button" class="layout-option" data-layout-option="stage" aria-pressed="false">
+              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="28" height="16" rx="2" /></svg>
+              Stage
+            </button>
+          </div>
+          <p class="deck-hint">Click a tile or press <kbd>1</kbd>–<kbd>3</kbd>: it swaps onto the stage at the same timestamp.</p>
+        </div>
 
         <section class="recap" id="recap" aria-labelledby="recap-title">
           <div class="section-head">
-            <h2 id="recap-title">Match recap</h2>
-            <span class="muted">every event is a seek — click to jump</span>
+            <h2 id="recap-title" class="recap-title">Match recap</h2>
+            <span class="muted">every event is a seek</span>
           </div>
           <ol class="recap-list" data-recap></ol>
         </section>
+      </section>
 
-        <section class="why" aria-labelledby="why-title">
-          <h2 id="why-title">Players don't watch a film. They watch a match.</h2>
-          <p>
-            Every video player is designed for a story that goes one way. Gameplay has angles, rounds and moments you
-            want to jump between. Vantage is a Video.js v10 skin built for that.
-          </p>
-          <p>
-            One stage, two synced angles you can swap with a click or the keys 1–3, and a timeline where every
-            elimination, objective and round is a marker you can seek to. Everything works by keyboard, touch and
-            mouse.
-          </p>
-        </section>
+      <!-- 01 Multiview ------------------------------------------------------------------------------>
+      <section class="block" id="multiview" aria-labelledby="mv-title">
+        <header class="block-head">
+          <p class="block-num">01</p>
+          <h2 id="mv-title">Multiview, on one clock</h2>
+          <p class="block-lede">A match is seen from many sides. Vantage plays them together and lets you choose which one gets the stage.</p>
+        </header>
+        <div class="mv-grid">
+          <article class="mv-card">
+            <svg class="mv-diagram" aria-hidden="true" viewBox="0 0 160 90"><rect class="d-stage" x="2" y="2" width="106" height="86" rx="6" /><rect class="d-tile" x="114" y="2" width="44" height="41" rx="5" /><rect class="d-tile" x="114" y="47" width="44" height="41" rx="5" /></svg>
+            <h3>70 / 30</h3>
+            <p>The stage takes most of the width; two muted angles play beside it. The broadcast default.</p>
+          </article>
+          <article class="mv-card">
+            <svg class="mv-diagram" aria-hidden="true" viewBox="0 0 160 90"><rect class="d-stage" x="2" y="2" width="76" height="86" rx="6" /><rect class="d-tile" x="82" y="2" width="76" height="86" rx="6" /></svg>
+            <h3>50 / 50</h3>
+            <p>Two points of view at full size, side by side — attacker and defender, player and map.</p>
+          </article>
+          <article class="mv-card">
+            <svg class="mv-diagram" aria-hidden="true" viewBox="0 0 160 90"><rect class="d-stage" x="2" y="2" width="156" height="86" rx="6" /></svg>
+            <h3>Stage only</h3>
+            <p>One angle, nothing else. The other streams pause to save bandwidth.</p>
+          </article>
+        </div>
+        <ul class="facts">
+          <li><strong>≤ 0.25 s</strong><span>angles stay within a quarter second of the stage</span></li>
+          <li><strong>1 click</strong><span>or one key swaps an angle at the same timestamp</span></li>
+          <li><strong>0</strong><span>tiles streaming on a phone: angles become chips</span></li>
+        </ul>
+      </section>
 
-        <section class="details" id="details" aria-labelledby="details-title">
-          <h2 id="details-title" class="visually-hidden">Details</h2>
-          <ul class="cards">
-            <li class="card">
-              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--signal)" stroke-width="2"><rect x="3" y="6" width="22" height="16" rx="2" /><path d="M3 11h22" /></svg>
-              <h3>Angles are real controls</h3>
-              <p>Tiles and chips swap the source on the stage at the same timestamp. The other angles stay muted and keep in sync within a quarter second.</p>
-            </li>
-            <li class="card">
-              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--event)" stroke-width="2"><path d="M3 14h22" /><path d="M14 8l6 6-6 6-6-6z" /></svg>
-              <h3>A timeline of moments</h3>
-              <p>Eliminations, objectives and rounds come from a WebVTT file. Markers differ by shape and colour, carry tooltips, and are one Tab stop away; N jumps to the next.</p>
-            </li>
-            <li class="card">
-              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--text)" stroke-width="2"><rect x="4" y="8" width="20" height="12" rx="3" /><path d="M9 14h2M13 14h2M17 14h2" /></svg>
-              <h3>Keyboard like a spectator client</h3>
-              <p>1–3 angles, N next highlight, Space, M, F, arrows, and ? for the full list. Focus is always visible and the band never hides while something in it has focus.</p>
-            </li>
-            <li class="card">
-              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--signal)" stroke-width="2"><circle cx="14" cy="14" r="9" /><path d="M14 9v5l3 3" /></svg>
-              <h3>Readable over anything</h3>
-              <p>Controls sit on a gradient scrim and the HUD on solid chips, never on raw footage. Measured over white and black frames: 4.5:1 or better for every label.</p>
-            </li>
-            <li class="card">
-              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--event)" stroke-width="2"><rect x="5" y="3" width="18" height="22" rx="3" /><path d="M11 21h6" /></svg>
-              <h3>Phone first</h3>
-              <p>On a phone the angles become a chip row under the stage, tap targets grow to 48 px, and only the stage streams, which saves data and battery.</p>
-            </li>
-            <li class="card">
-              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--text)" stroke-width="2"><path d="M5 14h18" /><path d="M14 5v18" /></svg>
-              <h3>Calm on request</h3>
-              <p>Under reduced motion toasts and the sync pulse go still and swaps cut instead of fade. Under forced colours the markers keep their shapes.</p>
-            </li>
-          </ul>
-        </section>
-      </main>
+      <!-- 02 Timeline ------------------------------------------------------------------------------->
+      <section class="block" id="timeline" aria-labelledby="tl-title">
+        <header class="block-head">
+          <p class="block-num">02</p>
+          <h2 id="tl-title">A timeline that knows the match</h2>
+          <p class="block-lede">Events come from a plain WebVTT file. Each kind has its own shape, so the bar reads without colour.</p>
+        </header>
+        <figure class="annotated">
+          <img src="./states/tooltip.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The control band with a marker tooltip open: Objective captured, 01:35, press Enter to jump." />
+          <ol class="callouts">
+            <li><span class="legend legend-elim" aria-hidden="true"></span><strong>Highlights</strong> eliminations and clutches, amber diamonds</li>
+            <li><span class="legend legend-obj" aria-hidden="true"></span><strong>Objectives</strong> cyan squares</li>
+            <li><span class="legend legend-round" aria-hidden="true"></span><strong>Rounds</strong> red ticks, with alternate rounds shaded on the bar</li>
+            <li><kbd>Tab</kbd><strong>One stop</strong> for every marker; arrows move between them, Enter jumps</li>
+            <li><kbd>N</kbd><strong>Next highlight</strong> and <kbd>⇧N</kbd> previous, also as buttons</li>
+          </ol>
+        </figure>
+      </section>
 
-      <footer class="foot">
-        <span>
+      <!-- 03 Summary -------------------------------------------------------------------------------->
+      <section class="block" id="summary" aria-labelledby="sum-title">
+        <header class="block-head">
+          <p class="block-num">03</p>
+          <h2 id="sum-title">The match, summarised</h2>
+          <p class="block-lede">Written from the same two files that drive the player — the scoreboard and the events. Every moment below is a seek.</p>
+        </header>
+        <div class="summary" data-summary hidden>
+          <div class="summary-score" data-summary-score></div>
+          <p class="summary-text" data-summary-text></p>
+          <div class="summary-chart" data-summary-chart title="Click to jump"></div>
+          <p class="summary-axis"><span>Start</span><span>Momentum · <span class="score-a">Azure</span> above, <span class="score-b">Ember</span> below</span><span>End</span></p>
+          <ol class="moments" data-summary-moments></ol>
+        </div>
+      </section>
+
+      <!-- 04 States --------------------------------------------------------------------------------->
+      <section class="block" id="states" aria-labelledby="st-title">
+        <header class="block-head">
+          <p class="block-num">04</p>
+          <h2 id="st-title">Every state, designed</h2>
+          <p class="block-lede">Captured from the live player, not mocked up.</p>
+        </header>
+        <ul class="states">
+          <li><img src="./states/start.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Before first play: the cyan centre play button and the HUD." /><span>Before first play</span></li>
+          <li><img src="./states/playing.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Playing, with the scoreboard, angle label and sync pill." /><span>Playing with HUD</span></li>
+          <li><img src="./states/toast.jpg" width="640" height="360" loading="lazy" decoding="async" alt="An elimination toast above the band." /><span>Event toast</span></li>
+          <li><img src="./states/settings.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The settings menu: speed, layout, event toasts." /><span>Settings</span></li>
+          <li><img src="./states/switching.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Switching to angle 2 notice on the stage." /><span>Switching angle</span></li>
+          <li><img src="./states/unavailable.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Angle 3 unavailable, staying on angle 1." /><span>Angle unavailable</span></li>
+          <li><img src="./states/focus.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Keyboard focus ring on the volume thumb, band held open." /><span>Keyboard focus</span></li>
+          <li><img src="./states/shortcuts.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The keyboard shortcuts popover." /><span>Shortcuts</span></li>
+          <li><img src="./states/forced.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Forced colours: system colours, markers keep their shapes." /><span>Forced colours</span></li>
+        </ul>
+      </section>
+
+      <!-- 05 Customize ------------------------------------------------------------------------------>
+      <section class="block" id="customize" aria-labelledby="cu-title">
+        <header class="block-head">
+          <p class="block-num">05</p>
+          <h2 id="cu-title">Make it yours</h2>
+          <p class="block-lede">The public Video.js properties drive the whole skin. Change them here and watch the player at the top.</p>
+        </header>
+        <form class="customizer" data-customizer>
+          <fieldset class="field">
+            <legend>Accent</legend>
+            <div class="swatches">
+              <label class="swatch"><input type="radio" name="accent" value="#38e1ff" checked /><span style="--c: #38e1ff"></span><span class="visually-hidden">Signal cyan</span></label>
+              <label class="swatch"><input type="radio" name="accent" value="#5cf2a0" /><span style="--c: #5cf2a0"></span><span class="visually-hidden">Mint</span></label>
+              <label class="swatch"><input type="radio" name="accent" value="#ffb020" /><span style="--c: #ffb020"></span><span class="visually-hidden">Amber</span></label>
+              <label class="swatch"><input type="radio" name="accent" value="#ff6ad5" /><span style="--c: #ff6ad5"></span><span class="visually-hidden">Magenta</span></label>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="cu-radius">Corner radius <output data-radius-value>14px</output></label>
+            <input id="cu-radius" type="range" name="radius" min="0" max="28" step="2" value="14" />
+          </div>
+          <fieldset class="field">
+            <legend>Show</legend>
+            <label class="check"><input type="checkbox" name="hud" checked /> Scoreboard HUD</label>
+            <label class="check"><input type="checkbox" name="toasts" checked /> Event toasts</label>
+            <label class="check"><input type="checkbox" name="keyhints" checked /> Key hints</label>
+          </fieldset>
+          <div class="field snippet">
+            <span class="snippet-label">Your CSS</span>
+            <pre><code data-snippet></code></pre>
+          </div>
+        </form>
+      </section>
+
+      <!-- 06 Specs ---------------------------------------------------------------------------------->
+      <section class="block" id="specs" aria-labelledby="sp-title">
+        <header class="block-head">
+          <p class="block-num">06</p>
+          <h2 id="sp-title">Specifications</h2>
+          <p class="block-lede">Everything sizes from <code>--media-scale-unit</code>, so fullscreen and host overrides scale the whole band together.</p>
+        </header>
+        <figure class="spec">
+          <svg viewBox="0 0 1000 300" role="img" aria-label="Technical drawing of the control band: a 24 pixel timeline row above a row of 44 pixel buttons; 4 pixel track; 16 pixel thumb growing to 20; markers 10, 9 and 2 by 16 pixels.">
+            <defs><marker id="ar" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" fill="#a7afbd" /></marker></defs>
+            <rect x="40" y="60" width="920" height="170" rx="10" fill="#12161d" stroke="rgb(255 255 255 / .14)" />
+            <text x="60" y="108" class="sv-mono">12:04</text>
+            <rect x="130" y="98" width="700" height="4" rx="2" fill="rgb(255 255 255 / .4)" />
+            <rect x="130" y="98" width="340" height="4" rx="2" fill="#38e1ff" />
+            <circle cx="470" cy="100" r="8" fill="#f3f5f8" stroke="rgb(56 225 255 / .45)" stroke-width="6" />
+            <rect x="244" y="95" width="10" height="10" fill="#ffb020" transform="rotate(45 249 100)" />
+            <rect x="590" y="95.5" width="9" height="9" rx="2" fill="#38e1ff" />
+            <rect x="700" y="92" width="2" height="16" fill="#ff4d5e" />
+            <text x="850" y="108" class="sv-mono sv-muted">24:37</text>
+            <g fill="none" stroke="rgb(255 255 255 / .35)">
+              <rect x="70" y="140" width="44" height="44" rx="8" /><rect x="118" y="140" width="44" height="44" rx="8" /><rect x="166" y="140" width="44" height="44" rx="8" /><rect x="214" y="140" width="44" height="44" rx="8" />
+              <rect x="742" y="140" width="44" height="44" rx="8" /><rect x="790" y="140" width="44" height="44" rx="8" /><rect x="838" y="140" width="44" height="44" rx="8" /><rect x="886" y="140" width="44" height="44" rx="8" />
+            </g>
+            <line x1="70" x2="114" y1="200" y2="200" stroke="#a7afbd" marker-start="url(#ar)" marker-end="url(#ar)" />
+            <text x="92" y="218" class="sv-label" text-anchor="middle">44 · 48 touch</text>
+            <line x1="962" x2="962" y1="140" y2="184" stroke="#a7afbd" marker-start="url(#ar)" marker-end="url(#ar)" />
+            <text x="955" y="204" class="sv-label" text-anchor="end">44</text>
+            <line x1="470" x2="470" y1="40" y2="86" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="470" y="34" class="sv-label" text-anchor="middle">thumb 16 → 20 on focus</text>
+            <line x1="249" x2="249" y1="40" y2="88" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="249" y="34" class="sv-label" text-anchor="middle">◆ 10</text>
+            <text x="594" y="34" class="sv-label" text-anchor="middle">■ 9</text>
+            <line x1="594" x2="594" y1="40" y2="88" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="701" y="34" class="sv-label" text-anchor="middle">▮ 2 × 16</text>
+            <line x1="701" x2="701" y1="40" y2="88" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="300" y="130" class="sv-label">track 4 · hit area 24</text>
+            <text x="500" y="268" class="sv-label" text-anchor="middle">band: timeline row 24 + button row 44 · scrim ground 96% → 0 · gaps 4</text>
+          </svg>
+        </figure>
+        <dl class="tokens">
+          <div><dt><span class="tok" style="--c: #0a0d12"></span>Ground</dt><dd>#0A0D12</dd></div>
+          <div><dt><span class="tok" style="--c: #12161d"></span>Surface</dt><dd>#12161D</dd></div>
+          <div><dt><span class="tok" style="--c: #38e1ff"></span>Signal</dt><dd>#38E1FF · accent</dd></div>
+          <div><dt><span class="tok" style="--c: #ffb020"></span>Event</dt><dd>#FFB020 · highlights</dd></div>
+          <div><dt><span class="tok" style="--c: #ff4d5e"></span>Round</dt><dd>#FF4D5E · rounds, errors</dd></div>
+          <div><dt><span class="tok" style="--c: #5cf2a0"></span>Sync</dt><dd>#5CF2A0 · in sync</dd></div>
+        </dl>
+      </section>
+
+      <!-- 07 Accessibility -------------------------------------------------------------------------->
+      <section class="block" id="access" aria-labelledby="ac-title">
+        <header class="block-head">
+          <p class="block-num">07</p>
+          <h2 id="ac-title">Accessible on purpose</h2>
+          <p class="block-lede">Measured, not assumed. The full audit, item by item, is in the repository.</p>
+        </header>
+        <ul class="facts facts-4">
+          <li><strong>100</strong><span>Lighthouse accessibility</span></li>
+          <li><strong>5.28 : 1</strong><span>lowest text contrast, over a pure white frame</span></li>
+          <li><strong>48 px</strong><span>touch targets on phones</span></li>
+          <li><strong>0</strong><span>layout shift while the page loads</span></li>
+        </ul>
+        <div class="contrast">
+          <figure><img src="./states/bright.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The band over a bright frame stays readable." /><figcaption>Over a bright frame</figcaption></figure>
+          <figure><img src="./states/dark.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The band over a dark frame stays readable." /><figcaption>Over a dark frame</figcaption></figure>
+        </div>
+        <ul class="a11y-list">
+          <li><strong>Keyboard first.</strong> Every control in visual order, one visible ring, menus close with Esc and hand focus back.</li>
+          <li><strong>Never colour alone.</strong> Markers differ by shape; "on" states change shape or label too.</li>
+          <li><strong>Calm on request.</strong> Reduced motion stops the sweep, the pulse and the spinner; swaps cut instead of fade.</li>
+          <li><strong>Forced colours.</strong> System colours throughout; markers keep their shapes; focus uses Highlight.</li>
+        </ul>
+      </section>
+
+      <!-- 08 Install -------------------------------------------------------------------------------->
+      <section class="block" id="install" aria-labelledby="in-title">
+        <header class="block-head">
+          <p class="block-num">08</p>
+          <h2 id="in-title">Install</h2>
+          <p class="block-lede">Vantage is skin source for Video.js 10: copy it into your project and keep the public properties.</p>
+        </header>
+        <ol class="steps">
+          <li>
+            <h3>Add Video.js 10 and the fonts</h3>
+            <div class="code"><pre><code>npm i @videojs/html @fontsource/inter @fontsource/space-grotesk @fontsource/jetbrains-mono</code></pre><button type="button" class="copy">Copy</button></div>
+          </li>
+          <li>
+            <h3>Copy the skin and import it</h3>
+            <div class="code"><pre><code>import '@videojs/html/video/player';
+import '@videojs/html/media/mux-video';
+import './vantage/video/skin';   // src/ from the repository</code></pre><button type="button" class="copy">Copy</button></div>
+          </li>
+          <li>
+            <h3>Add your stream and its events</h3>
+            <div class="code"><pre><code>&lt;video-player&gt;
+  &lt;!-- skin.html markup, with your media where it says --&gt;
+  &lt;mux-video src="https://stream.mux.com/PLAYBACK_ID.m3u8" crossorigin&gt;
+    &lt;track kind="metadata" label="events" src="events.vtt" default&gt;
+  &lt;/mux-video&gt;
+&lt;/video-player&gt;</code></pre><button type="button" class="copy">Copy</button></div>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner">
+        <a class="wordmark chip" href="#stage">VANTAGE</a>
+        <p>
           Built on <a href="https://videojs.org">Video.js v10</a> ·
-          <a href="#" data-footage>Footage</a>
-          <span data-mux hidden> · Video hosted on <a href="https://www.mux.com">Mux</a></span>
-          · Made in Beirut
-        </span>
-        <span>Apache 2.0</span>
-      </footer>
-    </div>
+          <a href="#" data-footage>Footage</a><span data-mux hidden> · Video hosted on <a href="https://www.mux.com">Mux</a></span>
+          · Made in Beirut · Apache 2.0
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

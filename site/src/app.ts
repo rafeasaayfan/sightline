@@ -10,7 +10,10 @@ import {
   setStageState,
   setSync,
   type MatchEvent,
+  cut,
+  type Layout,
 } from '@/video/skin';
+import { initCustomizer, renderSummary } from './sections';
 import skinTemplate from '@/video/skin.html?raw';
 
 /* ------------------------------------------------------------------------------------------------ Data */
@@ -65,10 +68,18 @@ function createStage(slot: HTMLElement, match: Match, angle: Angle): { root: HTM
   const cors = usesMux(angle) ? ' crossorigin="anonymous"' : '';
   const media = `<mux-video src="${srcOf(angle)}" playsinline preload="auto"${cors}>${events}</mux-video>`;
   const player = document.createElement('video-player');
-  slot.replaceChildren();
+  // Reuse the poster the page already painted as the player's poster image, so the stage never repaints it.
+  const painted = slot.querySelector<HTMLImageElement>('.stage-poster');
   player.innerHTML = skinTemplate.replace(MEDIA_PLACEHOLDER, media);
   player.setAttribute('poster', './poster.jpg');
-  slot.append(player);
+  const posterImg = player.querySelector<HTMLImageElement>('.media-poster-image');
+  if (painted && posterImg) {
+    painted.className = posterImg.className;
+    painted.removeAttribute('width');
+    painted.removeAttribute('height');
+    posterImg.replaceWith(painted);
+  }
+  slot.replaceChildren(player);
 
   const root = player.querySelector<HTMLElement>('.vantage')!;
   const el = player.querySelector<MediaEl>('mux-video')!;
@@ -147,6 +158,7 @@ export async function start(): Promise<void> {
       m.setAttribute('muted', '');
       m.setAttribute('playsinline', '');
       m.setAttribute('preload', 'auto');
+      m.setAttribute('poster', './poster.jpg');
       m.setAttribute('aria-hidden', 'true');
       m.tabIndex = -1;
       m.src = srcOf(angle);
@@ -168,10 +180,13 @@ export async function start(): Promise<void> {
     for (const angle of angles) {
       const onStage = angle.id === stageAngle.id;
       const tile = tiles.get(angle.id)!;
-      tile.button.hidden = onStage || tile.failed;
+      // 50 / 50 shows one angle beside the stage: the first one not on stage.
+      const duoPick = angles.find((a) => a.id !== stageAngle.id && !tiles.get(a.id)!.failed);
+      const shown = arena.dataset.layout !== 'duo' || angle.id === duoPick?.id;
+      tile.button.hidden = onStage || tile.failed || !shown;
       const chip = chipsEl.querySelector<HTMLButtonElement>(`[data-angle="${angle.id}"]`)!;
       chip.setAttribute('aria-pressed', String(onStage));
-      if (!onStage && tilesActive()) {
+      if (!onStage && shown && tilesActive()) {
         const m = ensureTileMedia(angle);
         if (m) follow(m, true);
       } else {
@@ -247,6 +262,7 @@ export async function start(): Promise<void> {
       stageAngle = angle;
       setAngle(root, `Angle ${angle.id} · ${angle.label}`);
       setStageState(root, null);
+      cut(root);
     } catch {
       // Stay on the angle that works and say so.
       if (master.src !== srcOf(previous)) {
@@ -269,17 +285,16 @@ export async function start(): Promise<void> {
 
   /* ---------------------------------------------------------------- Layout */
 
-  const layoutButton = document.querySelector<HTMLButtonElement>('[data-layout-toggle]')!;
-  function applyLayout(value: 'split' | 'stage'): void {
+  const layoutButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-layout-option]')];
+  function applyLayout(value: Layout): void {
     arena.dataset.layout = value;
-    layoutButton.setAttribute('aria-pressed', String(value === 'stage'));
-    document.querySelector('[data-layout-label]')!.textContent = value === 'stage' ? 'Stage only' : '70 / 30';
+    for (const b of layoutButtons) b.setAttribute('aria-pressed', String(b.dataset.layoutOption === value));
     setLayout(root, value);
     renderAngles();
     syncAll(true);
   }
-  layoutButton.addEventListener('click', () => applyLayout(arena.dataset.layout === 'stage' ? 'split' : 'stage'));
-  root.addEventListener('vantage:layout', (e) => applyLayout((e as CustomEvent<'split' | 'stage'>).detail));
+  for (const b of layoutButtons) b.addEventListener('click', () => applyLayout(b.dataset.layoutOption as Layout));
+  root.addEventListener('vantage:layout', (e) => applyLayout((e as CustomEvent<Layout>).detail));
   wide.addEventListener('change', () => {
     renderAngles();
     syncAll(true);
@@ -336,6 +351,7 @@ export async function start(): Promise<void> {
   root.addEventListener('vantage:events', (e) => {
     events = (e as CustomEvent<MatchEvent[]>).detail;
     renderRecap();
+    renderSummary({ match, events, teams: [teamA, teamB], duration: master.duration, seek: (t) => (master.currentTime = t) });
     tick();
   });
 
@@ -373,6 +389,7 @@ export async function start(): Promise<void> {
     }
   }
 
+  initCustomizer(root);
   master.addEventListener('timeupdate', tick);
   master.addEventListener('seeked', tick);
   tick();

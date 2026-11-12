@@ -4,6 +4,10 @@ Vantage is a [Video.js 10](https://videojs.org) skin for watching play, not film
 
 It is an HTML skin styled with plain CSS, built from the Video.js Scaffold skin with `npx @videojs/cli skin create`. The design mockups are in `design/reference/`.
 
+## The demo page
+
+Eight numbered sections around a live multiview hero: 01 Multiview (70/30, 50/50, stage only), 02 Event timeline, 03 Match summary (written from `match.json` and `events.vtt`, with a momentum chart and jump-to moments), 04 Every state (captured from the live player), 05 Make it yours (live accent, radius and HUD switches), 06 Specifications, 07 Accessibility, 08 Install.
+
 ## What's where
 
 - `src/`: the skin, and only the skin. It works on any video; with no events track it is an ordinary player.

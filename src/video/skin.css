@@ -550,7 +550,7 @@
     height: var(--vt-thumb);
     border-radius: 50%;
     background-color: var(--vt-text);
-    box-shadow: 0 0 0 3px rgb(56 225 255 / 0.45);
+    box-shadow: 0 0 0 3px var(--vt-halo);
     outline: none;
     translate: -50% -50%;
     transition: scale var(--vt-duration-fast) var(--vt-ease);
@@ -1315,5 +1315,72 @@
     .vt-state {
       border: 1px solid CanvasText;
     }
+  }
+}
+
+@layer components {
+  /* Round bands: alternate rounds get a faint tint on the timeline, so the bar reads as a map of the match. */
+  .vt-rounds {
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 12px;
+    translate: 0 -50%;
+    pointer-events: none;
+  }
+
+  .vt-round-band {
+    position: absolute;
+    inset-block: 0;
+    left: var(--vt-from);
+    width: calc(var(--vt-to) - var(--vt-from));
+  }
+
+  .vt-round-band[data-odd="true"] {
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  /* The broadcast cut: a signal line sweeps across the stage when the angle changes. */
+  .vt-cut {
+    position: absolute;
+    inset: 0;
+    z-index: 24;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .vantage[data-cut] .vt-cut {
+    background:
+      linear-gradient(90deg, transparent 0 46%, rgb(56 225 255 / 0.55) 49.5% 50.5%, transparent 54% 100%) no-repeat,
+      rgb(10 13 18 / 0.18);
+    background-size: 220% 100%, auto;
+    animation: vt-cut 380ms cubic-bezier(0.3, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes vt-cut {
+    0% {
+      opacity: 1;
+      background-position: 100% 0, 0 0;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      background-position: 0% 0, 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vantage[data-cut] .vt-cut {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  /* Hosts can hide the HUD or the key hints: data-hud="off", data-keyhints="off" on the player root. */
+  .vantage[data-hud="off"] .vt-hud,
+  .vantage[data-keyhints="off"] .vt-keyhints {
+    display: none;
   }
 }

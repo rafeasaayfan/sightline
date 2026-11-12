@@ -13,7 +13,7 @@ The brief's audit: *working controls, responsive layout, keyboard access, visibl
 | Responsive 320 / 390 / 768 / 1024 / 1440 | Pass |
 | Contrast over white and black frames | Pass (every pair; table in `design/contrast.md`) |
 | Reduced motion, forced colours, reduced transparency | Pass |
-| Lighthouse (mobile, throttled) | Accessibility 100 · Best practices 100 · Performance 72 · FCP 1.7s · CLS 0 |
+| Lighthouse (mobile, throttled) | Accessibility 100 · Best practices 100 · SEO 100 · Performance 78 · FCP 1.7s · LCP 2.4s · CLS 0.001 |
 
 ## Details
 
@@ -34,7 +34,7 @@ The brief's audit: *working controls, responsive layout, keyboard access, visibl
 | Event toasts | Playing across 0:48 raises "Elimination · Player 1 → Ember 3" in an `aria-live="polite"` region; settings switches toasts off | Pass |
 | No events | A single-angle match without an events file: no markers, highlight buttons `aria-disabled`, N does nothing, no recap, no angles column, no HUD, no errors | Pass |
 | Settings menu | Opens with Enter; holds Speed, Layout, Event toasts (and Captions when tracks exist); Esc closes it and focus returns to the gear; outside click closes | Pass |
-| Layout | Settings → Stage only hides the angles; the page's Layout button restores 70/30 | Pass |
+| Layout | Settings → Stage only hides the angles; 50 / 50 shows one angle at the same width as the stage; the page's layout control restores 70/30 | Pass |
 | Shortcuts | ? opens the list; Esc closes it | Pass |
 | HUD | Round, round clock, score and the active angle update from `match.json` as the match plays; sync pill shows OK, hollow amber while resyncing | Pass |
 | Angle swaps | 15 swaps while playing and 15 while paused, by tile click and keys 1–3, between different stream URLs: the stage resumes within 0.033s of the swap moment; no layout shift | Pass |
@@ -51,10 +51,10 @@ The brief's audit: *working controls, responsive layout, keyboard access, visibl
 | Reduced motion | Spinner stops, sync pulse stops, all transitions 0s, no smooth scrolling | Pass |
 | Forced colours | Markers keep their shapes; played range and focus use Highlight; chips and menus get borders | Pass |
 | Reduced transparency | The band and chips become solid ground | Pass |
-| First load | Lighthouse mobile (slow 4G, 4× CPU): first contentful paint 1.7s, largest 2.3s, no layout shift; fonts use `font-display: swap`; the player stack loads after the page paints | Pass |
+| First load | Lighthouse mobile (slow 4G, 4× CPU) on the full eight-section page: first contentful paint 1.7s, largest 2.4s, layout shift 0.001; the painted poster is reused as the player's poster so the stage never repaints; fonts use `font-display: swap`; the player stack loads after the page paints | Pass |
 
 ## Known limits
 
 - **Fullscreen on iOS Safari and Android Chrome** follows Video.js's own handling (on iPhone, Safari plays fullscreen in its native player). It was not tested on physical phones; check it on yours before submitting (owner checklist).
 - **Placeholder footage**: the three angles are crops of one CC BY clip until the match footage is uploaded to Mux; swap logic was tested with three different stream URLs.
-- **Performance score 72** on Lighthouse's throttled mobile profile comes from parsing the HLS engine after the page paints; first paint and layout stability meet the brief.
+- **Performance score 78** on Lighthouse's throttled mobile profile comes from parsing the HLS engine after the page paints; first paint and layout stability meet the brief.

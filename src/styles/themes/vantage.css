@@ -23,9 +23,10 @@
     --vt-round: #ff4d5e;
     --vt-sync: #5cf2a0;
     --vt-track: rgb(255 255 255 / 0.4); /* 3.3:1 against the band over a white frame. */
-    --vt-buffer: rgb(56 225 255 / 0.35);
+    --vt-buffer: color-mix(in srgb, var(--vt-signal) 35%, transparent);
     --vt-hover: rgb(255 255 255 / 0.08);
-    --vt-active: rgb(56 225 255 / 0.18);
+    --vt-active: color-mix(in srgb, var(--vt-signal) 18%, transparent);
+    --vt-halo: color-mix(in srgb, var(--vt-signal) 45%, transparent);
 
     /* Geometry. One unit is 4px at the default scale. */
     --vt-u: var(--media-spacing);
