@@ -56,7 +56,8 @@ const MEDIA_PLACEHOLDER = '<!-- Add a compatible media component here. -->';
 const SYNC_MS = 500;
 const SEEK_DRIFT = 0.25;
 const SWITCH_NOTICE_MS = 150;
-const wide = matchMedia('(min-width: 640px)');
+/** Phones: narrow screens, and touch screens held sideways (short). They get angle tabs, not the split view. */
+const phone = matchMedia('(width < 640px), (pointer: coarse) and (max-height: 500px)');
 
 const srcOf = (a: Angle) => (a.mux ? `https://stream.mux.com/${a.mux}.m3u8` : (a.src ?? a.mp4 ?? ''));
 const usesMux = (a: Angle) => !!a.mux;
@@ -172,8 +173,15 @@ export async function start(): Promise<void> {
     chipsEl.append(chip);
   }
 
-  /** Tiles play only on wide screens with the angles column showing; phones stream the stage alone. */
-  const tilesActive = () => wide.matches && arena.dataset.layout !== 'stage' && angles.length > 1;
+  /** The player itself is fullscreen (its own button, not the page's multiview). */
+  const playerFullscreen = () => document.fullscreenElement === root;
+  /**
+   * Tiles play beside the stage on wide screens. Phones stream the stage alone and switch angles with tabs; in
+   * fullscreen they can open the angles over the picture with a button.
+   */
+  const anglesOpen = () => root.hasAttribute('data-angles-open');
+  const tilesActive = () =>
+    arena.dataset.layout !== 'stage' && angles.length > 1 && (!phone.matches || (playerFullscreen() && anglesOpen()));
 
   function ensureTileMedia(angle: Angle): MediaEl | undefined {
     const tile = tiles.get(angle.id)!;
@@ -321,8 +329,8 @@ export async function start(): Promise<void> {
     if (arena.dataset.layout !== value) document.dispatchEvent(new CustomEvent('sightline:before-layout'));
     arena.dataset.layout = value;
     // Stage only is an ordinary player: no multiview there.
-    root.toggleAttribute('data-multiview', canWatch && value !== 'stage');
-    watchButton.hidden = !canWatch || value === 'stage';
+    root.toggleAttribute('data-multiview', canWatch && value !== 'stage' && !phone.matches);
+    watchButton.hidden = !canWatch || value === 'stage' || phone.matches;
     for (const b of layoutButtons) b.setAttribute('aria-pressed', String(b.dataset.layoutOption === value));
     setLayout(root, value);
     renderAngles();
@@ -330,10 +338,33 @@ export async function start(): Promise<void> {
   }
   for (const b of layoutButtons) b.addEventListener('click', () => applyLayout(b.dataset.layoutOption as Layout));
   root.addEventListener('sightline:layout', (e) => applyLayout((e as CustomEvent<Layout>).detail));
-  wide.addEventListener('change', () => {
+  /* ---------------------------------------------------------------- Phones */
+
+  const anglesToggle = root.querySelector<HTMLButtonElement>('.sl-angles-toggle');
+  function applyPhone(): void {
+    arena.toggleAttribute('data-phone', phone.matches);
+    const value = (arena.dataset.layout as Layout) ?? 'split';
+    root.toggleAttribute('data-multiview', canWatch && value !== 'stage' && !phone.matches);
+    watchButton.hidden = !canWatch || value === 'stage' || phone.matches;
+    // In fullscreen on a phone the angles stay closed until the viewer opens them.
+    const offer = phone.matches && playerFullscreen() && angles.length > 1 && value !== 'stage';
+    if (anglesToggle) anglesToggle.hidden = !offer;
+    if (!offer) setAnglesOpen(false);
+    renderAngles();
+    syncAll(true);
+  }
+  function setAnglesOpen(open: boolean): void {
+    root.toggleAttribute('data-angles-open', open);
+    anglesToggle?.setAttribute('aria-pressed', String(open));
+    anglesToggle?.setAttribute('aria-label', open ? 'Hide angles' : 'Show angles');
+  }
+  anglesToggle?.addEventListener('click', () => {
+    setAnglesOpen(!anglesOpen());
     renderAngles();
     syncAll(true);
   });
+  phone.addEventListener('change', applyPhone);
+  document.addEventListener('fullscreenchange', applyPhone);
 
   /* ---------------------------------------------------------------- Multiview fullscreen: the arena alone, edge to edge */
 
@@ -376,6 +407,7 @@ export async function start(): Promise<void> {
   watchButton.addEventListener('click', () => void toggleWatch());
   document.querySelector('[data-watch-close]')!.addEventListener('click', () => void toggleWatch());
   root.addEventListener('sightline:multiview', () => void toggleWatch());
+  applyPhone();
 
   /* ---------------------------------------------------------------- Moment links: ?t=95&angle=2 */
 

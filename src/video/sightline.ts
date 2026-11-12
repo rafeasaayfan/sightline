@@ -518,15 +518,23 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
     giveUp = window.setTimeout(clear, 30000); // a stalled network shouldn't leave the pill up forever
   };
 
-  const setBadge = (level: number) => {
+  // The badge shows the quality the viewer chose (pulsing until it is on screen); on Auto, the one playing.
+  let playing = -1;
+  const setBadge = () => {
+    const chosen = engine && engine.manualLevel >= 0 ? engine.manualLevel : -1;
+    const level = chosen >= 0 ? chosen : playing;
     const tier = tierOf(renditionSize(engine?.levels[level]));
-    if (badge) badge.hidden = !tier;
+    if (badge) {
+      badge.hidden = !tier;
+      badge.toggleAttribute('data-loading', !!tier && chosen >= 0 && playing !== chosen);
+    }
     if (badgeLabel) badgeLabel.textContent = tier;
     root.toggleAttribute('data-hd', !!tier);
   };
 
   const onSwitched = (_: string, data: { level: number }) => {
-    setBadge(data.level);
+    playing = data.level;
+    setBadge();
     if (pending >= 0 && data.level === pending) finish(data.level);
   };
 
@@ -593,6 +601,7 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
     queueMicrotask(() => {
       bind();
       if (engine && engine.manualLevel < 0) clear();
+      setBadge();
     });
   };
   let renditions: EventTarget | undefined;
@@ -624,6 +633,8 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
   media.addEventListener('loadstart', () => {
     clear();
     segments.clear();
+    playing = -1;
+    setBadge();
     bind();
   });
   media.addEventListener('loadedmetadata', bind);

@@ -2622,7 +2622,9 @@
 @layer components {
   /* Small players: the docked panel gives its width back to the buttons. */
   @container media-root (width <= 640px) {
-    .sightline[data-docked]:not([data-layout="stage"]):not(:fullscreen) .sl-band {
+    /* Both states, so the line keeps one width whether the controls are active or idle. */
+    .sightline[data-docked]:not([data-layout="stage"]):not(:fullscreen) .sl-band,
+    .sightline[data-docked]:not([data-layout="stage"]):not(:fullscreen) .sl-controls:not([data-visible]) .sl-band {
       padding-inline: 2px;
     }
   }
@@ -2696,24 +2698,40 @@
   /* The badge sits on the gear's top-right corner, like a broadcast HD bug. */
   .sl-hd:not([hidden]) {
     position: absolute;
-    top: 3px;
-    right: 1px;
+    top: 50%;
+    left: 50%;
     display: block;
+    translate: 3px -15px;
     pointer-events: none;
   }
 
+  /* A solid broadcast-style tag on the gear's top-right shoulder, ringed in the band's colour so it reads on it. */
   .sl-hd-label {
     display: block;
-    padding: 1px 3px 0;
-    border-radius: 3px;
+    min-width: 19px;
+    padding: 2px 3px 1px;
+    border-radius: 4px;
     background-color: var(--sl-signal);
     color: var(--sl-signal-text);
     font-family: var(--sl-font-label);
-    font-size: 9px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     line-height: 11px;
-    letter-spacing: 0.04em;
-    box-shadow: 0 0 0 1.5px rgb(11 14 20 / 0.9);
+    letter-spacing: 0.03em;
+    text-align: center;
+    box-shadow: 0 0 0 2px #14171c;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sl-hd[data-loading] .sl-hd-label {
+      animation: sl-hd-wait 1.1s ease-in-out infinite;
+    }
+  }
+
+  @keyframes sl-hd-wait {
+    50% {
+      opacity: 0.45;
+    }
   }
 
   /* Loading a quality: top centre, under the replay badge when both show. */
@@ -2821,6 +2839,35 @@
     .sl-quality,
     .sl-hd-label {
       border: 1px solid CanvasText;
+    }
+  }
+}
+
+@layer components {
+  .sl-angles-toggle[hidden] {
+    display: none;
+  }
+
+  .sl-angles-toggle[aria-pressed="true"] {
+    color: var(--sl-signal);
+  }
+
+  /* Phones: a smaller settings menu (rows stay comfortable to tap). */
+  @media (width < 640px), (pointer: coarse) and (max-height: 500px) {
+    .sl-menu {
+      min-width: 176px;
+      border-radius: 8px;
+    }
+
+    .sl-menu .sl-menu-item {
+      gap: 8px;
+      min-height: 36px;
+      padding-inline: 10px;
+      font-size: 13px;
+    }
+
+    .sl-menu .sl-menu-content {
+      padding: 4px;
     }
   }
 }

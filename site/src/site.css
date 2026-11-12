@@ -3650,3 +3650,71 @@ body::after {
   backdrop-filter: none;
   background: rgb(8 9 11 / 0.97);
 }
+
+/* ===============================================================================================================
+ * Phones (narrow, or a touch screen held sideways): no split view. The stage takes the full width and the angles
+ * are tabs under it. In the player's fullscreen the angles stay closed until the viewer opens them with the angles
+ * button; then they float small at the top right.
+ * =============================================================================================================== */
+.arena[data-phone] .stage .sightline[data-docked]:not(:fullscreen) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "video"
+    "band"
+    "side";
+}
+
+.arena[data-phone] .sightline[data-docked]:not([data-layout="stage"]):not(:fullscreen) .sl-side.angles {
+  height: auto;
+}
+
+.arena[data-phone] .tiles {
+  display: none !important;
+}
+
+.arena[data-phone] .chips {
+  display: grid;
+}
+
+.arena[data-phone][data-layout="stage"] .chips,
+.arena[data-phone] .sightline:fullscreen .chips {
+  display: none;
+}
+
+/* Fullscreen on a phone: closed by default, opened with the angles button. */
+.arena[data-phone] .sightline:fullscreen:not([data-angles-open]) .sl-side.angles {
+  display: none;
+}
+
+.arena[data-phone] .sightline:fullscreen[data-angles-open] .tiles {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.arena[data-phone] .sightline:not([data-layout="stage"]):fullscreen .sl-side.angles {
+  /* Under the HUD chips, and two 16:9 angles stacked must clear the controls: size them from the height too. */
+  top: 56px;
+  right: 16px;
+  width: clamp(110px, min(24vw, (100dvh - 230px) * 0.89), 220px);
+}
+
+.arena[data-phone] .sightline:fullscreen .tile {
+  transform: none;
+  box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.9);
+}
+
+.arena[data-phone] .sightline:fullscreen .tile-muted {
+  display: none;
+}
+
+.arena[data-phone] .sightline:fullscreen .tile-clock {
+  display: none;
+}
+
+.arena[data-phone] .sightline:fullscreen .tile-label {
+  top: 6px;
+  left: 6px;
+  padding: 3px 7px;
+  font-size: 11px;
+}
