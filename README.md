@@ -1,6 +1,6 @@
 # Sightline
 
-Sightline is a [Video.js 10](https://videojs.org) skin for watching play, not films: esports, gameplay recordings and multi-camera sports. The main POV takes the stage and two more angles stay live beside it; click one, or press 1–3, and it swaps onto the stage at the same timestamp. The seek bar is an event lane: every kill, clutch, objective and round is a pin with its own glyph in the colour of the side that scored, and hovering shows the frame. A kill feed, a broadcast HUD, instant replay (R), multiview fullscreen (W), clips, moment links and a spoiler-free mode are built for people watching a match.
+Sightline is a [Video.js 10](https://videojs.org) skin for watching play, not films: esports, gameplay recordings and multi-camera sports. The main POV takes the stage and two more angles stay live beside it; click one, or press 1–3, and it swaps onto the stage at the same timestamp. The seek bar is an event lane: every kill, clutch, objective and round is a pin with its own glyph in the colour of the side that scored, and hovering shows the frame. A kill feed, a broadcast HUD, instant replay (R), multiview fullscreen (W), moment links and a spoiler-free mode are built for people watching a match.
 
 It is an HTML skin styled with plain CSS, built from the Video.js Scaffold skin with `npx @videojs/cli skin create`. The design mockups are in `design/reference/`.
 
@@ -12,7 +12,7 @@ A full-width console around the player: the stage and its two angles on top (spl
 
 - `src/`: the skin, and only the skin. It works on any video; with no events track it is an ordinary player.
   - `src/video/skin.html`, `skin.css`, `skin.ts`: markup, styles and element registration.
-  - `src/video/sightline.ts`: event lane, highlights, kill feed, instant replay, clips, HUD API.
+  - `src/video/sightline.ts`: event lane, highlights, kill feed, instant replay, HUD API.
   - `src/styles/themes/sightline.css`: tokens.
 - `site/`: the public demo page (what you deploy and submit).
   - `site/public/match.json`: **the file you edit**: angles, Mux playback IDs, teams, scoreboard.
@@ -91,7 +91,7 @@ Without anything else it is an overlay player. A host page can add more:
 - `data-docked` on the player root docks the control panel under the picture; put a side column (for angles) in an element with the class `sl-side` inside the root. In fullscreen the side column floats on the picture and the controls return over it; with `data-layout="stage"` the player is an ordinary overlay player.
 - `<track kind="metadata" label="thumbnails" src="storyboard.vtt">` on the media gives seek-bar thumbnails.
 - `data-multiview` shows the multiview button; it dispatches `sightline:multiview` for the page to handle.
-- The API exported from `src/video/skin`: `setScoreboard`, `setAngle`, `setSync`, `setStageState`, `setLayout`, `setMultiview`, `setClip`, `instantReplay`, `nextHighlight`, `prevHighlight`, `getEvents`, `cut`. Events: `sightline:events`, `sightline:layout`, `sightline:spoilers`, `sightline:multiview`.
+- The API exported from `src/video/skin`: `setScoreboard`, `setAngle`, `setSync`, `setStageState`, `setLayout`, `setMultiview`, `instantReplay`, `nextHighlight`, `prevHighlight`, `getEvents`, `cut`. Events: `sightline:events`, `sightline:layout`, `sightline:spoilers`, `sightline:multiview`.
 
 ## Credits
 

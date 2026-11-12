@@ -61,11 +61,13 @@ const WALLS = [
 
 // Low cover: crates and barriers (do not block sight, drawn with a little height).
 const HALF_CRATES = [
-  [330, 412, 38, 38, 0.08], [606, 368, 34, 34, -0.1], [712, 238, 40, 40, 0.12], [452, 186, 36, 36, 0],
-  [604, 756, 40, 40, 0.05], [186, 318, 32, 32, -0.06], [640, 476, 30, 30, 0.2], [360, 760, 44, 30, 0],
-  [880, 120, 34, 34, 0.1],
+  [410, 330, 38, 38, 0.08], [600, 330, 34, 34, -0.1], [700, 120, 36, 36, 0.12], [452, 186, 36, 36, 0],
+  [560, 800, 40, 40, 0.05], [70, 300, 32, 32, -0.06], [560, 520, 30, 30, 0.2], [360, 760, 44, 30, 0],
+  [850, 60, 34, 34, 0.1],
 ];
-const CRATES = [...HALF_CRATES, ...HALF_CRATES.map(([x, y, w, h, a]) => [W - x - w, H - y - h, w, h, a])].map(([x, y, w, h, a]) => ({ x, y, w, h, a }));
+// The right half mirrors the left, except a few crates nudged off Ember's routes.
+const CRATE_NUDGE = { 0: [1222, 536], 1: [1250, 150], 2: [866, 806], 3: [1262, 760], 6: [1380, 640] };
+const CRATES = [...HALF_CRATES, ...HALF_CRATES.map(([x, y, w, h, a], i) => [...(CRATE_NUDGE[i] || [W - x - w, H - y - h]), w, h, a])].map(([x, y, w, h, a]) => ({ x, y, w, h, a }));
 const BARRELS = [[300, 90], [322, 108], [1300, 810], [1278, 792], [760, 560], [840, 340], [560, 860 - 70], [1040, 70]].map(([x, y]) => ({ x, y }));
 const SITES = [
   { name: 'A', x: 800, y: 205, r: 78 },
@@ -91,8 +93,8 @@ const TRACKS = {
   1: {
     a1: [sp('a1', 0.5), [2.5, 300, 300], [5, 430, 256], [7.5, 580, 256], [9.6, 652, 228], [11, 690, 215], [13, 722, 210], [16, 770, 192], [19.5, 790, 200], [27, 800, 214], [31, 802, 214]],
     a2: [sp('a2', 0.5), [3, 290, 450], [7, 420, 452], [10, 590, 440], [13, 640, 470], [15.5, 680, 505], [17, 690, 520]],
-    a3: [sp('a3', 0.5), [3.2, 300, 600], [6.5, 420, 645], [10, 580, 650], [13, 640, 690], [19.5, 650, 694], [22.5, 700, 700], [24, 702, 700], [27, 690, 470], [29.5, 712, 330], [31, 730, 300]],
-    a4: [sp('a4', 0.5), [3.6, 300, 615], [7, 440, 648], [10.5, 590, 660], [13.5, 620, 744], [22, 626, 744], [24, 680, 640], [26.5, 690, 470], [28.5, 720, 320], [31, 750, 270]],
+    a3: [sp('a3', 0.5), [3.2, 300, 600], [6.5, 420, 645], [10, 580, 650], [13, 640, 690], [19.5, 650, 694], [22.5, 700, 700], [24, 702, 700], [25.8, 712, 600], [27.3, 711, 520], [28.6, 712, 420], [30, 720, 330], [31, 730, 300]],
+    a4: [sp('a4', 0.5), [3.6, 300, 615], [7, 440, 648], [10.5, 590, 660], [13.5, 620, 744], [22, 626, 744], [24, 690, 640], [25.3, 711, 560], [26.5, 711, 460], [28.5, 730, 320], [31, 750, 270]],
     e3: [sp('e3', 0.5), [3, 1310, 300], [6, 1180, 250], [8.5, 1060, 228], [10, 980, 200], [11, 935, 185]],
     e1: [sp('e1', 0.5), [3, 1300, 460], [7, 1190, 530], [11, 1060, 545], [14, 960, 550], [15.6, 905, 560], [17, 900, 562], [18.2, 915, 580], [19.6, 950, 640], [21.2, 1100, 650], [31, 1110, 652]],
     e2: [sp('e2', 0.5), [3, 1310, 330], [6, 1220, 250], [9, 1160, 240], [10.5, 1180, 172], [24, 1182, 170], [27, 1150, 240], [29.5, 1050, 222], [31, 1030, 220]],
@@ -109,24 +111,24 @@ const TRACKS = {
     e3: [sp('e3', 40), [43, 1310, 300], [46.5, 1180, 250], [50, 1060, 240], [55, 1062, 242], [57.5, 1235, 262], [59.5, 1240, 470], [61.5, 1120, 520], [63, 940, 560], [65, 850, 660], [71, 830, 690]],
   },
   3: {
-    a1: [sp('a1', 80), [82.5, 300, 340], [85, 450, 440], [87, 600, 420], [88, 640, 400], [90, 662, 470], [92.5, 700, 562], [104, 702, 562], [106.5, 690, 430], [108.2, 700, 352], [109, 705, 336], [110.5, 694, 300], [113.5, 680, 272], [115.5, 760, 242], [117.5, 862, 250], [118, 870, 250], [121, 880, 240]],
+    a1: [sp('a1', 80), [82.5, 300, 340], [85, 450, 440], [87, 600, 420], [88, 640, 400], [90, 662, 470], [92.5, 700, 562], [104, 702, 562], [106.5, 690, 430], [108.2, 690, 370], [109, 688, 356], [110.5, 670, 310], [113.5, 680, 272], [115.5, 760, 285], [117.5, 840, 285], [118, 846, 284], [121, 860, 290]],
     a2: [sp('a2', 80), [83, 300, 300], [86, 430, 256], [89, 580, 256], [92, 640, 232], [95, 700, 202], [97, 720, 192]],
-    a3: [sp('a3', 80), [83, 300, 322], [86, 430, 266], [90, 600, 266], [94, 660, 262], [97, 690, 250], [99.5, 710, 240]],
+    a3: [sp('a3', 80), [83, 300, 300], [86, 430, 266], [90, 600, 266], [94, 660, 262], [97, 690, 250], [99.5, 710, 240]],
     a4: [sp('a4', 80), [84, 300, 452], [88, 450, 452], [92, 600, 432], [96, 660, 380], [100, 700, 330], [102, 718, 312]],
     e2: [sp('e2', 80), [83, 1300, 420], [85.5, 1100, 440], [87, 960, 370], [88, 880, 312]],
     e1: [sp('e1', 80), [83, 1310, 300], [86, 1180, 250], [90, 1060, 232], [94, 980, 222], [97, 900, 226], [99, 880, 232], [102, 868, 242], [107, 862, 244], [109, 860, 245]],
-    e3: [sp('e3', 80), [83, 1310, 292], [86, 1180, 250], [89.5, 1060, 160], [93, 1000, 150], [97, 922, 140], [99.5, 880, 150], [102, 930, 140], [105, 1060, 135], [110, 1062, 136], [112, 960, 140], [113.5, 880, 142]],
-    e4: [sp('e4', 80), [83, 1300, 362], [86, 1245, 300], [90, 1160, 250], [95, 1000, 262], [100, 930, 260], [102, 910, 256], [104, 960, 232], [106.5, 1080, 246], [108, 1150, 236], [109.5, 1162, 180], [116, 1164, 180], [117.6, 1102, 244], [118, 1096, 248]],
+    e3: [sp('e3', 80), [83, 1310, 292], [86, 1180, 250], [88, 1085, 248], [90, 1050, 165], [93, 1000, 150], [97, 922, 140], [99.5, 880, 150], [102, 930, 140], [105, 1060, 135], [110, 1062, 136], [112, 960, 140], [113.5, 880, 142]],
+    e4: [sp('e4', 80), [83, 1300, 362], [86, 1245, 300], [90, 1160, 250], [95, 1000, 262], [100, 930, 260], [102, 910, 256], [104, 960, 232], [106.5, 1080, 246], [108, 1150, 236], [109.5, 1162, 180], [116, 1164, 180], [117, 1160, 238], [117.7, 1104, 246], [118, 1096, 248]],
   },
   4: {
     a4: [sp('a4', 130), [133, 300, 620], [136, 450, 646], [138, 580, 652], [139, 610, 660]],
     a1: [sp('a1', 130), [133, 300, 452], [136, 450, 452], [139, 580, 450], [141, 640, 472], [143, 690, 540], [145, 700, 570], [147, 742, 640], [149, 790, 680], [158, 796, 690]],
-    a2: [sp('a2', 130), [133, 300, 590], [136, 440, 645], [140, 560, 652], [143, 620, 682], [146, 662, 718], [148, 690, 732], [150, 700, 740], [152, 762, 722], [158, 770, 716]],
+    a2: [sp('a2', 130), [133, 300, 590], [136, 440, 645], [140, 520, 672], [143, 630, 722], [146, 662, 718], [148, 690, 732], [150, 700, 740], [152, 762, 722], [158, 770, 716]],
     a3: [sp('a3', 130), [133, 300, 330], [136, 430, 256], [140, 580, 256], [143, 642, 232], [152, 646, 236], [155, 690, 330], [158, 694, 420]],
-    e1: [sp('e1', 130), [133, 1300, 600], [135.5, 1180, 646], [137.5, 1000, 670], [139, 852, 690], [140.5, 975, 795], [142, 1010, 822], [144, 1080, 822], [145.5, 1092, 752], [158, 1094, 750]],
+    e1: [sp('e1', 130), [133, 1300, 600], [135.5, 1180, 640], [137.5, 1000, 660], [139, 852, 690], [140.3, 955, 768], [141.8, 1005, 822], [144, 1080, 822], [145.5, 1092, 752], [158, 1094, 750]],
     e3: [sp('e3', 130), [133, 1300, 452], [136, 1180, 460], [139, 1050, 500], [142, 950, 540], [144, 930, 610], [145, 920, 640]],
     e2: [sp('e2', 130), [133, 1300, 610], [136, 1200, 806], [140, 1150, 822], [146.5, 1152, 822], [148.5, 1000, 822], [150, 955, 770]],
-    e4: [sp('e4', 130), [133, 1300, 300], [136, 1180, 250], [140, 1060, 242], [142, 1150, 240], [143.5, 1162, 180], [150, 1164, 180], [152, 1232, 330], [154, 1232, 450], [156, 1150, 470], [158, 1100, 480]],
+    e4: [sp('e4', 130), [133, 1300, 300], [136, 1180, 250], [140, 1060, 242], [142, 1150, 240], [143.5, 1162, 180], [150, 1164, 180], [151.3, 1225, 250], [152.3, 1240, 330], [154, 1232, 450], [156, 1150, 470], [158, 1100, 480]],
   },
 };
 
@@ -313,7 +315,7 @@ function facing(u, t, r = roundAt(t)) {
   return Math.atan2(hy, hx);
 }
 
-const muzzleOf = (p, f) => ({ x: p.x + Math.cos(f) * 31 - Math.sin(f) * 3.5, y: p.y + Math.sin(f) * 31 + Math.cos(f) * 3.5 });
+const muzzleOf = (p, f) => ({ x: p.x + Math.cos(f) * 38 - Math.sin(f) * 4.2, y: p.y + Math.sin(f) * 38 + Math.cos(f) * 4.2 });
 
 /** First wall hit along a ray from a in direction ang, up to maxD. */
 function rayWall(a, ang, maxD) {
@@ -370,7 +372,13 @@ const SHOTS = (() => {
           const ang = Math.atan2(qs.y - m.y, qs.x - m.x) + Math.atan2(off, dist);
           const maxD = dist + 140 + seeded(ts * 100, u.index, 45) * 120;
           const d = rayWall(m, ang, maxD);
-          shots.push({ t: ts, team: u.team, by: u.id, on: null, ax: m.x, ay: m.y, bx: m.x + Math.cos(ang) * d, by2: m.y + Math.sin(ang) * d, kind: d < maxD - 0.5 ? 'wall' : 'floor', ang });
+          if (i === nb - 1 && seeded(ts * 100, u.index, 47) < 0.3) {
+            // a grazing hit: some damage, never lethal (only the scripted eliminations kill)
+            const a2 = Math.atan2(qs.y - m.y, qs.x - m.x);
+            shots.push({ t: ts, team: u.team, by: u.id, on: e.id, ax: m.x, ay: m.y, bx: qs.x, by2: qs.y, kind: 'chip', ang: a2, dmg: 12 + Math.round(seeded(ts * 100, u.index, 48) * 14) });
+          } else {
+            shots.push({ t: ts, team: u.team, by: u.id, on: null, ax: m.x, ay: m.y, bx: m.x + Math.cos(ang) * d, by2: m.y + Math.sin(ang) * d, kind: d < maxD - 0.5 ? 'wall' : 'floor', ang });
+          }
         }
         next = t + nb * 0.11 + 0.75 + seeded(t * 10, u.index, 46) * 0.9;
       }
@@ -383,8 +391,12 @@ const SHOTS = (() => {
 function health(u, t, r) {
   if (!isAlive(u, t, r)) return 0;
   let hp = 100;
-  for (const s of SHOTS) if (s.on === u.id && s.t <= t && s.t >= r.start - 0.01 && s.t <= r.end + 1) hp -= 34;
-  return Math.max(hp, 8);
+  for (const s of SHOTS) {
+    if (s.t > t) break;
+    if (s.on !== u.id || s.t < r.start - 0.01 || s.t > r.end + 1) continue;
+    hp = s.kind === 'chip' ? Math.max(hp - s.dmg, 34) : Math.round(hp * 0.45);
+  }
+  return hp;
 }
 
 /** Full drawable state of a unit at t (handles death: frozen pose plus a short knock-back). */
@@ -452,7 +464,7 @@ function buildMap(scale) {
     for (let gy = 0; gy < H; gy += 50) {
       const z = zoneOf(gx + 25, gy + 25);
       const n = seeded(gx, gy, 1);
-      let l = z === 'spawn' ? 15 : z === 'plaza' ? 19 : 17;
+      let l = z === 'spawn' ? 17 : z === 'plaza' ? 21 : 19;
       l += (n - 0.5) * 4;
       ctx.fillStyle = `rgb(${l | 0},${(l + 3.5) | 0},${(l + 8) | 0})`;
       ctx.fillRect(gx, gy, 50, 50);
@@ -655,10 +667,6 @@ function buildMap(scale) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(s.name, s.x, s.y + 2);
-    // stencil bridges
-    ctx.fillStyle = '#12161c';
-    ctx.globalAlpha = 0.5;
-    ctx.fillRect(s.x - 30, s.y - 2, 60, 3);
     ctx.restore();
   }
 
@@ -666,7 +674,7 @@ function buildMap(scale) {
   const lights = [[160, 450], [W - 160, 450], [800, 205], [800, 695], [520, 200], [W - 520, H - 200], [520, 700], [W - 520, H - 700], [800, 450], [420, 450], [W - 420, 450]];
   for (const [x, y] of lights) {
     const g = ctx.createRadialGradient(x, y, 0, x, y, 210);
-    g.addColorStop(0, 'rgba(175,200,235,0.085)');
+    g.addColorStop(0, 'rgba(175,200,235,0.11)');
     g.addColorStop(0.5, 'rgba(175,200,235,0.03)');
     g.addColorStop(1, 'rgba(175,200,235,0)');
     ctx.fillStyle = g;
@@ -779,7 +787,7 @@ function drawSolids(ctx, cam) {
       if (nx * (cam.x - mx) + ny * (cam.y - my) <= 0) continue;
       const len = Math.hypot(nx, ny);
       const light = (-nx / len) * 0.6 + (-ny / len) * 0.8; // light from upper-left
-      const base = it.kind === 'crate' ? [34, 32, 28] : [22, 28, 37];
+      const base = it.kind === 'crate' ? [40, 38, 33] : [30, 37, 48];
       const f = 0.55 + 0.35 * light;
       ctx.fillStyle = `rgb(${(base[0] * f) | 0},${(base[1] * f) | 0},${(base[2] * f) | 0})`;
       ctx.beginPath();
@@ -798,11 +806,14 @@ function drawSolids(ctx, cam) {
       g.addColorStop(0, '#3b3a35');
       g.addColorStop(1, '#25241f');
     } else if (w.core) {
-      g.addColorStop(0, '#2a3340');
-      g.addColorStop(1, '#171d26');
+      g.addColorStop(0, '#3a4657');
+      g.addColorStop(1, '#202833');
+    } else if (w.edge) {
+      g.addColorStop(0, '#1c222b');
+      g.addColorStop(1, '#12161c');
     } else {
-      g.addColorStop(0, '#252d39');
-      g.addColorStop(1, '#151a22');
+      g.addColorStop(0, '#343f4e');
+      g.addColorStop(1, '#1d2430');
     }
     ctx.fillStyle = g;
     ctx.beginPath();
@@ -994,69 +1005,74 @@ function drawCone(ctx, u, s, len, alpha) {
   ctx.fill();
 }
 
-/** A top-down soldier: pack, torso with team shoulder plates, arms, rifle, helmet with a visor stripe. */
+/** A top-down soldier: pack, armoured torso with a team stripe, both arms on the rifle, helmet and goggles. */
 function drawSoldier(ctx, team, dead, breathe) {
   const c = TEAM[team];
-  const accent = dead ? 'rgba(120,128,140,0.55)' : rgba(c, 1);
+  const accent = dead ? 'rgba(120,128,140,0.5)' : rgba(c, 1);
   // pack
-  ctx.fillStyle = dead ? '#1a1d22' : '#1c232c';
-  rr(ctx, -15, -7.5, 9, 15, 3);
+  ctx.fillStyle = dead ? '#1a1d22' : '#1d242d';
+  rr(ctx, -14.5, -7, 8, 14, 2.5);
   ctx.fill();
-  // arms
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = dead ? '#23272d' : '#28303b';
-  ctx.lineWidth = 4.6;
+  // torso (vest)
+  ctx.fillStyle = dead ? '#2b2f35' : '#343e4b';
   ctx.beginPath();
-  ctx.moveTo(0, 9);
-  ctx.lineTo(9, 6);
-  ctx.moveTo(0, -9.5);
-  ctx.lineTo(16, 2);
-  ctx.stroke();
-  // rifle
-  ctx.fillStyle = '#0b0d10';
-  rr(ctx, 3, 1.6, 22, 4.2, 1.2);
+  ctx.ellipse(-1.5, 0, 7.4 * breathe, 13, 0, 0, TAU);
   ctx.fill();
-  ctx.fillRect(24, 2.6, 8, 2.2);
-  ctx.fillRect(12, 5.4, 3.4, 4);
-  ctx.strokeStyle = 'rgba(160,175,195,0.35)';
-  ctx.lineWidth = 0.8;
-  ctx.beginPath();
-  ctx.moveTo(4, 2.2);
-  ctx.lineTo(24, 2.2);
-  ctx.stroke();
-  // torso
-  ctx.fillStyle = dead ? '#2a2e34' : '#313a47';
-  ctx.beginPath();
-  ctx.ellipse(-1, 0, 8.2 * breathe, 12.6, 0, 0, TAU);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+  ctx.strokeStyle = 'rgba(0,0,0,0.55)';
   ctx.lineWidth = 1;
   ctx.stroke();
-  // shoulder plates
-  ctx.fillStyle = accent;
+  // team stripe across the shoulders
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'butt';
   ctx.beginPath();
-  ctx.ellipse(-0.5, -10, 4.4, 3.2, 0, 0, TAU);
-  ctx.ellipse(-0.5, 10, 4.4, 3.2, 0, 0, TAU);
+  ctx.ellipse(-1.5, 0, 5.2, 11.2, 0, Math.PI * 0.62, Math.PI * 1.38);
+  ctx.stroke();
+  // arms reaching to the rifle
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = dead ? '#2c3036' : '#3b4553';
+  ctx.lineWidth = 4.6;
+  ctx.beginPath();
+  ctx.moveTo(-0.5, 10.5);
+  ctx.quadraticCurveTo(5, 10, 10, 5.8);
+  ctx.moveTo(-0.5, -10.5);
+  ctx.quadraticCurveTo(9, -8, 17, 2.4);
+  ctx.stroke();
+  // rifle
+  ctx.fillStyle = '#0a0c0f';
+  rr(ctx, 2, 1.6, 23, 4.2, 1.2);
   ctx.fill();
-  // gloves
-  ctx.fillStyle = '#15191f';
+  ctx.fillRect(24, 2.7, 8, 2);
+  ctx.fillRect(12, 5.4, 3.4, 4.2);
+  ctx.strokeStyle = 'rgba(170,185,205,0.4)';
+  ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.arc(9.5, 5.8, 2.4, 0, TAU);
-  ctx.arc(16.5, 2.4, 2.4, 0, TAU);
+  ctx.moveTo(3, 2.2);
+  ctx.lineTo(24, 2.2);
+  ctx.stroke();
+  // gloves
+  ctx.fillStyle = '#161a20';
+  ctx.beginPath();
+  ctx.arc(10, 5.8, 2.3, 0, TAU);
+  ctx.arc(17, 2.6, 2.3, 0, TAU);
   ctx.fill();
   // helmet
-  const hg = ctx.createRadialGradient(-1, -2.5, 0.5, 1, 0, 7);
-  hg.addColorStop(0, dead ? '#4a4f57' : '#5b6675');
-  hg.addColorStop(1, dead ? '#25282d' : '#2b333e');
+  const hg = ctx.createRadialGradient(-1.5, -2, 0.5, 0, 0, 6.5);
+  hg.addColorStop(0, dead ? '#4a4f57' : '#616d7c');
+  hg.addColorStop(1, dead ? '#25282d' : '#2a313b');
   ctx.fillStyle = hg;
   ctx.beginPath();
-  ctx.arc(1, 0, 6.6, 0, TAU);
+  ctx.arc(0, 0, 5.9, 0, TAU);
   ctx.fill();
-  ctx.strokeStyle = accent;
-  ctx.lineWidth = 2.2;
-  ctx.beginPath();
-  ctx.arc(1, 0, 5.4, -0.75, 0.75);
+  ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+  ctx.lineWidth = 0.8;
   ctx.stroke();
+  // goggles strap and lens
+  ctx.fillStyle = dead ? '#3a3f46' : '#0d1014';
+  rr(ctx, 3.2, -3.2, 2.6, 6.4, 1.2);
+  ctx.fill();
+  ctx.fillStyle = dead ? 'rgba(0,0,0,0)' : rgba(c, 0.85);
+  ctx.fillRect(4.6, -2.4, 1, 4.8);
 }
 
 function drawUnit(ctx, u, s, t, opts) {
@@ -1074,11 +1090,14 @@ function drawUnit(ctx, u, s, t, opts) {
     ctx.shadowBlur = 6;
     drawSoldier(ctx, u.team, f > 0.25, 1);
     ctx.restore();
-    const flash = clamp(1 - s.since / 0.5, 0, 1);
+    const flash = clamp(1 - s.since / 0.35, 0, 1);
     if (flash > 0) {
-      ctx.fillStyle = `rgba(255,255,255,${0.5 * flash})`;
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 22);
+      g.addColorStop(0, rgba(RED, 0.45 * flash));
+      g.addColorStop(1, rgba(RED, 0));
+      ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.arc(0, 0, 14, 0, TAU);
+      ctx.arc(0, 0, 22, 0, TAU);
       ctx.fill();
     }
     // marker: red ring with an X, slightly offset so the body stays readable
@@ -1088,21 +1107,17 @@ function drawUnit(ctx, u, s, t, opts) {
       ctx.strokeStyle = rgba(RED, 0.9);
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(0, 0, 19, 0, TAU);
+      ctx.arc(0, 0, 16, 0, TAU);
       ctx.stroke();
-      ctx.strokeStyle = rgba(c, 0.6);
+      ctx.strokeStyle = rgba(c, 0.5);
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(0, 0, 23, 0, TAU);
+      ctx.arc(0, 0, 19.5, 0, TAU);
       ctx.stroke();
-      ctx.lineWidth = 2.4;
+      ctx.lineWidth = 2.2;
       ctx.strokeStyle = rgba(RED, 1);
       ctx.beginPath();
-      ctx.moveTo(-5, -5); ctx.lineTo(5, 5); ctx.moveTo(5, -5); ctx.lineTo(-5, 5);
-      ctx.translate(0, 0);
-      ctx.save();
-      ctx.translate(0, 0);
-      ctx.restore();
+      ctx.moveTo(-4, -4); ctx.lineTo(4, 4); ctx.moveTo(4, -4); ctx.lineTo(-4, 4);
       ctx.stroke();
     }
     ctx.restore();
@@ -1135,6 +1150,7 @@ function drawUnit(ctx, u, s, t, opts) {
   let kick = 0;
   for (const sh of opts.shots) if (sh.by === u.id && t >= sh.t && t < sh.t + 0.08) kick = Math.max(kick, 1 - (t - sh.t) / 0.08);
   ctx.translate(-2.2 * kick, 0);
+  ctx.scale(1.2, 1.2);
   drawSoldier(ctx, u.team, false, 1 + Math.sin(t * 2.4 + u.index) * 0.03);
   ctx.restore();
 }
@@ -1147,8 +1163,8 @@ function drawShots(ctx, t, recent) {
     // tracer
     if (a < 0.14) {
       const L = Math.hypot(s.bx - s.ax, s.by2 - s.ay);
-      const head = clamp(a / 0.035, 0, 1);
-      const tail = clamp((a - 0.02) / 0.12, 0, 1);
+      const head = 1; // hitscan: the round is there on the frame it is fired
+      const tail = clamp(a / 0.13, 0, 1);
       const hx = lerp(s.ax, s.bx, head), hy = lerp(s.ay, s.by2, head);
       const tx = lerp(s.ax, s.bx, tail), ty = lerp(s.ay, s.by2, tail);
       if (L > 1 && head > tail) {
@@ -1200,7 +1216,7 @@ function drawShots(ctx, t, recent) {
       ctx.restore();
     }
     // impact
-    const ia = a - 0.03;
+    const ia = s.kind === 'wall' || s.kind === 'floor' ? a - 0.016 : a;
     if (ia >= 0 && ia < 0.45) {
       const k = ia / 0.45;
       ctx.save();
@@ -1455,7 +1471,7 @@ function drawOverview(ctx, t, w, h) {
   ctx.restore();
   for (const [u, s] of states) {
     if (!s.alive) continue;
-    drawLabel(ctx, ox + s.x * sc, oy + (s.y - 24) * sc, u, s, 0.95, 1);
+    drawLabel(ctx, ox + s.x * sc, oy + (s.y - 30) * sc, u, s, 0.95, 1);
   }
   overlays(ctx, t, w, h, w / 1280);
 }
@@ -1579,7 +1595,7 @@ function drawPov(ctx, t, w, h, id) {
   f.globalCompositeOperation = 'source-over';
   f.filter = 'none';
   f.clearRect(0, 0, fw, fh);
-  f.fillStyle = 'rgba(3,5,8,0.66)';
+  f.fillStyle = 'rgba(3,5,8,0.6)';
   f.fillRect(0, 0, fw, fh);
   f.globalCompositeOperation = 'destination-out';
   f.filter = 'blur(2.5px)';
@@ -1627,8 +1643,11 @@ function drawPov(ctx, t, w, h, id) {
     if (!s.alive) continue;
     const v = vis(u);
     if (v <= 0) continue;
+    // Tag sits on the side away from where the unit points, so it never covers the rifle.
     const [sx, sy] = toScreen(s.x, s.y);
-    drawLabel(ctx, sx, sy - 34 * (w / 1280), u, s, w / 1280, v);
+    const a = s.facing + rot;
+    const d = 40 * (w / 1280);
+    drawLabel(ctx, sx - Math.cos(a) * d, sy - Math.sin(a) * d + 6 * (w / 1280), u, s, w / 1280, v);
   }
   // Spectating tag.
   const sc = w / 1280;

@@ -379,22 +379,6 @@ function endReplay(state: State): void {
   if (badge) badge.hidden = true;
 }
 
-/**
- * Show a clip on the timeline: a marked range from start to end (seconds), or null to clear it. The host owns the
- * clip itself (marking, sharing, stopping at the end); the skin only draws it.
- */
-export function setClip(root: HTMLElement, clip: { start: number; end: number } | null): void {
-  const range = root.querySelector<HTMLElement>('.sl-clip-range');
-  const duration = states.get(root)?.media?.duration ?? NaN;
-  if (!range) return;
-  range.hidden = !clip || !Number.isFinite(duration) || duration <= 0;
-  if (range.hidden || !clip) return;
-  const a = Math.max(0, Math.min(clip.start, clip.end));
-  const b = Math.min(duration, Math.max(clip.start, clip.end));
-  range.style.setProperty('--sl-from', `${(a / duration) * 100}%`);
-  range.style.setProperty('--sl-to', `${(b / duration) * 100}%`);
-}
-
 /** Reflect the page's multiview fullscreen state on the button. */
 export function setMultiview(root: HTMLElement, on: boolean): void {
   root.querySelector<HTMLElement>('.sl-multiview')?.setAttribute('aria-pressed', String(on));

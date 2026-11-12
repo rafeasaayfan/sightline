@@ -5,7 +5,6 @@ import {
   nextHighlight,
   prevHighlight,
   setAngle,
-  setClip,
   setLayout,
   setMultiview,
   setScoreboard,
@@ -398,107 +397,8 @@ export async function start(): Promise<void> {
     window.setTimeout(() => (shareLabel.textContent = 'Copy link to this moment'), 2400);
   });
 
-  /* ---------------------------------------------------------------- Clips: ?t=80&end=95&angle=2 */
-
-  // Idle → press once to mark the start (the range grows on the timeline as it plays) → press again to mark the end
-  // and copy the link. A clip link plays from its start and stops at its end; the button then replays it.
-  const clipButton = document.querySelector<HTMLButtonElement>('[data-clip]')!;
-  const clipLabel = clipButton.querySelector<HTMLElement>('[data-clip-label]')!;
-  const clipCancel = document.querySelector<HTMLButtonElement>('[data-clip-cancel]')!;
-  const CLIP_MIN = 2;
-  let clip: { start: number; end: number } | null = null;
-  let marking: number | null = null;
-  let clipStop = false;
-
-  const clipText = (c: { start: number; end: number }) => `${formatTime(c.start)}–${formatTime(c.end)}`;
-  const say = (text: string) => (shareStatus.textContent = text);
-  const renderClip = () => {
-    clipButton.setAttribute('aria-pressed', String(marking !== null));
-    clipCancel.hidden = marking === null && clip === null;
-    if (marking !== null) {
-      clipLabel.textContent = `Set clip end · from ${formatTime(marking)}`;
-      setClip(root, { start: marking, end: Math.max(master.currentTime, marking + 0.1) });
-    } else if (clip) {
-      clipLabel.textContent = `Replay clip ${clipText(clip)}`;
-      setClip(root, clip);
-    } else {
-      clipLabel.textContent = 'Clip';
-      setClip(root, null);
-    }
-  };
-
-  clipButton.addEventListener('click', async () => {
-    if (marking === null && clip) {
-      master.currentTime = clip.start;
-      clipStop = true;
-      void master.play().catch(() => undefined);
-      return;
-    }
-    if (marking === null) {
-      marking = master.currentTime;
-      clip = null;
-      renderClip();
-      say(`Clip started at ${formatTime(marking)}. Press Clip again to set the end.`);
-      return;
-    }
-    const a = Math.min(marking, master.currentTime);
-    const b = Math.max(marking, master.currentTime, a + CLIP_MIN);
-    marking = null;
-    clip = { start: Math.floor(a), end: Math.ceil(Math.min(b, master.duration)) };
-    const url = new URL(location.href);
-    url.hash = '';
-    url.searchParams.set('t', String(clip.start));
-    url.searchParams.set('end', String(clip.end));
-    url.searchParams.set('angle', String(stageAngle.id));
-    let text = `Clip ${clipText(clip)} copied`;
-    try {
-      await navigator.clipboard.writeText(url.toString());
-    } catch {
-      history.replaceState(null, '', url);
-      text = `Clip ${clipText(clip)} is in the address bar`;
-    }
-    renderClip();
-    say(text);
-    const label = clipLabel.textContent;
-    clipLabel.textContent = text;
-    window.setTimeout(() => {
-      if (clipLabel.textContent === text) clipLabel.textContent = label;
-    }, 2200);
-  });
-
-  clipCancel.addEventListener('click', () => {
-    marking = null;
-    clip = null;
-    clipStop = false;
-    renderClip();
-    say('Clip cleared');
-    clipButton.focus();
-  });
-
-  master.addEventListener('timeupdate', () => {
-    if (marking !== null) renderClip();
-    // A clip stops at its end, once per play-through.
-    if (clip && clipStop && master.currentTime >= clip.end) {
-      clipStop = false;
-      master.pause();
-      say(`End of clip ${clipText(clip)}`);
-    }
-  });
-  master.addEventListener('seeked', () => {
-    if (clip && (master.currentTime < clip.start - 0.5 || master.currentTime > clip.end)) clipStop = false;
-  });
-  master.addEventListener('durationchange', renderClip);
-
   const params = new URLSearchParams(location.search);
   const startAt = Number(params.get('t'));
-  const endAt = Number(params.get('end'));
-  if (startAt >= 0 && endAt > startAt) {
-    clip = { start: startAt, end: endAt };
-    clipStop = true;
-    const show = () => renderClip();
-    if (master.readyState >= 1) show();
-    else master.addEventListener('loadedmetadata', show, { once: true });
-  }
   const startAngle = angles.find((a) => String(a.id) === params.get('angle'));
   if (startAt > 0 || startAngle) {
     const jump = () => {
