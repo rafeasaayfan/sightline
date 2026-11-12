@@ -40,6 +40,8 @@ The challenge's audit: *working controls, responsive layout, keyboard access, vi
 | Moment links | "Copy link to this moment" copies `?t=&angle=`; opening it lands on that time and angle | Pass |
 | No events | A single-angle match without an events file: no pins, highlight buttons `aria-disabled`, N does nothing, no recap, no angles column, no HUD, no errors | Pass |
 | Settings menu | Opens with Enter; holds Speed, Quality (Auto plus each Mux rendition, shown only when the stream has more than one), Layout, Kill feed, Spoiler-free (and Captions when tracks exist); Esc closes it and focus returns to the gear | Pass |
+| Quality switch | Picking a quality shows "Loading 720p" while the old quality keeps playing (no stall), then "Now in 720p"; seeking back into a part watched in another quality plays those frames while the chosen quality reloads; the gear wears an HD badge while 1080p plays | Pass |
+| Rotate (phones) | In fullscreen on a touch device a rotate button locks the screen to landscape (Screen Orientation API); hidden outside fullscreen and where the browser can't lock (iPhone uses Safari's own fullscreen player) | Pass |
 | Layout | Split: stage and two angles at exactly the stage's height, controls docked under them. Stage only: an ordinary overlay player, no multiview | Pass |
 | Multiview fullscreen | W or the page button fills the screen with the stage and its angles; swaps and layouts work inside; Esc or the close button exits | Pass |
 | Shortcuts | ? opens the list; Esc closes it | Pass |

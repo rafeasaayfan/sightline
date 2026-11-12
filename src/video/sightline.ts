@@ -440,10 +440,13 @@ function attachMedia(state: State, media: HTMLMediaElement): void {
 
 /** The parts of an hls.js instance the skin reads. Video.js's HLS media expose it as `engine`. */
 interface HlsEngine {
-  levels: { width?: number; height?: number }[];
+  levels: { width?: number; height?: number; bitrate?: number; details?: unknown }[];
+  audioTracks?: unknown[];
+  bandwidthEstimate?: number;
   manualLevel: number;
   nextLevel: number;
   currentLevel: number;
+  trigger(event: string, data: unknown): void;
   on(event: string, listener: (event: string, data: any) => void): void;
   off(event: string, listener: (event: string, data: any) => void): void;
 }
@@ -465,11 +468,12 @@ const tierOf = (size: number) => (size >= 4320 ? '8K' : size >= 2160 ? '4K' : si
 const qualityName = (size: number) => `${size}p${tierOf(size) ? ` ${tierOf(size)}` : ''}`;
 
 /**
- * Quality on HLS streams. A chosen quality loads behind the picture: the old one keeps playing (hls.js `nextLevel`)
- * while a pill says the new one is loading, and the pill clears the moment the new quality is on screen. Parts of
- * the video already buffered in another quality (watched before the change) are fetched again in the chosen one
- * when playback returns to them, the same way: the old frames play until the new ones arrive. The gear wears an HD
- * (or 4K) badge while such a rendition plays.
+ * Quality on HLS streams. A chosen quality loads behind the picture: the old one keeps playing while a pill says the
+ * new one is loading, and the pill clears the moment the new quality is on screen. To get there quickly without a
+ * stall, the stretch ahead that is buffered in another quality is dropped from the first segment boundary a couple
+ * of seconds out (hls.js alone would play up to its whole forward buffer in the old quality first), and hls.js
+ * refills it in the chosen one. Parts already watched in another quality get the same treatment when playback
+ * returns to them. The gear wears an HD (or 4K) badge while such a rendition plays.
  */
 function attachQuality(state: State, media: HTMLMediaElement): void {
   const { root } = state;
@@ -481,6 +485,8 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
   let pending = -1; // the level being loaded, or -1
   let doneTimer = 0;
   let giveUp = 0;
+  // What is buffered, segment by segment, and in which level: start (ms) → segment.
+  const segments = new Map<number, { start: number; end: number; level: number }>();
 
   const showPill = (text: string, done: boolean) => {
     if (!pill || !pillText) return;
@@ -509,7 +515,7 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
     pending = level;
     showPill(`Loading ${qualityName(renditionSize(engine.levels[level]))}`, false);
     window.clearTimeout(giveUp);
-    giveUp = window.setTimeout(clear, 20000); // a stalled network shouldn't leave the pill up forever
+    giveUp = window.setTimeout(clear, 30000); // a stalled network shouldn't leave the pill up forever
   };
 
   const setBadge = (level: number) => {
@@ -524,29 +530,62 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
     if (pending >= 0 && data.level === pending) finish(data.level);
   };
 
-  // The fragment now on screen. If the viewer picked a quality and this part was buffered in another one, fetch it
-  // again in the chosen quality from the next fragment on; this fragment keeps playing meanwhile.
-  const onFragChanged = (_: string, data: { frag: { level: number; type?: string } }) => {
-    if (!engine || data.frag.type && data.frag.type !== 'main') return;
-    const chosen = engine.manualLevel;
-    if (chosen < 0 || !engine.levels[chosen] || data.frag.level === chosen || pending === chosen) return;
-    load(chosen);
-    engine.nextLevel = chosen;
+  // Drop the run of segments ahead that is buffered in another quality, starting at the first boundary the old
+  // frames can reach while a new segment downloads (worked out from the measured bandwidth, as hls.js does), so the
+  // picture never runs dry. hls.js refetches the gap in the chosen level; segments already in it are kept.
+  const upgradeAhead = (chosen: number) => {
+    if (!engine) return;
+    const level = engine.levels[chosen];
+    const bandwidth = engine.bandwidthEstimate || 1e6;
+    const segment = [...segments.values()][0];
+    const duration = segment ? segment.end - segment.start : 6;
+    const fetch = 1 + ((level?.bitrate ?? 0) * duration) / bandwidth + (level?.details ? 0 : 1);
+    const lead = media.paused ? 0.1 : Math.max(2.5, fetch * 1.5);
+    const ahead = [...segments.values()].filter((g) => g.start >= media.currentTime + lead - 0.05).sort((a, b) => a.start - b.start);
+    let from = -1;
+    let to = -1;
+    for (const g of ahead) {
+      if (g.level === chosen) break;
+      if (from < 0) from = g.start;
+      else if (Math.abs(g.start - to) > 0.25) break; // a hole: stop at the end of this run
+      to = g.end;
+    }
+    if (from < 0) return;
+    for (const [key, g] of segments) if (g.start >= from - 0.05 && g.end <= to + 0.05) segments.delete(key);
+    // With a separate audio rendition only the video buffer holds the old quality; otherwise both are one stream.
+    engine.trigger('hlsBufferFlushing', { startOffset: from, endOffset: to, type: engine.audioTracks?.length ? 'video' : null });
   };
 
-  // Paused: nothing plays to confirm the switch, so the new quality being buffered at the playhead is enough.
+  // The segment now on screen. If the viewer picked a quality and this part is in another one, the old frames keep
+  // playing while the stretch ahead is fetched again in the chosen quality.
+  const onFragChanged = (_: string, data: { frag: { level: number; type?: string } }) => {
+    if (!engine || (data.frag.type && data.frag.type !== 'main')) return;
+    const chosen = engine.manualLevel;
+    if (chosen < 0 || !engine.levels[chosen] || data.frag.level === chosen) return;
+    if (pending !== chosen) load(chosen);
+    upgradeAhead(chosen);
+  };
+
   const onFragBuffered = (_: string, data: { frag: { level: number; start: number; duration: number; type?: string } }) => {
     const f = data.frag;
-    if (pending < 0 || f.level !== pending || !media.paused || (f.type && f.type !== 'main')) return;
-    if (media.currentTime >= f.start - 0.5 && media.currentTime < f.start + f.duration + 0.5) finish(f.level);
+    if (f.type && f.type !== 'main') return;
+    segments.set(Math.round(f.start * 1000), { start: f.start, end: f.start + f.duration, level: f.level });
+    // Paused: nothing plays to confirm the switch, so the new quality buffered at the playhead is enough.
+    if (pending >= 0 && f.level === pending && media.paused && media.currentTime >= f.start - 0.5 && media.currentTime < f.start + f.duration + 0.5) finish(f.level);
   };
 
   // hls.js starts loading another level. A manual pick (the viewer chose it in the menu) gets the pill; Auto's own
   // adaptive switches stay silent.
   const onSwitching = (_: string, data: { level: number }) => {
     if (!engine || engine.manualLevel < 0 || data.level !== engine.manualLevel) return;
-    if (data.level === engine.currentLevel) clear();
-    else if (pending !== data.level) load(data.level);
+    if (data.level === engine.currentLevel) {
+      clear();
+      return;
+    }
+    if (pending !== data.level) load(data.level);
+    // After hls.js has scheduled its own switch, bring the new quality closer.
+    const chosen = data.level;
+    window.setTimeout(() => engine?.manualLevel === chosen && upgradeAhead(chosen), 0);
   };
 
   // The viewer picked a quality in the menu. Back to Auto clears the pill.
@@ -584,6 +623,7 @@ function attachQuality(state: State, media: HTMLMediaElement): void {
   // A new source (an angle swap) starts over.
   media.addEventListener('loadstart', () => {
     clear();
+    segments.clear();
     bind();
   });
   media.addEventListener('loadedmetadata', bind);
