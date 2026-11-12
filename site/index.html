@@ -42,8 +42,8 @@
           <p class="eyebrow"><span class="chip eyebrow-chip">Spectator mode</span> a Video.js v10 skin for esports broadcasts, scrims and game VODs</p>
           <h1 id="hero-title"><span class="line"><span>Watch the match,</span></span><span class="line"><span class="signal">not the movie.</span></span></h1>
           <p class="lede">
-            Sightline turns a Video.js player into a spectator client. One POV fills the stage, the other two ride on its
-            right edge and stay live, a kill feed calls the action, and the seek bar is a lane of events you can jump to.
+            Sightline turns a Video.js player into a spectator client. One POV fills the stage, the other two play beside it
+            and stay live, a kill feed calls the action, and the seek bar is a lane of events you can jump to.
           </p>
           <ul class="hero-keys" aria-label="Try it">
             <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> switch angle</li>
@@ -55,6 +55,31 @@
 
         <p class="visually-hidden" data-match-title>Showmatch · Azure vs Ember</p>
 
+        <div class="console">
+          <div class="console-bar">
+            <p class="console-match"><span class="console-live"><span class="watch-dot" aria-hidden="true"></span>Live</span><span data-console-title>Showmatch · Azure vs Ember</span></p>
+            <div class="layouts" role="group" aria-label="Layout">
+            <span class="deck-label">Layout</span>
+            <button type="button" class="layout-option" data-layout-option="split" aria-pressed="true">
+              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="18" height="16" rx="2" /><rect x="21" y="1" width="8" height="7.5" rx="1.5" /><rect x="21" y="9.5" width="8" height="7.5" rx="1.5" /></svg>
+              Split
+            </button>
+            <button type="button" class="layout-option" data-layout-option="stage" aria-pressed="false">
+              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="28" height="16" rx="2" /></svg>
+              Stage
+            </button>
+          </div>
+            <div class="deck-actions">
+            <button type="button" class="deck-button" data-watch>
+              <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M2.75 4.75h9v10.5h-9ZM14.25 4.75h3v4.25h-3ZM14.25 11h3v4.25h-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+              Multiview fullscreen <kbd>W</kbd>
+            </button>
+            <button type="button" class="deck-button" data-share>
+              <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+              <span data-share-label>Copy link to this moment</span>
+            </button>
+          </div>
+          </div>
         <div class="arena" aria-label="Player" data-layout="split">
           <div class="watch-bar" data-watch-bar>
             <span class="watch-live"><span class="watch-dot" aria-hidden="true"></span>Multiview</span>
@@ -68,52 +93,31 @@
             <div class="stage-player" data-stage>
               <img class="stage-poster" src="./poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
             </div>
-            <div class="angles" data-angles-column>
-              <div class="tiles" data-tiles role="group" aria-label="Angles"></div>
-              <div class="chips" data-chips role="group" aria-label="Angles"></div>
-            </div>
+          </div>
+          <div class="angles" data-angles-column>
+            <div class="tiles" data-tiles role="group" aria-label="Angles"></div>
+            <div class="chips" data-chips role="group" aria-label="Angles"></div>
           </div>
         </div>
-
-        <div class="deck">
-          <div class="layouts" role="group" aria-label="Layout">
-            <span class="deck-label">Layout</span>
-            <button type="button" class="layout-option" data-layout-option="split" aria-pressed="true">
-              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="28" height="16" rx="2" /><rect x="21" y="3.5" width="6" height="4.5" rx="1" /><rect x="21" y="9.5" width="6" height="4.5" rx="1" /></svg>
-              Inset
-            </button>
-            <button type="button" class="layout-option" data-layout-option="stage" aria-pressed="false">
-              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="28" height="16" rx="2" /></svg>
-              Stage
-            </button>
-          </div>
-          <div class="deck-actions">
-            <button type="button" class="deck-button" data-watch>
-              <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M2.75 4.75h9v10.5h-9ZM14.25 4.75h3v4.25h-3ZM14.25 11h3v4.25h-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
-              Multiview fullscreen <kbd>W</kbd>
-            </button>
-            <button type="button" class="deck-button" data-share>
-              <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-              <span data-share-label>Copy link to this moment</span>
-            </button>
-          </div>
-          <p class="deck-hint">Click an angle on the stage or press <kbd>1</kbd>–<kbd>3</kbd>: it swaps in at the same timestamp.</p>
+          <p class="deck-hint">Click an angle or press <kbd>1</kbd>–<kbd>3</kbd>: it swaps onto the stage at the same timestamp.</p>
           <p class="visually-hidden" role="status" data-share-status></p>
-        </div>
+          <section class="recap" id="recap" aria-labelledby="recap-title">
+            <div class="section-head">
+              <h2 id="recap-title" class="recap-title">Match recap</h2>
+              <span class="muted">every event is a seek</span>
+              <span class="recap-nav">
+                <button type="button" class="recap-step" data-recap-step="-1" aria-label="Scroll the recap back"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M12 5l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+                <button type="button" class="recap-step" data-recap-step="1" aria-label="Scroll the recap forward"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+              </span>
+            </div>
+            <div class="recap-rail" data-recap-rail>
+              <ol class="recap-list" data-recap></ol>
+            </div>
+          </section>
+          </div>
 
-        <section class="recap" id="recap" aria-labelledby="recap-title">
-          <div class="section-head">
-            <h2 id="recap-title" class="recap-title">Match recap</h2>
-            <span class="muted">every event is a seek</span>
-            <span class="recap-nav">
-              <button type="button" class="recap-step" data-recap-step="-1" aria-label="Scroll the recap back"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M12 5l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
-              <button type="button" class="recap-step" data-recap-step="1" aria-label="Scroll the recap forward"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
-            </span>
-          </div>
-          <div class="recap-rail" data-recap-rail>
-            <ol class="recap-list" data-recap></ol>
-          </div>
-        </section>
+
+
       </section>
 
       <!-- 01 Features --------------------------------------------------------------------------------->
@@ -124,7 +128,7 @@
           <p class="block-lede">Everything a viewer needs to follow a match, and nothing a film player needs instead.</p>
         </header>
         <ul class="features">
-          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M2.75 4.75h9v10.5h-9ZM14.25 4.75h3v4.25h-3ZM14.25 11h3v4.25h-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Angles on the stage</h3><p>Two more POVs ride on the stage's right edge, live and in sync. Click one or press <kbd>1</kbd>–<kbd>3</kbd> and it swaps in at the same moment.</p></li>
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M2.75 4.75h9v10.5h-9ZM14.25 4.75h3v4.25h-3ZM14.25 11h3v4.25h-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Angles on the stage</h3><p>Two more POVs play beside the stage, live and in sync. Click one or press <kbd>1</kbd>–<kbd>3</kbd> and it swaps in at the same moment.</p></li>
           <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><h3>An event lane</h3><p>Every kill, clutch, objective and round is a pin above the seek bar, in the colour of the side that scored. <kbd>N</kbd> jumps to the next.</p></li>
           <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4.25 10a5.75 5.75 0 1 0 1.9-4.25" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 3.5v3.75h3.75Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 7.75v4.5L12.5 10Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><h3>Instant replay</h3><p><kbd>R</kbd> plays the last eight seconds at half speed, then hands back to the match where you left it.</p></li>
           <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 7.5v-4h4M12.5 3.5h4v4M16.5 12.5v4h-4M7.5 16.5h-4v-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Multiview fullscreen</h3><p><kbd>W</kbd> fills the screen with the stage and its angles, and nothing else: no page, no navigation.</p></li>

@@ -2971,3 +2971,371 @@ html[data-spoilers] .recap-rail::after {
 .tile:focus-visible {
   transform: perspective(900px) rotateY(-3deg) translateX(-4px);
 }
+
+/* ===============================================================================================================
+ * Headers: one column each. The hero title runs on one line; its lede and keys sit under it at full width.
+ * =============================================================================================================== */
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.hero h1 {
+  font-size: clamp(40px, 5.9vw, 108px);
+}
+
+.hero h1 .line {
+  display: inline-block;
+}
+
+.hero h1 .line + .line {
+  margin-inline-start: 0.24em;
+}
+
+@media (width >= 900px) {
+  .hero h1 {
+    white-space: nowrap;
+  }
+}
+
+.lede {
+  max-width: none;
+  font-size: clamp(16px, 1.35vw, 19px);
+}
+
+.hero-keys {
+  gap: 10px 28px;
+}
+
+.block-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.block-lede {
+  max-width: 64ch;
+}
+
+/* ------------------------------------------------------------------------------------------------- Make it yours */
+
+.customizer {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 28px 48px;
+  padding: clamp(20px, 2.6vw, 32px);
+}
+
+.customizer > .field:not(.snippet) {
+  grid-column: 1;
+}
+
+.customizer .snippet {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+}
+
+.customizer .snippet pre {
+  height: 100%;
+}
+
+.customizer .field legend,
+.customizer .field > label,
+.customizer .snippet-label {
+  margin-bottom: 4px;
+}
+
+/* The radius slider is drawn like the player's line: 4px rail, signal fill, white knob on a soft ring. */
+.customizer input[type="range"] {
+  --p: 50%;
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.customizer input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--signal) var(--p), rgb(255 255 255 / 0.2) var(--p));
+}
+
+.customizer input[type="range"]::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--signal) 45%, transparent),
+    0 2px 8px rgb(0 0 0 / 0.5);
+  appearance: none;
+  transition: scale 200ms ease;
+}
+
+.customizer input[type="range"]:hover::-webkit-slider-thumb,
+.customizer input[type="range"]:active::-webkit-slider-thumb {
+  scale: 1.2;
+}
+
+.customizer input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.customizer input[type="range"]::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--signal);
+}
+
+.customizer input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 45%, transparent);
+}
+
+.customizer input[type="range"]:focus-visible {
+  outline: none;
+}
+
+.customizer input[type="range"]:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+
+@media (forced-colors: active) {
+  .customizer input[type="range"]::-webkit-slider-runnable-track {
+    background: CanvasText;
+  }
+
+  .customizer input[type="range"]::-webkit-slider-thumb {
+    background: Highlight;
+  }
+}
+
+@media (width < 760px) {
+  .customizer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .customizer > .field:not(.snippet),
+  .customizer .snippet {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------- Install */
+
+.steps {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+}
+
+.steps li {
+  grid-column: span 1;
+}
+
+/* ===============================================================================================================
+ * The console: a frame the width of the screen around the player. Stage on the left, the two angles stacked on the
+ * right at a third of the width, so they are big enough to watch; the layout and share controls ride on top and the
+ * recap along the bottom.
+ * =============================================================================================================== */
+
+.console {
+  --edge: clamp(8px, 1vw, 16px);
+  --frame-pad: clamp(10px, 1.3vw, 18px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: calc(100vw - var(--sbw, 0px) - 2 * var(--edge));
+  min-height: calc(100svh - 64px - 2 * var(--edge));
+  margin-inline-start: calc(50% - (100vw - var(--sbw, 0px)) / 2 + var(--edge));
+  padding: var(--frame-pad);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: linear-gradient(rgb(15 17 21 / 0.94), rgb(10 12 15 / 0.94));
+  box-shadow: 0 50px 100px -50px #000;
+}
+
+/* Corner ticks on the frame, like a viewfinder. */
+.console::before {
+  --tick: rgb(255 255 255 / 0.45);
+  content: "";
+  position: absolute;
+  inset: -7px;
+  background:
+    linear-gradient(var(--tick), var(--tick)) left top / 18px 1px,
+    linear-gradient(var(--tick), var(--tick)) left top / 1px 18px,
+    linear-gradient(var(--tick), var(--tick)) right top / 18px 1px,
+    linear-gradient(var(--tick), var(--tick)) right top / 1px 18px,
+    linear-gradient(var(--tick), var(--tick)) left bottom / 18px 1px,
+    linear-gradient(var(--tick), var(--tick)) left bottom / 1px 18px,
+    linear-gradient(var(--tick), var(--tick)) right bottom / 18px 1px,
+    linear-gradient(var(--tick), var(--tick)) right bottom / 1px 18px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.console-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+
+.console-match {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto 0 0;
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.console-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--round);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.console .deck-hint {
+  margin: 0;
+  flex-basis: auto;
+}
+
+/* Stage and angles side by side; the angles column is a third of the frame. */
+.arena {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+  margin-block: auto;
+}
+
+.arena[data-layout="stage"],
+.arena[data-single] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.stage::before {
+  display: none;
+}
+
+.angles {
+  position: static;
+  width: auto;
+  perspective: none;
+  pointer-events: auto;
+}
+
+.tiles,
+.arena:fullscreen .tiles {
+  gap: 14px;
+}
+
+.tile,
+.tile:focus-visible {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--corner);
+  box-shadow: none;
+  transform: none;
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    border-color: rgb(255 255 255 / 0.6);
+    transform: none;
+  }
+}
+
+.tile-label {
+  top: 10px;
+  inset-inline-start: 10px;
+  padding: 5px 12px 5px 10px;
+  font-size: 13px;
+}
+
+.tile-muted {
+  display: inline-flex;
+}
+
+.tile-clock {
+  bottom: 10px;
+  inset-inline-start: 10px;
+  font-size: 11px;
+}
+
+/* Multiview fullscreen keeps the same split, edge to edge. */
+.arena:fullscreen {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-content: center;
+  margin: 0;
+}
+
+.arena:fullscreen .stage {
+  width: 100%;
+}
+
+.arena:fullscreen[data-layout="stage"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.arena:fullscreen[data-layout="stage"] .stage {
+  width: min(100%, calc((100vh - 80px) * 16 / 9));
+}
+
+/* Phones: the frame becomes the page width; the angles are chips under the stage. */
+@media (width < 640px) {
+  .console {
+    width: auto;
+    min-height: 0;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 0 0 16px;
+    border-inline: 0;
+    border-radius: 0;
+  }
+
+  .console::before {
+    display: none;
+  }
+
+  .console-bar,
+  .console .deck-hint,
+  .console .recap {
+    padding-inline: var(--gutter);
+  }
+
+  .console-bar {
+    padding-top: 14px;
+  }
+
+  .arena {
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+  }
+
+  .angles {
+    padding-inline: var(--gutter);
+  }
+}

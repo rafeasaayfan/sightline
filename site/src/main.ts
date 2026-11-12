@@ -49,3 +49,20 @@ for (const block of document.querySelectorAll('.block')) reveal.observe(block);
 const showTarget = () => document.querySelector(location.hash || '#none')?.closest('.block')?.classList.add('is-in');
 window.addEventListener('hashchange', showTarget);
 showTarget();
+
+// The console spans the viewport; it needs the scrollbar's width to stop short of it.
+const setScrollbar = () =>
+  document.documentElement.style.setProperty('--sbw', `${window.innerWidth - document.documentElement.clientWidth}px`);
+setScrollbar();
+window.addEventListener('resize', setScrollbar);
+
+// Range inputs show their filled part, like the player's line.
+for (const range of document.querySelectorAll<HTMLInputElement>('.customizer input[type="range"]')) {
+  const paint = () => {
+    const min = Number(range.min || 0);
+    const max = Number(range.max || 100);
+    range.style.setProperty('--p', `${((Number(range.value) - min) / (max - min)) * 100}%`);
+  };
+  range.addEventListener('input', paint);
+  paint();
+}

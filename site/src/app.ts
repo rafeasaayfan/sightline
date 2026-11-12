@@ -180,8 +180,6 @@ export async function start(): Promise<void> {
   }
 
   function renderAngles(): void {
-    // Angles inset on the stage push the kill feed to the left.
-    root.toggleAttribute('data-inset', tilesActive());
     for (const angle of angles) {
       const onStage = angle.id === stageAngle.id;
       const tile = tiles.get(angle.id)!;
@@ -308,6 +306,7 @@ export async function start(): Promise<void> {
   const watching = () => document.fullscreenElement === arena;
   const calm = matchMedia('(prefers-reduced-motion: reduce)');
   document.querySelector<HTMLElement>('[data-watch-title]')!.textContent = match.title;
+  document.querySelector<HTMLElement>('[data-console-title]')!.textContent = match.title;
   const watchButton = document.querySelector<HTMLButtonElement>('[data-watch]')!;
   watchButton.hidden = !canWatch;
   if (canWatch) root.setAttribute('data-multiview', '');

@@ -529,7 +529,7 @@ function setup(root: HTMLElement): void {
   layout?.addEventListener('value-change', () => {
     const value: Layout = layout.value === 'stage' ? 'stage' : 'split';
     root.dataset.layout = value;
-    root.querySelector('.sl-layout-value')!.textContent = value === 'stage' ? 'Stage only' : 'Inset';
+    root.querySelector('.sl-layout-value')!.textContent = value === 'stage' ? 'Stage only' : 'Split';
     root.dispatchEvent(new CustomEvent('sightline:layout', { detail: value, bubbles: true }));
   });
 }
@@ -578,7 +578,7 @@ export function setLayout(root: HTMLElement, value: Layout): void {
   const layout = root.querySelector<HTMLElement & { value?: string }>('.sl-layout-group');
   if (layout && layout.value !== value) layout.value = value;
   const label = root.querySelector('.sl-layout-value');
-  if (label) label.textContent = value === 'stage' ? 'Stage only' : 'Inset';
+  if (label) label.textContent = value === 'stage' ? 'Stage only' : 'Split';
 }
 
 /*
