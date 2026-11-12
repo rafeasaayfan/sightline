@@ -10,3 +10,6 @@ dist
 
 # Rendered match footage (upload to Mux; regenerate with design/match/record.mjs).
 site/public/media/
+
+# Generated soundtrack (design/match/sound.mjs).
+design/match/out/
