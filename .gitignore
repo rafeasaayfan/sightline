@@ -13,3 +13,6 @@ site/public/media/
 
 # Generated soundtrack (design/match/sound.mjs).
 design/match/out/
+
+# The demo site build is committed (the host serves it from the repo); the skin build in /dist is not.
+!site/dist/

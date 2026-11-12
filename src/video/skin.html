@@ -157,6 +157,24 @@
 </template>
 </media-playback-rate-radio-group>
 </media-menu-content>
+<media-menu-item commandfor="sl-quality-menu" class="sl-menu-item sl-menu-quality">
+<media-text token="menu.quality">Quality</media-text>
+<span class="sl-menu-hint"><span data-part="value"></span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>
+</media-menu-item>
+<media-menu-content class="sl-menu-content" id="sl-quality-menu">
+<media-menu-item class="sl-menu-item sl-menu-back">
+<media-icon family="sightline" name="chevron" class="sl-menu-chevron sl-menu-chevron-back"></media-icon>
+<media-text token="menu.quality">Quality</media-text>
+</media-menu-item>
+<media-quality-radio-group class="sl-menu-group">
+<template>
+<media-menu-radio-item class="sl-menu-item sl-menu-radio">
+<span class="sl-menu-label"><span data-part="label"></span> <sup data-part="tier" class="sl-menu-tier"></sup></span>
+<media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator>
+</media-menu-radio-item>
+</template>
+</media-quality-radio-group>
+</media-menu-content>
 <media-menu-item commandfor="sl-layout-menu" class="sl-menu-item sl-menu-layout">
 <span>Layout</span>
 <span class="sl-menu-hint"><span class="sl-layout-value">Split</span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>

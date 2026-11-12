@@ -46,6 +46,7 @@ import '@videojs/html/ui/menu-checkbox-item';
 import '@videojs/html/ui/menu-item-indicator';
 import '@videojs/html/ui/playback-rate-radio-group';
 import '@videojs/html/ui/captions-radio-group';
+import '@videojs/html/ui/quality-radio-group';
 import '@videojs/html/ui/popover';
 import '@videojs/html/ui/pip-button';
 import '@videojs/html/ui/fullscreen-button';

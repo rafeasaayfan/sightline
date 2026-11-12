@@ -39,7 +39,7 @@ The challenge's audit: *working controls, responsive layout, keyboard access, vi
 | Spoiler-free | Settings hides the score, the kill feed and the event pins, and the page blurs its recap | Pass |
 | Moment links | "Copy link to this moment" copies `?t=&angle=`; opening it lands on that time and angle | Pass |
 | No events | A single-angle match without an events file: no pins, highlight buttons `aria-disabled`, N does nothing, no recap, no angles column, no HUD, no errors | Pass |
-| Settings menu | Opens with Enter; holds Speed, Layout, Kill feed, Spoiler-free (and Captions when tracks exist); Esc closes it and focus returns to the gear | Pass |
+| Settings menu | Opens with Enter; holds Speed, Quality (Auto plus each Mux rendition, shown only when the stream has more than one), Layout, Kill feed, Spoiler-free (and Captions when tracks exist); Esc closes it and focus returns to the gear | Pass |
 | Layout | Split: stage and two angles at exactly the stage's height, controls docked under them. Stage only: an ordinary overlay player, no multiview | Pass |
 | Multiview fullscreen | W or the page button fills the screen with the stage and its angles; swaps and layouts work inside; Esc or the close button exits | Pass |
 | Shortcuts | ? opens the list; Esc closes it | Pass |

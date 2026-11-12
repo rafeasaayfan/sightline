@@ -541,6 +541,8 @@ export async function start(): Promise<void> {
   initCustomizer(root);
   master.addEventListener('timeupdate', tick);
   master.addEventListener('seeked', tick);
+  // A streamed seek can take a second to land; the recap, score and clocks follow the target at once.
+  master.addEventListener('seeking', tick);
   tick();
   renderAngles();
 }

@@ -12,7 +12,7 @@
       "id": 1,
       "label": "Player POV",
       "short": "POV",
-      "mux": "",
+      "mux": "4Uk7T31a8UCvkwPDvQRoy8S5cqCLnIAob3Qx2vuIWew",
       "src": "./media/angle1.mp4",
       "poster": "./posters/angle1.jpg",
       "storyboard": "./storyboards/angle1.vtt"
@@ -21,7 +21,7 @@
       "id": 2,
       "label": "Aim cam",
       "short": "Aim",
-      "mux": "",
+      "mux": "iFzfd8YUY01jyWLEuBnrMPtFvzi01L5901AUlDbGBy8OQU",
       "src": "./media/angle2.mp4",
       "poster": "./posters/angle2.jpg",
       "storyboard": "./storyboards/angle2.vtt"
@@ -30,7 +30,7 @@
       "id": 3,
       "label": "Radar",
       "short": "Radar",
-      "mux": "",
+      "mux": "W02lKu02qF02aPaiPk3FDzMJlJ28iDPTZo00gpVApJ9ed2M",
       "src": "./media/angle3.mp4",
       "poster": "./posters/angle3.jpg",
       "storyboard": "./storyboards/angle3.vtt"

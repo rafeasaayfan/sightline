@@ -1,0 +1,41 @@
+WEBVTT
+
+NOTE
+Events for the demo round: Counter-Strike 2 gameplay recorded by the author, timed from the in-game kill feed.
+Cue text is kind|label|team: elim, clutch, obj or round; team is a (Defenders) or b (Attackers), the side that scored.
+
+00:00:02.800 --> 00:00:03.800
+elim|Elimination · NBW_Rafeh → Defender|b
+
+00:00:18.000 --> 00:00:19.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:20.000 --> 00:00:21.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:24.000 --> 00:00:25.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:26.000 --> 00:00:27.000
+elim|Elimination · NBW_Rafeh → Defender|b
+
+00:00:35.000 --> 00:00:36.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:37.000 --> 00:00:38.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:41.000 --> 00:00:42.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:44.800 --> 00:00:45.800
+elim|Elimination · NBW_Rafeh → Defender|b
+
+00:00:48.000 --> 00:00:49.000
+elim|Elimination · Defender → Attacker|a
+
+00:00:56.000 --> 00:00:57.000
+clutch|Clutch · 4K · NBW_Rafeh|b
+
+00:00:56.500 --> 00:00:57.500
+obj|Round won · Attackers|b

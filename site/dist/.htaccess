@@ -1,0 +1,18 @@
+# Sightline demo on Apache hosts: serve modules, captions and streams with the right types.
+AddType text/javascript .mjs
+AddType text/javascript .js
+AddType text/vtt .vtt
+AddType image/svg+xml .svg
+AddType application/vnd.apple.mpegurl .m3u8
+AddCharset utf-8 .js .mjs .css .vtt .html .json
+
+# Built assets have content hashes in their names, so they can be cached for a year.
+# match.json and events.vtt have no hash: they revalidate, so new Mux playback IDs and events show up at once.
+<IfModule mod_headers.c>
+  <FilesMatch "-[A-Za-z0-9_-]{8}\.(js|css|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "^(match\.json|events\.vtt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
