@@ -26,3 +26,23 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('.copy')) {
     window.setTimeout(() => (button.textContent = 'Copy'), 1600);
   });
 }
+
+// Sections reveal as they scroll into view; cards inside get a stagger index.
+for (const group of document.querySelectorAll('.mv-grid, .states, .facts, .tokens, .steps')) {
+  [...group.children].forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i)));
+}
+const reveal = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('is-in');
+      reveal.unobserve(entry.target);
+    }
+  },
+  { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+);
+for (const block of document.querySelectorAll('.block')) reveal.observe(block);
+// Jumping to a section by link or hash reveals it at once.
+const showTarget = () => document.querySelector(location.hash || '#none')?.closest('.block')?.classList.add('is-in');
+window.addEventListener('hashchange', showTarget);
+showTarget();

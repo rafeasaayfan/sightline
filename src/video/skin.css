@@ -419,20 +419,39 @@
     opacity: 0.4;
   }
 
+  /* State icons share one cell and morph: the outgoing icon shrinks and turns away as the incoming one arrives. */
   .vt-icon {
     grid-area: 1 / 1;
     width: var(--vt-icon);
     height: var(--vt-icon);
-    display: none;
+    display: block;
+    opacity: 0;
+    scale: 0.55;
+    rotate: -24deg;
     pointer-events: none;
+    transition:
+      opacity var(--vt-duration) var(--vt-ease),
+      scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      rotate 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .vt-icon-static {
-    display: block;
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
   }
 
-  .vt-button:active .vt-icon {
-    scale: 0.92;
+  /* Press: a quick, springy squeeze on the whole button. */
+  .vt-button {
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      scale 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .vt-button:active {
+    scale: 0.88;
+    transition-duration: 60ms;
   }
 
   .vt-play:not([data-ended]):not([data-started]) .vt-play-icon,
@@ -450,7 +469,9 @@
   .vt-pip[data-pip] .vt-pip-exit-icon,
   .vt-fullscreen:not([data-fullscreen]) .vt-fullscreen-enter-icon,
   .vt-fullscreen[data-fullscreen] .vt-fullscreen-exit-icon {
-    display: block;
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
   }
 
   /* ------------------------------------------------------------------------------------------- Clocks */
@@ -1382,5 +1403,171 @@
   .vantage[data-hud="off"] .vt-hud,
   .vantage[data-keyhints="off"] .vt-keyhints {
     display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Motion. Short, eased, transform and opacity only; every duration collapses under reduced motion (see the
+ * preferences block, which zeroes transitions and animations inside the skin).
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  /* The played range and thumb glide between time updates instead of stepping; they follow the pointer exactly
+     while dragging or seeking. */
+  .vt-timeline .vt-fill {
+    transition: width 260ms linear;
+  }
+
+  .vt-timeline .vt-thumb {
+    transition:
+      left 260ms linear,
+      scale 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 200ms ease;
+  }
+
+  .vt-slider:is([data-dragging], [data-seeking]) .vt-fill,
+  .vt-slider:is([data-dragging], [data-seeking]) .vt-thumb {
+    transition-property: scale, box-shadow;
+  }
+
+  /* The track thickens under the pointer or focus, so it is easier to hit and clearly "live". */
+  .vt-track {
+    transition: scale 200ms var(--vt-ease), background-color 200ms ease;
+  }
+
+  .vt-slider[data-interactive] .vt-track {
+    scale: 1 1.6;
+  }
+
+  .vt-slider[data-interactive] .vt-thumb {
+    box-shadow: 0 0 0 5px var(--vt-halo), 0 0 18px var(--vt-halo);
+  }
+
+  /* Hover preview rises into place. */
+  .vt-preview {
+    translate: 0 6px;
+    scale: 0.96;
+    transform-origin: bottom center;
+    transition:
+      opacity 160ms ease,
+      translate 220ms var(--vt-ease),
+      scale 220ms var(--vt-ease);
+  }
+
+  .vt-slider:is([data-pointing], [data-dragging]) .vt-preview {
+    translate: 0 0;
+    scale: 1;
+  }
+
+  /* Markers lift on hover and focus. */
+  .vt-marker-shape {
+    transition: scale 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .vt-marker:focus-visible .vt-marker-shape {
+    scale: 1.35;
+  }
+
+  .vt-marker-tip:not([hidden]) {
+    animation: vt-rise 180ms var(--vt-ease);
+  }
+
+  /* Menus, popovers and tooltips open from their button with a short rise. */
+  .vantage .media-popup {
+    transition-property: opacity, scale, translate;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  }
+
+  .vantage .media-popup:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    scale: 0.94;
+    translate: 0 8px;
+  }
+
+  .vt-menu[data-align="end"],
+  .vt-keys[data-align="end"] {
+    transform-origin: bottom right;
+  }
+
+  .vt-menu-item {
+    transition: background-color 140ms ease, color 140ms ease;
+  }
+
+  .vt-menu-chevron {
+    transition: translate 160ms var(--vt-ease);
+  }
+
+  .vt-menu-item[data-highlighted] .vt-menu-chevron:not(.vt-menu-chevron-back) {
+    translate: 2px 0;
+  }
+
+  /* Submenus slide across. */
+  .vt-menu-content {
+    transition-duration: 240ms;
+  }
+
+  /* The band slides down a little as it fades when the player goes idle, and returns at once. */
+  .vt-band {
+    transition:
+      opacity 260ms var(--vt-ease),
+      translate 320ms var(--vt-ease);
+  }
+
+  .vt-controls:not([data-visible]) .vt-band {
+    translate: 0 10px;
+  }
+
+  .vt-controls[data-visible] .vt-band {
+    transition-duration: 140ms, 180ms;
+  }
+
+  /* The HUD and angle label fade with the controls but stay as a quiet hint. */
+  .vt-hud {
+    transition: opacity 300ms ease;
+  }
+
+  /* Centre play breathes a halo until the match starts. */
+  .vt-center-play::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 var(--vt-halo);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vt-center-play:not([data-started])::after {
+      animation: vt-breathe 2.2s ease-out infinite;
+    }
+  }
+
+  @keyframes vt-breathe {
+    0% {
+      box-shadow: 0 0 0 0 var(--vt-halo);
+    }
+    100% {
+      box-shadow: 0 0 0 22px transparent;
+    }
+  }
+
+  .vt-center-play {
+    transition: scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .vt-center-play:active {
+    scale: 0.92;
+  }
+
+  @keyframes vt-rise {
+    from {
+      opacity: 0;
+      translate: -50% 6px;
+    }
+  }
+
+  /* Volume rule thickens on interaction too. */
+  .vt-volume-slider[data-interactive] .vt-track {
+    scale: 1 1.5;
   }
 }

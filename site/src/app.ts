@@ -338,6 +338,7 @@ export async function start(): Promise<void> {
         button.className = 'recap-item';
         button.dataset.kind = event.kind;
         button.dataset.index = String(index);
+        button.style.setProperty('--i', String(index));
         button.innerHTML = `<span class="recap-mark" aria-hidden="true"></span><span class="recap-time">${formatTime(event.time)}</span><span class="recap-label">${event.label}</span><span class="recap-now" aria-hidden="true">Now</span>`;
         button.addEventListener('click', () => {
           master.currentTime = event.time;
