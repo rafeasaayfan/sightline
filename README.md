@@ -22,7 +22,9 @@ A full-width console around the player: the stage and its two angles on top (spl
 - `apps/preview/`: the Video.js workbench for developing the skin.
 - `design/`: mockups, the icon generator (`design/icons/generate.mjs`) and the contrast measurement (`design/contrast.mjs`, results in `design/contrast.md`).
 
-## The demo match
+## The generated match (alternative footage)
+
+The site plays recorded gameplay. `design/match/` can produce an original, rights-free alternative instead:
 
 `design/match/script.mjs` scripts a four-round 4v4 (who eliminates whom and when, objective captures, a 1v3 clutch); `sim.js` draws it from three cameras; `record.mjs` records each camera to `site/public/media/angle1-3.mp4` and writes `events.vtt` and the scoreboard. `sound.mjs` synthesizes the soundtrack from the same script and muxes it in, and `storyboards.mjs` makes the seek-bar thumbnails and posters:
 
@@ -100,8 +102,8 @@ Without anything else it is an overlay player. A host page can add more:
 - Built on [Video.js 10](https://videojs.org) (`@videojs/html`), Apache-2.0. Started from the Video.js Scaffold skin via `@videojs/cli`.
 - Type: Barlow Condensed, Inter and JetBrains Mono, SIL Open Font License 1.1, self-hosted through Fontsource.
 - Icons: drawn for Sightline by `design/icons/generate.mjs`.
-- Footage and sound: an original top-down match between two invented teams, rendered by `design/match/` (three cameras: Player 1 POV, Player 2 POV, map overview), with a soundtrack synthesized from code. Its events and scoreboard come from the same script, so the timeline, the kill feed and every gunshot match the picture.
-- No game names, logos, characters or interface from any real game; team names are invented.
+- Footage: one round of Counter-Strike 2 gameplay recorded by the author (the player POV with its game sound; the aim cam and radar views are cut from the same recording, so all three stay in sync). The events in `site/public/events.vtt` were timed from the in-game kill feed; other players are not named. Counter-Strike is a trademark of Valve Corporation; this project is not affiliated with or endorsed by Valve.
+- `design/match/` also contains an original generated match (script, renderer, synthesized soundtrack) that can replace the footage; a richer renderer is parked on the `wip/better-match` branch.
 
 ## Licence
 

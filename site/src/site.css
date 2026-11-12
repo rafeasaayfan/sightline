@@ -3627,3 +3627,26 @@ html[data-spoilers] .recap-rail::after {
 body::after {
   content: none;
 }
+
+/* ===============================================================================================================
+ * Cheap to composite while three videos play: the map's fade is baked into its pixels, the frame is opaque, and
+ * nothing around the videos asks for blur, big shadows or a permanent layer.
+ * =============================================================================================================== */
+.terrain {
+  mask-image: none;
+  transition: none;
+}
+
+.console {
+  background: #0d0f12;
+  box-shadow: none;
+}
+
+.console[data-wide] {
+  will-change: auto;
+}
+
+.top {
+  backdrop-filter: none;
+  background: rgb(8 9 11 / 0.97);
+}

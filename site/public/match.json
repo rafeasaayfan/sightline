@@ -1,17 +1,17 @@
 {
-  "title": "Showmatch · Azure vs Ember",
+  "title": "Round 3 · Defenders vs Attackers",
   "teams": [
-    "Azure",
-    "Ember"
+    "Defenders",
+    "Attackers"
   ],
-  "footage": "Footage: an original match rendered for Sightline (design/match)",
-  "footageUrl": "#install",
+  "footage": "Footage: Counter-Strike 2 gameplay recorded by the author",
+  "footageUrl": "https://github.com/rafeasaayfan/sightline#credits",
   "repo": "https://github.com/rafeasaayfan/sightline",
   "angles": [
     {
       "id": 1,
-      "label": "Player 1 POV",
-      "short": "Player 1",
+      "label": "Player POV",
+      "short": "POV",
       "mux": "",
       "src": "./media/angle1.mp4",
       "poster": "./posters/angle1.jpg",
@@ -19,8 +19,8 @@
     },
     {
       "id": 2,
-      "label": "Player 2 POV",
-      "short": "Player 2",
+      "label": "Aim cam",
+      "short": "Aim",
       "mux": "",
       "src": "./media/angle2.mp4",
       "poster": "./posters/angle2.jpg",
@@ -28,8 +28,8 @@
     },
     {
       "id": 3,
-      "label": "Map overview",
-      "short": "Map",
+      "label": "Radar",
+      "short": "Radar",
       "mux": "",
       "src": "./media/angle3.mp4",
       "poster": "./posters/angle3.jpg",
@@ -40,51 +40,15 @@
   "scoreboard": [
     {
       "t": 0,
-      "round": 1,
-      "azure": 0,
-      "ember": 0
-    },
-    {
-      "t": 31,
-      "round": 1,
-      "azure": 1,
-      "ember": 0
-    },
-    {
-      "t": 40,
-      "round": 2,
-      "azure": 1,
-      "ember": 0
-    },
-    {
-      "t": 71,
-      "round": 2,
-      "azure": 1,
-      "ember": 1
-    },
-    {
-      "t": 80,
       "round": 3,
-      "azure": 1,
-      "ember": 1
+      "defenders": 0,
+      "attackers": 2
     },
     {
-      "t": 121,
+      "t": 56.5,
       "round": 3,
-      "azure": 2,
-      "ember": 1
-    },
-    {
-      "t": 130,
-      "round": 4,
-      "azure": 2,
-      "ember": 1
-    },
-    {
-      "t": 158,
-      "round": 4,
-      "azure": 3,
-      "ember": 1
+      "defenders": 0,
+      "attackers": 3
     }
   ]
 }

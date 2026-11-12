@@ -3,7 +3,7 @@
 //   FFMPEG=path/to/ffmpeg node design/match/storyboards.mjs
 //
 // For each site/public/media/angleN.mp4 it writes:
-//   site/public/storyboards/angleN.jpg   a sprite of 160×90 frames, one every STEP seconds
+//   site/public/storyboards/angleN.jpg   a sprite of 160×90 frames, one every 1–2 seconds
 //   site/public/storyboards/angleN.vtt   WebVTT cues pointing at each frame (#xywh), the format Video.js reads
 //   site/public/posters/angleN.jpg       a 640×360 poster at POSTER_AT seconds
 // and site/public/poster.jpg (the stage poster, 1280×720) from angle 1.
@@ -13,15 +13,13 @@
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { DURATION } from './script.mjs';
 
 const ffmpeg = process.env.FFMPEG ?? fileURLToPath(new URL('./node_modules/ffmpeg-static/ffmpeg.exe', import.meta.url));
 const site = (p) => fileURLToPath(new URL(`../../site/public/${p}`, import.meta.url));
-const STEP = 2;
 const W = 160;
 const H = 90;
 const COLS = 10;
-const POSTER_AT = 2;
+const POSTER_AT = 4;
 
 const stamp = (s) => {
   const h = Math.floor(s / 3600);
@@ -32,11 +30,21 @@ const stamp = (s) => {
 
 const run = (args) => execFileSync(ffmpeg, ['-hide_banner', '-loglevel', 'error', '-y', ...args]);
 
+/** A file's duration in seconds, read from ffmpeg's banner. */
+function durationOf(file) {
+  let text = '';
+  try {
+    execFileSync(ffmpeg, ['-hide_banner', '-i', file], { stdio: ['ignore', 'ignore', 'pipe'] });
+  } catch (error) {
+    text = String(error.stderr ?? '');
+  }
+  const m = /Duration: (\d+):(\d+):([\d.]+)/.exec(text);
+  if (!m) throw new Error(`no duration for ${file}`);
+  return Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3]);
+}
+
 mkdirSync(site('storyboards'), { recursive: true });
 mkdirSync(site('posters'), { recursive: true });
-
-const frames = Math.ceil(DURATION / STEP);
-const rows = Math.ceil(frames / COLS);
 
 for (const n of [1, 2, 3]) {
   const src = site(`media/angle${n}.mp4`);
@@ -44,6 +52,11 @@ for (const n of [1, 2, 3]) {
     console.warn(`skipped angle${n}: ${src} not found`);
     continue;
   }
+  const DURATION = durationOf(src);
+  // A thumbnail every second for short videos, every two seconds for longer ones.
+  const STEP = DURATION <= 120 ? 1 : 2;
+  const frames = Math.ceil(DURATION / STEP);
+  const rows = Math.ceil(frames / COLS);
   run(['-i', src, '-vf', `fps=1/${STEP},scale=${W}:${H},tile=${COLS}x${rows}`, '-frames:v', '1', '-q:v', '5', site(`storyboards/angle${n}.jpg`)]);
   let vtt = 'WEBVTT\n';
   for (let i = 0; i < frames; i++) {

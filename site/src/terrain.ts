@@ -106,6 +106,17 @@ function draw(canvas: HTMLCanvasElement): void {
     ctx.lineWidth = index ? 1.1 : 0.8;
     ctx.stroke();
   }
+  // The fade toward the edges is baked into the pixels once (not a CSS mask, which costs a GPU pass every frame
+  // while video plays).
+  const fade = ctx.createRadialGradient(w / 2, 0, 0, w / 2, 0, Math.max(w, h) * 0.95);
+  fade.addColorStop(0, 'rgb(0 0 0 / 1)');
+  fade.addColorStop(0.45, 'rgb(0 0 0 / 1)');
+  fade.addColorStop(0.8, 'rgb(0 0 0 / 0.35)');
+  fade.addColorStop(1, 'rgb(0 0 0 / 0)');
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.fillStyle = fade;
+  ctx.fillRect(0, 0, w, h);
+  ctx.globalCompositeOperation = 'source-over';
   canvas.dataset.ready = '';
 }
 
