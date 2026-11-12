@@ -52,8 +52,8 @@ Kinds: `elim` and `clutch` (amber diamond), `obj` (cyan square), `round` (red ti
 
 ```sh
 npm install
-npm run dev          # skin workbench at http://localhost:5173
-npm run site:dev     # demo page at http://localhost:5191
+npm run dev          # the website, opens http://localhost:5191
+npm run workbench    # the bare skin workbench at http://localhost:5173
 npm run typecheck
 ```
 
