@@ -180,16 +180,15 @@ export async function start(): Promise<void> {
   }
 
   function renderAngles(): void {
+    // Angles inset on the stage push the kill feed to the left.
+    root.toggleAttribute('data-inset', tilesActive());
     for (const angle of angles) {
       const onStage = angle.id === stageAngle.id;
       const tile = tiles.get(angle.id)!;
-      // 50 / 50 shows one angle beside the stage: the first one not on stage.
-      const duoPick = angles.find((a) => a.id !== stageAngle.id && !tiles.get(a.id)!.failed);
-      const shown = arena.dataset.layout !== 'duo' || angle.id === duoPick?.id;
-      tile.button.hidden = onStage || tile.failed || !shown;
+      tile.button.hidden = onStage || tile.failed;
       const chip = chipsEl.querySelector<HTMLButtonElement>(`[data-angle="${angle.id}"]`)!;
       chip.setAttribute('aria-pressed', String(onStage));
-      if (!onStage && shown && tilesActive()) {
+      if (!onStage && tilesActive()) {
         const m = ensureTileMedia(angle);
         if (m) follow(m, true);
       } else {

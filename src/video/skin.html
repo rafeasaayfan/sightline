@@ -63,6 +63,12 @@
 <media-time type="duration" class="sl-time sl-time-duration"></media-time>
 </div>
 <div class="sl-row sl-row-buttons">
+<button type="button" class="sl-button sl-prev" id="sl-prev" aria-label="Previous highlight" aria-keyshortcuts="Shift+N" aria-disabled="true">
+<media-icon family="sightline" name="highlight-prev" class="sl-icon sl-icon-static"></media-icon>
+</button>
+<media-tooltip trigger="sl-prev" side="top" class="media-popup sl-tooltip">
+<span>Previous highlight</span><kbd class="sl-kbd">⇧N</kbd>
+</media-tooltip>
 <media-play-button class="sl-button sl-play" id="sl-play">
 <media-icon family="sightline" name="play" class="sl-icon sl-play-icon"></media-icon>
 <media-icon family="sightline" name="pause" class="sl-icon sl-pause-icon"></media-icon>
@@ -72,19 +78,13 @@
 <media-tooltip-label></media-tooltip-label>
 <media-tooltip-shortcut class="sl-kbd"></media-tooltip-shortcut>
 </media-tooltip>
-<span class="sl-time-compact" aria-hidden="true"><media-time type="current" class="sl-time"></media-time><span class="sl-time-sep">/</span><media-time type="duration" class="sl-time sl-time-duration"></media-time></span>
-<button type="button" class="sl-button sl-prev" id="sl-prev" aria-label="Previous highlight" aria-keyshortcuts="Shift+N" aria-disabled="true">
-<media-icon family="sightline" name="highlight-prev" class="sl-icon sl-icon-static"></media-icon>
-</button>
-<media-tooltip trigger="sl-prev" side="top" class="media-popup sl-tooltip">
-<span>Previous highlight</span><kbd class="sl-kbd">⇧N</kbd>
-</media-tooltip>
 <button type="button" class="sl-button sl-next" id="sl-next" aria-label="Next highlight" aria-keyshortcuts="N" aria-disabled="true">
 <media-icon family="sightline" name="highlight-next" class="sl-icon sl-icon-static"></media-icon>
 </button>
 <media-tooltip trigger="sl-next" side="top" class="media-popup sl-tooltip">
 <span>Next highlight</span><kbd class="sl-kbd">N</kbd>
 </media-tooltip>
+<span class="sl-time-compact" aria-hidden="true"><media-time type="current" class="sl-time"></media-time><span class="sl-time-sep">/</span><media-time type="duration" class="sl-time sl-time-duration"></media-time></span>
 <button type="button" class="sl-button sl-replay" id="sl-replay" aria-label="Instant replay, last 8 seconds at half speed" aria-keyshortcuts="R">
 <media-icon family="sightline" name="replay" class="sl-icon sl-icon-static"></media-icon>
 </button>
@@ -159,7 +159,7 @@
 </media-menu-content>
 <media-menu-item commandfor="sl-layout-menu" class="sl-menu-item sl-menu-layout">
 <span>Layout</span>
-<span class="sl-menu-hint"><span class="sl-layout-value">70 / 30</span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>
+<span class="sl-menu-hint"><span class="sl-layout-value">Inset</span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>
 </media-menu-item>
 <media-menu-content class="sl-menu-content" id="sl-layout-menu">
 <media-menu-item class="sl-menu-item sl-menu-back">
@@ -167,8 +167,7 @@
 <span>Layout</span>
 </media-menu-item>
 <media-menu-radio-group class="sl-menu-group sl-layout-group" value="split">
-<media-menu-radio-item value="split" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">70 / 30 · stage and angles</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
-<media-menu-radio-item value="duo" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">50 / 50 · side by side</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
+<media-menu-radio-item value="split" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">Inset · angles on the stage</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
 <media-menu-radio-item value="stage" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">Stage only</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
 </media-menu-radio-group>
 </media-menu-content>

@@ -9,7 +9,7 @@
 
 import { sightlineIcons } from './icons';
 
-export type Layout = 'split' | 'duo' | 'stage';
+export type Layout = 'split' | 'stage';
 
 export type EventKind = 'highlight' | 'objective' | 'round';
 
@@ -527,9 +527,9 @@ function setup(root: HTMLElement): void {
   // with data-layout on the player root.
   const layout = root.querySelector<HTMLElement & { value?: string }>('.sl-layout-group');
   layout?.addEventListener('value-change', () => {
-    const value = layout.value === 'stage' || layout.value === 'duo' ? layout.value : 'split';
+    const value: Layout = layout.value === 'stage' ? 'stage' : 'split';
     root.dataset.layout = value;
-    root.querySelector('.sl-layout-value')!.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
+    root.querySelector('.sl-layout-value')!.textContent = value === 'stage' ? 'Stage only' : 'Inset';
     root.dispatchEvent(new CustomEvent('sightline:layout', { detail: value, bubbles: true }));
   });
 }
@@ -578,7 +578,7 @@ export function setLayout(root: HTMLElement, value: Layout): void {
   const layout = root.querySelector<HTMLElement & { value?: string }>('.sl-layout-group');
   if (layout && layout.value !== value) layout.value = value;
   const label = root.querySelector('.sl-layout-value');
-  if (label) label.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
+  if (label) label.textContent = value === 'stage' ? 'Stage only' : 'Inset';
 }
 
 /*

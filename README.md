@@ -6,7 +6,7 @@ It is an HTML skin styled with plain CSS, built from the Video.js Scaffold skin 
 
 ## The demo page
 
-Eight numbered sections around a live multiview hero: 01 Multiview (70/30, 50/50, stage only), 02 Event timeline, 03 Match summary (written from `match.json` and `events.vtt`, with a momentum chart and jump-to moments), 04 Every state (captured from the live player), 05 Make it yours (live accent, radius and HUD switches), 06 Specifications, 07 Accessibility, 08 Install.
+Four numbered sections around a live multiview hero (the stage with its two angles inset on the right, the deck and the match recap): 01 Built for spectators, 02 Make it yours (live accent, radius and HUD switches), 03 Accessibility, 04 Install.
 
 ## What's where
 

@@ -26,12 +26,8 @@
         <a class="wordmark" href="./" aria-label="Sightline, home"><span class="wordmark-in" aria-hidden="true">SIGHT</span><span class="wordmark-out" aria-hidden="true">LINE</span></a>
         <span class="onair" aria-hidden="true"><span class="onair-dot"></span>On air</span>
         <nav class="nav" aria-label="Sections">
-          <a href="#multiview">Multiview</a>
-          <a href="#timeline">Timeline</a>
-          <a href="#summary">Summary</a>
-          <a href="#states">States</a>
+          <a href="#features">Features</a>
           <a href="#customize">Customize</a>
-          <a href="#specs">Specs</a>
           <a href="#access">Accessibility</a>
           <a href="#install">Install</a>
           <a href="#" data-repo-link hidden>GitHub</a>
@@ -46,9 +42,8 @@
           <p class="eyebrow"><span class="chip eyebrow-chip">Spectator mode</span> a Video.js v10 skin for esports broadcasts, scrims and game VODs</p>
           <h1 id="hero-title"><span class="line"><span>Watch the match,</span></span><span class="line"><span class="signal">not the movie.</span></span></h1>
           <p class="lede">
-            Sightline turns a Video.js player into a spectator client. One POV takes the stage, two more stay live beside it,
-            a kill feed calls the action, and the seek bar is a map of the match — every elimination, objective and round
-            is a marker you can jump to.
+            Sightline turns a Video.js player into a spectator client. One POV fills the stage, the other two ride on its
+            right edge and stay live, a kill feed calls the action, and the seek bar is a lane of events you can jump to.
           </p>
           <ul class="hero-keys" aria-label="Try it">
             <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> switch angle</li>
@@ -73,10 +68,10 @@
             <div class="stage-player" data-stage>
               <img class="stage-poster" src="./poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
             </div>
-          </div>
-          <div class="angles" data-angles-column>
-            <div class="tiles" data-tiles role="group" aria-label="Angles"></div>
-            <div class="chips" data-chips role="group" aria-label="Angles"></div>
+            <div class="angles" data-angles-column>
+              <div class="tiles" data-tiles role="group" aria-label="Angles"></div>
+              <div class="chips" data-chips role="group" aria-label="Angles"></div>
+            </div>
           </div>
         </div>
 
@@ -84,12 +79,8 @@
           <div class="layouts" role="group" aria-label="Layout">
             <span class="deck-label">Layout</span>
             <button type="button" class="layout-option" data-layout-option="split" aria-pressed="true">
-              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="19" height="16" rx="2" /><rect x="22" y="1" width="7" height="7.5" rx="1.5" /><rect x="22" y="9.5" width="7" height="7.5" rx="1.5" /></svg>
-              70 / 30
-            </button>
-            <button type="button" class="layout-option" data-layout-option="duo" aria-pressed="false">
-              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="13.5" height="16" rx="2" /><rect x="15.5" y="1" width="13.5" height="16" rx="2" /></svg>
-              50 / 50
+              <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="28" height="16" rx="2" /><rect x="21" y="3.5" width="6" height="4.5" rx="1" /><rect x="21" y="9.5" width="6" height="4.5" rx="1" /></svg>
+              Inset
             </button>
             <button type="button" class="layout-option" data-layout-option="stage" aria-pressed="false">
               <svg aria-hidden="true" viewBox="0 0 30 18" width="30" height="18"><rect x="1" y="1" width="28" height="16" rx="2" /></svg>
@@ -106,7 +97,7 @@
               <span data-share-label>Copy link to this moment</span>
             </button>
           </div>
-          <p class="deck-hint">Click a tile or press <kbd>1</kbd>–<kbd>3</kbd>: it swaps onto the stage at the same timestamp.</p>
+          <p class="deck-hint">Click an angle on the stage or press <kbd>1</kbd>–<kbd>3</kbd>: it swaps in at the same timestamp.</p>
           <p class="visually-hidden" role="status" data-share-status></p>
         </div>
 
@@ -125,98 +116,27 @@
         </section>
       </section>
 
-      <!-- 01 Multiview ------------------------------------------------------------------------------>
-      <section class="block" id="multiview" aria-labelledby="mv-title">
+      <!-- 01 Features --------------------------------------------------------------------------------->
+      <section class="block" id="features" aria-labelledby="ft-title">
         <header class="block-head">
           <p class="block-num">01</p>
-          <h2 id="mv-title">Multiview, on one clock</h2>
-          <p class="block-lede">A match is seen from many sides. Sightline plays them together and lets you choose which one gets the stage.</p>
+          <h2 id="ft-title">Built for spectators</h2>
+          <p class="block-lede">Everything a viewer needs to follow a match, and nothing a film player needs instead.</p>
         </header>
-        <div class="mv-grid">
-          <article class="mv-card">
-            <svg class="mv-diagram" aria-hidden="true" viewBox="0 0 160 90"><rect class="d-stage" x="2" y="2" width="106" height="86" rx="6" /><rect class="d-tile" x="114" y="2" width="44" height="41" rx="5" /><rect class="d-tile" x="114" y="47" width="44" height="41" rx="5" /></svg>
-            <h3>70 / 30</h3>
-            <p>The stage takes most of the width; two muted angles play beside it. The broadcast default.</p>
-          </article>
-          <article class="mv-card">
-            <svg class="mv-diagram" aria-hidden="true" viewBox="0 0 160 90"><rect class="d-stage" x="2" y="2" width="76" height="86" rx="6" /><rect class="d-tile" x="82" y="2" width="76" height="86" rx="6" /></svg>
-            <h3>50 / 50</h3>
-            <p>Two points of view at full size, side by side — attacker and defender, player and map.</p>
-          </article>
-          <article class="mv-card">
-            <svg class="mv-diagram" aria-hidden="true" viewBox="0 0 160 90"><rect class="d-stage" x="2" y="2" width="156" height="86" rx="6" /></svg>
-            <h3>Stage only</h3>
-            <p>One angle, nothing else. The other streams pause to save bandwidth.</p>
-          </article>
-        </div>
-        <ul class="facts">
-          <li><strong>≤ 0.25 s</strong><span>angles stay within a quarter second of the stage</span></li>
-          <li><strong>1 click</strong><span>or one key swaps an angle at the same timestamp</span></li>
-          <li><strong>0</strong><span>tiles streaming on a phone: angles become chips</span></li>
+        <ul class="features">
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M2.75 4.75h9v10.5h-9ZM14.25 4.75h3v4.25h-3ZM14.25 11h3v4.25h-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Angles on the stage</h3><p>Two more POVs ride on the stage's right edge, live and in sync. Click one or press <kbd>1</kbd>–<kbd>3</kbd> and it swaps in at the same moment.</p></li>
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><h3>An event lane</h3><p>Every kill, clutch, objective and round is a pin above the seek bar, in the colour of the side that scored. <kbd>N</kbd> jumps to the next.</p></li>
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4.25 10a5.75 5.75 0 1 0 1.9-4.25" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 3.5v3.75h3.75Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 7.75v4.5L12.5 10Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><h3>Instant replay</h3><p><kbd>R</kbd> plays the last eight seconds at half speed, then hands back to the match where you left it.</p></li>
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3.5 7.5v-4h4M12.5 3.5h4v4M16.5 12.5v4h-4M7.5 16.5h-4v-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Multiview fullscreen</h3><p><kbd>W</kbd> fills the screen with the stage and its angles, and nothing else: no page, no navigation.</p></li>
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 1.5h1.6v13H3ZM5.4 2.25h7.85l-1.9 3.25 1.9 3.25H5.4Z" fill="currentColor" fill-rule="evenodd"/></svg></span><h3>Kill feed and HUD</h3><p>A game-style feed calls each event as it happens; the scoreboard and active angle sit on solid chips.</p></li>
+          <li><span class="feature-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4.5 4.75h11a1.75 1.75 0 0 1 1.75 1.75v7a1.75 1.75 0 0 1-1.75 1.75h-11A1.75 1.75 0 0 1 2.75 13.5v-7A1.75 1.75 0 0 1 4.5 4.75Z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10h3M11.5 10h2.5M6 12.75h1.5M10 12.75h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>Spoiler-free and shareable</h3><p>Hide every score and event for a late watch, or copy a link that opens on this exact moment and angle.</p></li>
         </ul>
       </section>
 
-      <!-- 02 Timeline ------------------------------------------------------------------------------->
-      <section class="block" id="timeline" aria-labelledby="tl-title">
-        <header class="block-head">
-          <p class="block-num">02</p>
-          <h2 id="tl-title">A timeline that knows the match</h2>
-          <p class="block-lede">Events come from a plain WebVTT file. Each one is a pin with a glyph that says what happened, in the colour of the side that scored — readable without the colour.</p>
-        </header>
-        <figure class="annotated">
-          <img src="./states/tooltip.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The control band with a marker tooltip open: Objective captured, 01:35, press Enter to jump." />
-          <ol class="callouts">
-            <li><span class="legend-pin" data-team="a" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Eliminations</strong> a skull, cyan for Azure, amber for Ember</li>
-            <li><span class="legend-pin legend-pin-solid" data-team="a" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M1.75 4.5l3.4 2.6L8 2.25l2.85 4.85 3.4-2.6-1.15 7.25H2.9ZM2.9 12.85h10.2v1.4H2.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Clutches</strong> a filled pin with a crown</li>
-            <li><span class="legend-pin" data-team="b" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 1.5h1.6v13H3ZM5.4 2.25h7.85l-1.9 3.25 1.9 3.25H5.4Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Objectives</strong> a flag</li>
-            <li><span class="legend-pin legend-pin-tag" aria-hidden="true">R2</span><strong>Rounds</strong> a tag, and a gap in the line</li>
-            <li><span class="legend-pin legend-pin-ghost" data-team="a" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Played or ahead</strong> played events are solid, upcoming ones are outlines</li>
-            <li><kbd>Tab</kbd><strong>One stop</strong> for every marker; arrows move between them, Enter jumps</li>
-            <li><kbd>N</kbd><strong>Next highlight</strong> and <kbd>⇧N</kbd> previous, also as buttons</li>
-          </ol>
-        </figure>
-      </section>
-
-      <!-- 03 Summary -------------------------------------------------------------------------------->
-      <section class="block" id="summary" aria-labelledby="sum-title">
-        <header class="block-head">
-          <p class="block-num">03</p>
-          <h2 id="sum-title">The match, summarised</h2>
-          <p class="block-lede">Written from the same two files that drive the player — the scoreboard and the events. Every moment below is a seek.</p>
-        </header>
-        <div class="summary" data-summary hidden>
-          <div class="summary-score" data-summary-score></div>
-          <p class="summary-text" data-summary-text></p>
-          <div class="summary-chart" data-summary-chart title="Click to jump"></div>
-          <p class="summary-axis"><span>Start</span><span>Momentum · <span class="score-a">Azure</span> above, <span class="score-b">Ember</span> below</span><span>End</span></p>
-          <ol class="moments" data-summary-moments></ol>
-        </div>
-      </section>
-
-      <!-- 04 States --------------------------------------------------------------------------------->
-      <section class="block" id="states" aria-labelledby="st-title">
-        <header class="block-head">
-          <p class="block-num">04</p>
-          <h2 id="st-title">Every state, designed</h2>
-          <p class="block-lede">Captured from the live player, not mocked up.</p>
-        </header>
-        <ul class="states">
-          <li><img src="./states/start.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Before first play: the cyan centre play button and the HUD." /><span>Before first play</span></li>
-          <li><img src="./states/playing.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Playing, with the scoreboard, angle label and sync pill." /><span>Playing with HUD</span></li>
-          <li><img src="./states/toast.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The kill feed at the top right: a new entry slides in with the two names in their team colours." /><span>Kill feed</span></li>
-          <li><img src="./states/settings.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The settings menu: speed, layout, kill feed, spoiler-free and captions." /><span>Settings</span></li>
-          <li><img src="./states/switching.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Switching to angle 2 notice on the stage." /><span>Switching angle</span></li>
-          <li><img src="./states/unavailable.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Angle 3 unavailable, staying on angle 1." /><span>Angle unavailable</span></li>
-          <li><img src="./states/focus.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Keyboard focus ring on the volume thumb, band held open." /><span>Keyboard focus</span></li>
-          <li><img src="./states/shortcuts.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The keyboard shortcuts popover." /><span>Shortcuts</span></li>
-          <li><img src="./states/forced.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Forced colours: system colours, event pins keep their glyphs." /><span>Forced colours</span></li>
-        </ul>
-      </section>
-
-      <!-- 05 Customize ------------------------------------------------------------------------------>
+      <!-- 02 Customize ------------------------------------------------------------------------------>
       <section class="block" id="customize" aria-labelledby="cu-title">
         <header class="block-head">
-          <p class="block-num">05</p>
+          <p class="block-num">02</p>
           <h2 id="cu-title">Make it yours</h2>
           <p class="block-lede">The public Video.js properties drive the whole skin. Change them here and watch the player at the top.</p>
         </header>
@@ -247,80 +167,10 @@
         </form>
       </section>
 
-      <!-- 06 Specs ---------------------------------------------------------------------------------->
-      <section class="block" id="specs" aria-labelledby="sp-title">
-        <header class="block-head">
-          <p class="block-num">06</p>
-          <h2 id="sp-title">Specifications</h2>
-          <p class="block-lede">Everything sizes from <code>--media-scale-unit</code>, so fullscreen and host overrides scale the whole band together.</p>
-        </header>
-        <figure class="spec">
-          <svg viewBox="0 0 1000 320" role="img" aria-label="Technical drawing of the control band: a 50 pixel timeline row, a 30 pixel lane of 20 pixel event pins with 6 pixel stems above a 4 pixel line, a 14 pixel knob, then a row of 44 pixel buttons whose hover plate is 30 pixels with a hairline border.">
-            <defs><marker id="ar" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" fill="#8b919a" /></marker></defs>
-            <rect x="40" y="60" width="920" height="200" rx="4" fill="#0f1114" stroke="rgb(255 255 255 / .16)" />
-            <text x="60" y="138" class="sv-mono">12:04</text>
-            <rect x="130" y="130" width="700" height="4" rx="2" fill="rgb(255 255 255 / .2)" />
-            <rect x="130" y="130" width="340" height="4" rx="2" fill="#38e1ff" />
-            <rect x="398.5" y="127" width="3" height="10" rx="1" fill="#0f1114" />
-            <g transform="translate(240 106)">
-              <rect width="20" height="20" rx="6" fill="rgb(56 225 255 / .18)" stroke="#38e1ff"  />
-              <g transform="translate(4 4) scale(.75)" color="#38e1ff"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></g>
-              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
-            </g>
-            <g transform="translate(310 106)">
-              <rect width="20" height="20" rx="6" fill="#ffb020" fill-opacity=".2" stroke="#ffb020"  />
-              <g transform="translate(4 4) scale(.75)" color="#ffb020"><path d="M3 1.5h1.6v13H3ZM5.4 2.25h7.85l-1.9 3.25 1.9 3.25H5.4Z" fill="currentColor" fill-rule="evenodd"/></g>
-              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
-            </g>
-            <g transform="translate(386 106)"><rect width="28" height="20" rx="6" fill="#0b0e14" stroke="rgb(255 255 255 / .45)" /><text x="14" y="14" text-anchor="middle" class="sv-tag">R2</text><line x1="14" x2="14" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" /></g>
-            <g transform="translate(550 106)">
-              <rect width="20" height="20" rx="6" fill="#38e1ff" stroke="#38e1ff"  />
-              <g transform="translate(4 4) scale(.75)" color="#0b0e14"><path d="M1.75 4.5l3.4 2.6L8 2.25l2.85 4.85 3.4-2.6-1.15 7.25H2.9ZM2.9 12.85h10.2v1.4H2.9Z" fill="currentColor" fill-rule="evenodd"/></g>
-              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
-            </g>
-            <g transform="translate(650 106)">
-              <rect width="20" height="20" rx="6" fill="#0b0e14" stroke="#ffb020" stroke-opacity=".45" />
-              <g transform="translate(4 4) scale(.75)" color="#ffb020"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></g>
-              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
-            </g>
-            <line x1="470" x2="470" y1="100" y2="126" stroke="rgb(255 255 255 / .45)" />
-            <circle cx="470" cy="132" r="7" fill="#f3f5f8" stroke="rgb(56 225 255 / .45)" stroke-width="6" />
-            <text x="850" y="138" class="sv-mono sv-muted">24:37</text>
-            <g fill="none" stroke="rgb(255 255 255 / .3)" stroke-dasharray="3 3">
-              <rect x="70" y="170" width="44" height="44" rx="4" /><rect x="118" y="170" width="44" height="44" rx="4" /><rect x="166" y="170" width="44" height="44" rx="4" /><rect x="214" y="170" width="44" height="44" rx="4" />
-              <rect x="742" y="170" width="44" height="44" rx="4" /><rect x="790" y="170" width="44" height="44" rx="4" /><rect x="838" y="170" width="44" height="44" rx="4" /><rect x="886" y="170" width="44" height="44" rx="4" />
-            </g>
-            <rect x="125" y="177" width="30" height="30" rx="9" fill="rgb(255 255 255 / .07)" stroke="rgb(255 255 255 / .16)" />
-            <line x1="70" x2="114" y1="230" y2="230" stroke="#8b919a" marker-start="url(#ar)" marker-end="url(#ar)" />
-            <text x="92" y="248" class="sv-label" text-anchor="middle">44 · 48 touch</text>
-            <line x1="125" x2="155" y1="160" y2="160" stroke="#8b919a" marker-start="url(#ar)" marker-end="url(#ar)" />
-            <text x="140" y="155" class="sv-label" text-anchor="middle">plate 30</text>
-            <line x1="962" x2="962" y1="100" y2="140" stroke="#8b919a" marker-start="url(#ar)" marker-end="url(#ar)" />
-            <text x="955" y="96" class="sv-label" text-anchor="end">timeline 50</text>
-            <line x1="250" x2="250" y1="40" y2="100" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="250" y="34" class="sv-label" text-anchor="middle">pin 20 · stem 6</text>
-            <line x1="470" x2="470" y1="40" y2="96" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="470" y="34" class="sv-label" text-anchor="middle">knob 14 → 17 on focus</text>
-            <line x1="660" x2="660" y1="40" y2="100" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="660" y="34" class="sv-label" text-anchor="middle">upcoming: outline</text>
-            <text x="560" y="160" class="sv-label" text-anchor="middle">clutch: filled</text>
-            <text x="500" y="296" class="sv-label" text-anchor="middle">band: timeline 50 + buttons 44 · line 4 · scrim ground 96% → 0</text>
-          </svg>
-        </figure>
-        <dl class="tokens">
-          <div><dt><span class="tok" style="--c: #0a0d12"></span>Ground</dt><dd>#0A0D12</dd></div>
-          <div><dt><span class="tok" style="--c: #12161d"></span>Surface</dt><dd>#12161D</dd></div>
-          <div><dt><span class="tok" style="--c: #38e1ff"></span>Signal</dt><dd>#38E1FF · accent, first side</dd></div>
-          <div><dt><span class="tok" style="--c: #ffb020"></span>Event</dt><dd>#FFB020 · second side</dd></div>
-          <div><dt><span class="tok" style="--c: #ff4d5e"></span>Round</dt><dd>#FF4D5E · live, replay, errors</dd></div>
-          <div><dt><span class="tok" style="--c: #5cf2a0"></span>Sync</dt><dd>#5CF2A0 · in sync</dd></div>
-        </dl>
-      </section>
-
-      <!-- 07 Accessibility -------------------------------------------------------------------------->
+      <!-- 03 Accessibility ------------------------------------------------------------------------------>
       <section class="block" id="access" aria-labelledby="ac-title">
         <header class="block-head">
-          <p class="block-num">07</p>
+          <p class="block-num">03</p>
           <h2 id="ac-title">Accessible on purpose</h2>
           <p class="block-lede">Measured, not assumed. The full audit, item by item, is in the repository.</p>
         </header>
@@ -330,22 +180,18 @@
           <li><strong>48 px</strong><span>touch targets on phones</span></li>
           <li><strong>0</strong><span>layout shift while the page loads</span></li>
         </ul>
-        <div class="contrast">
-          <figure><img src="./states/bright.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The band over a bright frame stays readable." /><figcaption>Over a bright frame</figcaption></figure>
-          <figure><img src="./states/dark.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The band over a dark frame stays readable." /><figcaption>Over a dark frame</figcaption></figure>
-        </div>
         <ul class="a11y-list">
-          <li><strong>Keyboard first.</strong> Every control in visual order, one visible ring, menus close with Esc and hand focus back.</li>
+          <li><strong>Keyboard first.</strong> Every control in visual order with one visible ring; menus close with Esc and hand focus back.</li>
           <li><strong>Never colour alone.</strong> Every event has its own glyph; "on" states change shape or label too.</li>
-          <li><strong>Calm on request.</strong> Reduced motion stops the sweep, the pulse and the spinner; swaps cut instead of fade.</li>
+          <li><strong>Calm on request.</strong> Reduced motion stops the sweeps, the pulse and the spinner; swaps cut instead of fade.</li>
           <li><strong>Forced colours.</strong> System colours throughout; event pins keep their glyphs; focus uses Highlight.</li>
         </ul>
       </section>
 
-      <!-- 08 Install -------------------------------------------------------------------------------->
+      <!-- 04 Install -------------------------------------------------------------------------------->
       <section class="block" id="install" aria-labelledby="in-title">
         <header class="block-head">
-          <p class="block-num">08</p>
+          <p class="block-num">04</p>
           <h2 id="in-title">Install</h2>
           <p class="block-lede">Sightline is skin source for Video.js 10: copy it into your project and keep the public properties.</p>
         </header>

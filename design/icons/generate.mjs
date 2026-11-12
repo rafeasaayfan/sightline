@@ -19,6 +19,20 @@ const line = (d, w = 1.75) =>
 const svg = (body, size = 20) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" aria-hidden="true" focusable="false">${body}</svg>`;
 
+/** A six-tooth cog as one filled outline with a round hole. */
+function cog(cx, cy, outer, root, hole, teeth = 6, topHalf = 13, rootHalf = 21) {
+  const n = (v) => String(Math.round(v * 100) / 100);
+  const rad = (d) => (d * Math.PI) / 180;
+  const at = (r, d) => `${n(cx + r * Math.cos(rad(d)))} ${n(cy + r * Math.sin(rad(d)))}`;
+  let d = '';
+  for (let k = 0; k < teeth; k++) {
+    const c = -90 + (k * 360) / teeth;
+    d += `${k ? 'L' : 'M'}${at(root, c - rootHalf)}L${at(outer, c - topHalf)}A${outer} ${outer} 0 0 1 ${at(outer, c + topHalf)}L${at(root, c + rootHalf)}A${root} ${root} 0 0 1 ${at(root, c + 360 / teeth - rootHalf)}`;
+  }
+  d += `ZM${n(cx + hole)} ${n(cy)}A${hole} ${hole} 0 1 0 ${n(cx - hole)} ${n(cy)}A${hole} ${hole} 0 1 0 ${n(cx + hole)} ${n(cy)}Z`;
+  return fill(d);
+}
+
 const speaker = solid('M3.75 8h2.5l4-3.25v10.5l-4-3.25h-2.5Z');
 
 const icons = {
@@ -34,8 +48,7 @@ const icons = {
     fill('M4.5 4h11A2.5 2.5 0 0 1 18 6.5v7a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 2 13.5v-7A2.5 2.5 0 0 1 4.5 4ZM5.5 9.25h3.5v1.5H5.5ZM11 9.25h3.5v1.5H11ZM5.5 12h2v1.25h-2ZM9.5 12h5v1.25h-5Z'),
   ),
   'captions-off': svg(line('M4.5 4.75h11a1.75 1.75 0 0 1 1.75 1.75v7a1.75 1.75 0 0 1-1.75 1.75h-11A1.75 1.75 0 0 1 2.75 13.5v-7A1.75 1.75 0 0 1 4.5 4.75Z') + line('M6 10h3M11.5 10h2.5M6 12.75h1.5M10 12.75h4', 1.5)),
-  /** Settings: two sliders, read as "tune". */
-  gear: svg(line('M3 6.5h7.5M15.5 6.5H17M3 13.5h1.5M9.5 13.5H17') + line('M13 4.25a2.25 2.25 0 1 1 0 4.5a2.25 2.25 0 1 1 0-4.5ZM7 11.25a2.25 2.25 0 1 1 0 4.5a2.25 2.25 0 1 1 0-4.5Z')),
+  gear: svg(cog(10, 10, 8, 6, 2.5)),
   'pip-enter': svg(line('M17.25 9V6A1.75 1.75 0 0 0 15.5 4.25h-11A1.75 1.75 0 0 0 2.75 6v8a1.75 1.75 0 0 0 1.75 1.75H8') + solid('M11 11.5h6v4h-6Z')),
   'pip-exit': svg(line('M17.25 9V6A1.75 1.75 0 0 0 15.5 4.25h-11A1.75 1.75 0 0 0 2.75 6v8a1.75 1.75 0 0 0 1.75 1.75H8') + line('M11.5 11.5l4.5 4M11.5 11.5v3M11.5 11.5h3')),
   'fullscreen-enter': svg(line('M3.5 7.5v-4h4M12.5 3.5h4v4M16.5 12.5v4h-4M7.5 16.5h-4v-4')),

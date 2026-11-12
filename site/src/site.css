@@ -1738,7 +1738,7 @@ input[type="range"] {
   }
 
   /* Cards inside a revealed block arrive one after another. */
-  .js .block :is(.mv-card, .states li, .facts li, .tokens div, .steps li) {
+  .js .block :is(.mv-card, .states li, .facts li, .tokens div, .steps li, .features li) {
     opacity: 0;
     translate: 0 16px;
     transition:
@@ -1749,7 +1749,7 @@ input[type="range"] {
     transition-delay: calc(250ms + var(--i, 0) * 70ms), calc(250ms + var(--i, 0) * 70ms), 0ms, 0ms;
   }
 
-  .js .block.is-in :is(.mv-card, .states li, .facts li, .tokens div, .steps li) {
+  .js .block.is-in :is(.mv-card, .states li, .facts li, .tokens div, .steps li, .features li) {
     opacity: 1;
     translate: 0 0;
   }
@@ -2784,4 +2784,190 @@ html[data-spoilers] .recap-rail::after {
     background: Highlight;
     color: HighlightText;
   }
+}
+
+/* ===============================================================================================================
+ * One stage, angles on it: the two other POVs ride on the stage's right edge, tilted a little as if pinned there.
+ * =============================================================================================================== */
+
+.arena {
+  display: block;
+}
+
+.stage {
+  flex: none;
+  width: 100%;
+}
+
+.angles {
+  position: absolute;
+  top: 60px;
+  right: 18px;
+  z-index: 5;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: clamp(150px, 21%, 330px);
+  perspective: 1100px;
+  pointer-events: none;
+}
+
+.tiles,
+.arena:fullscreen .tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tile {
+  border: 1px solid rgb(255 255 255 / 0.3);
+  box-shadow: -18px 22px 40px -14px rgb(0 0 0 / 0.85);
+  pointer-events: auto;
+  transform: rotateY(-10deg);
+  transform-origin: 100% 50%;
+  transition:
+    transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 160ms ease;
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    border-color: rgb(255 255 255 / 0.7);
+    transform: rotateY(-3deg) translateX(-4px);
+  }
+}
+
+.tile:focus-visible {
+  transform: rotateY(-3deg) translateX(-4px);
+}
+
+.tile-label {
+  top: 8px;
+  inset-inline-start: 8px;
+  padding: 4px 10px 4px 9px;
+  font-size: 12px;
+}
+
+.tile-muted {
+  display: none;
+}
+
+.tile-clock {
+  bottom: 8px;
+  inset-inline-start: 8px;
+  font-size: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+}
+
+@media (width < 1024px) {
+  .tiles {
+    display: flex;
+  }
+
+  .angles {
+    top: 52px;
+    width: 19%;
+  }
+}
+
+/* Phones: the stage streams alone; the angles become a chip row under it. */
+@media (width < 640px) {
+  .angles {
+    position: static;
+    width: auto;
+    margin-top: 14px;
+    perspective: none;
+    pointer-events: auto;
+  }
+}
+
+/* Multiview fullscreen is now the stage alone, edge to edge, with its angles on it. */
+.arena:fullscreen,
+.arena:fullscreen[data-layout="stage"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ------------------------------------------------------------------------------------------------- Features */
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.features li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 26px 0 30px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.feature-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--corner);
+  color: var(--signal);
+}
+
+.feature-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.features h3 {
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.features p {
+  margin: 0;
+  max-width: 40ch;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.features kbd {
+  color: var(--text);
+}
+
+@media (width < 1024px) {
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width < 640px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The tilt carries its own perspective, so it shows whatever the parent is. */
+.tile {
+  transform: perspective(900px) rotateY(-11deg);
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    transform: perspective(900px) rotateY(-3deg) translateX(-4px);
+  }
+}
+
+.tile:focus-visible {
+  transform: perspective(900px) rotateY(-3deg) translateX(-4px);
 }

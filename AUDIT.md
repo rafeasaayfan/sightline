@@ -34,7 +34,7 @@ The brief's audit: *working controls, responsive layout, keyboard access, visibl
 | Event toasts | Playing across 0:48 raises "Elimination · Player 1 → Ember 3" in an `aria-live="polite"` region; settings switches toasts off | Pass |
 | No events | A single-angle match without an events file: no markers, highlight buttons `aria-disabled`, N does nothing, no recap, no angles column, no HUD, no errors | Pass |
 | Settings menu | Opens with Enter; holds Speed, Layout, Event toasts (and Captions when tracks exist); Esc closes it and focus returns to the gear; outside click closes | Pass |
-| Layout | Settings → Stage only hides the angles; 50 / 50 shows one angle at the same width as the stage; the page's layout control restores 70/30 | Pass |
+| Layout | Settings → Stage only hides the angles; the page layout control restores Inset, with both angles inside the stage on its right and the kill feed moved left | Pass |
 | Shortcuts | ? opens the list; Esc closes it | Pass |
 | HUD | Round, round clock, score and the active angle update from `match.json` as the match plays; sync pill shows OK, hollow amber while resyncing | Pass |
 | Angle swaps | 15 swaps while playing and 15 while paused, by tile click and keys 1–3, between different stream URLs: the stage resumes within 0.033s of the swap moment; no layout shift | Pass |
@@ -44,7 +44,7 @@ The brief's audit: *working controls, responsive layout, keyboard access, visibl
 | 320px | No horizontal overflow; nothing spills out of the band; chip row; 48px buttons on touch; chip swap keeps the time | Pass |
 | 390px | Same as 320px | Pass |
 | 768px | Angles stacked under the stage | Pass |
-| 1024px and up | Stage and angles side by side (70/30) | Pass |
+| 640px and up | Angles inset on the stage's right edge | Pass |
 | Phones save data | Below 640px no tile streams at all; only the stage plays | Pass |
 | Tap targets | 48px buttons and chips on coarse pointers; 44px rows and buttons elsewhere; Lighthouse target-size passes | Pass |
 | Contrast | `design/contrast.mjs` composites each translucent surface over a white and a black frame: text ≥ 4.5:1 (lowest: muted duration 5.28:1), track, markers, thumb and focus ≥ 3:1 (lowest: round marker 3.60:1, track 3.28:1) | Pass |

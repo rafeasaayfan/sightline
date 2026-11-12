@@ -31,7 +31,7 @@ for (const button of document.querySelectorAll<HTMLButtonElement>('.copy')) {
 }
 
 // Sections reveal as they scroll into view; cards inside get a stagger index.
-for (const group of document.querySelectorAll('.mv-grid, .states, .facts, .tokens, .steps')) {
+for (const group of document.querySelectorAll('.features, .facts, .steps')) {
   [...group.children].forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i)));
 }
 const reveal = new IntersectionObserver(

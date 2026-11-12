@@ -2336,3 +2336,127 @@
     }
   }
 }
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Refinements: plate size and centring, menu scrollbars, a left-to-right shortcuts list, and room for inset angles.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  /* A slightly larger plate with tighter corners. */
+  .sl-button::before {
+    inset: 5px;
+    border-radius: 6px;
+  }
+
+  /* Only visible children stack above the plate; the hidden label keeps its absolute box so icons stay centred. */
+  .sl-button > .sl-visually-hidden {
+    position: absolute;
+  }
+
+  /* Menus that scroll get the same slim scrollbar as the page. */
+  .sl-menu-content {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.22) transparent;
+  }
+
+  .sl-menu-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sl-menu-content::-webkit-scrollbar-track {
+    margin-block: 8px;
+    background: transparent;
+  }
+
+  .sl-menu-content::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background: rgb(255 255 255 / 0.22) padding-box;
+  }
+
+  .sl-menu-content::-webkit-scrollbar-thumb:hover {
+    background: var(--sl-signal) padding-box;
+  }
+
+  /* Submenu title: no rule under it. */
+  .sl-menu-back {
+    box-shadow: none;
+    border-radius: 8px;
+  }
+
+  /* Shortcuts read left to right: keys in a column, the action beside them. */
+  .sl-keys-list > div,
+  .sightline[data-angles] .sl-keys-angles,
+  .sightline[data-multiview] .sl-keys-multiview {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr);
+    justify-content: start;
+    align-items: center;
+    gap: 12px;
+    text-align: start;
+  }
+
+  .sl-keys-list dt {
+    justify-content: flex-start;
+  }
+
+  .sl-keys,
+  .sl-keys-list {
+    direction: ltr;
+  }
+
+  /* With angles inset on the right of the stage, the kill feed moves to the left under the scoreboard. */
+  .sightline[data-inset] .sl-feed {
+    right: auto;
+    left: calc(var(--sl-u) * 4);
+    align-items: flex-start;
+  }
+
+  .sightline[data-inset] .sl-feed-item {
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%);
+    background: linear-gradient(270deg, rgb(10 13 18 / 0.55), rgb(10 13 18 / 0.92) 30%);
+  }
+
+  .sightline[data-inset] .sl-feed-item:first-child {
+    background: linear-gradient(270deg, rgb(10 13 18 / 0.6), rgb(18 22 29 / 0.96) 30%);
+  }
+
+  @keyframes sl-feed-in-left {
+    from {
+      opacity: 0;
+      translate: -40px 0;
+    }
+  }
+
+  .sightline[data-inset] .sl-feed-item {
+    animation-name: sl-feed-in-left;
+  }
+
+  .sightline[data-inset] .sl-feed-item[data-leaving] {
+    translate: -24px 0;
+  }
+}
+
+@layer components {
+  /* The shortcuts popover reads left to right throughout and fits without clipping. */
+  .sl-keys,
+  .sl-keys-title,
+  .sl-keys-list dd {
+    text-align: left;
+  }
+
+  .sl-keys {
+    max-height: min(440px, 80cqh);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.22) transparent;
+  }
+
+  .sl-keys-list {
+    gap: 4px;
+  }
+
+  .sl-keys-list dd {
+    font-size: var(--sl-text-tiny);
+    line-height: 1.35;
+  }
+}
