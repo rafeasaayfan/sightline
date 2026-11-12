@@ -2629,20 +2629,9 @@
 }
 
 /* ---------------------------------------------------------------------------------------------------------------
- * Action intensity and clips on the timeline.
+ * Clips on the timeline.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
-  /* A 3px strip just above the line, warm where the match is busy. */
-  .sl-heat {
-    position: absolute;
-    inset-inline: 0;
-    bottom: calc(var(--sl-rail, 20px) / 2 + 5px);
-    z-index: 1;
-    height: 3px;
-    border-radius: 2px;
-    pointer-events: none;
-  }
-
   /* A clip: an outlined range on the line, under the knob. */
   .sl-clip-range {
     position: absolute;
@@ -2658,19 +2647,45 @@
     pointer-events: none;
   }
 
-  .sightline[data-spoilers="on"] .sl-heat {
-    display: none;
-  }
-
   @media (forced-colors: active) {
-    .sl-heat {
-      display: none;
-    }
-
     .sl-clip-range {
       forced-color-adjust: none;
       background-color: transparent;
       box-shadow: inset 0 0 0 2px Highlight;
+    }
+  }
+}
+
+@layer components {
+  /* The seek knob's box is a 28px target (24px even with the frame scaled down); the 14px knob and its ring are painted
+     inside it. */
+  .sl-timeline .sl-thumb {
+    width: 28px;
+    height: 28px;
+    background: radial-gradient(
+      circle closest-side,
+      #fff 0 50%,
+      color-mix(in srgb, var(--sl-signal) 45%, transparent) 52% 71%,
+      transparent 74%
+    );
+    box-shadow: none;
+    filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.5));
+  }
+
+  .sl-timeline .sl-slider[data-interactive] .sl-thumb {
+    box-shadow: none;
+    background: radial-gradient(
+      circle closest-side,
+      #fff 0 50%,
+      color-mix(in srgb, var(--sl-signal) 55%, transparent) 52% 78%,
+      transparent 81%
+    );
+  }
+
+  @media (forced-colors: active) {
+    .sl-timeline .sl-thumb {
+      forced-color-adjust: none;
+      background: radial-gradient(circle closest-side, Highlight 0 52%, transparent 54%);
     }
   }
 }
