@@ -3622,3 +3622,8 @@ html[data-spoilers] .recap-rail::after {
 .console {
   transform-origin: 50% 0;
 }
+
+/* The grain overlay is gone: an SVG noise filter repainted across the whole screen cost more than it gave. */
+body::after {
+  content: none;
+}
