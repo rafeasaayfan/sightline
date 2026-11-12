@@ -297,6 +297,8 @@ export async function start(): Promise<void> {
 
   const layoutButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-layout-option]')];
   function applyLayout(value: Layout): void {
+    // Let the page record the frame's size first, so it can animate to the new one.
+    if (arena.dataset.layout !== value) document.dispatchEvent(new CustomEvent('sightline:before-layout'));
     arena.dataset.layout = value;
     // Stage only is an ordinary player: no multiview there.
     root.toggleAttribute('data-multiview', canWatch && value !== 'stage');

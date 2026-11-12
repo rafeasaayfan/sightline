@@ -3618,3 +3618,7 @@ html[data-spoilers] .recap-rail::after {
   height: auto;
   perspective: none;
 }
+
+.console {
+  transform-origin: 50% 0;
+}

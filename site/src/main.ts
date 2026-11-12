@@ -113,9 +113,31 @@ if (frame && arenaEl) {
   measure();
   new ResizeObserver(measure).observe(frame);
   window.addEventListener('resize', measure);
+  // Switching layout: start the frame at its old size and glide it to the new one (only a transform animates).
+  let before: DOMRect | null = null;
+  document.addEventListener('sightline:before-layout', () => {
+    before = frame.getBoundingClientRect();
+  });
+  const glide = () => {
+    const from = before;
+    before = null;
+    if (!from || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const to = frame.getBoundingClientRect();
+    const s = from.width / to.width;
+    const dy = from.top - to.top;
+    if (Math.abs(s - 1) < 0.01 && Math.abs(dy) < 1) return;
+    frame.animate(
+      [
+        { transform: `translateY(${dy}px) scale(${s})`, opacity: 0.6 },
+        { transform: 'none', opacity: 1 },
+      ],
+      { duration: 560, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+    );
+  };
   // The layout buttons and the player's menu both write data-layout on the arena.
   new MutationObserver(() => {
     measure();
+    glide();
     window.dispatchEvent(new Event('scroll'));
   }).observe(arenaEl, { attributes: true, attributeFilter: ['data-layout'] });
 }
