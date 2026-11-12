@@ -7,7 +7,7 @@
 // short kill-confirm tone; a bigger sting on the clutch; a countdown and start tone per round; a rising sweep and a
 // chord on each objective capture; a falling two-tone at each round's end.
 
-import { mkdirSync, writeFileSync, renameSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, renameSync, existsSync, copyFileSync, rmSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { DURATION, ROUNDS, KILLS } from './script.mjs';
@@ -157,7 +157,21 @@ if (process.argv.includes('--mux')) {
     }
     const tmp = `${file}.audio.mp4`;
     execFileSync(ffmpeg, ['-hide_banner', '-loglevel', 'error', '-y', '-i', file, '-i', wav, '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy', '-af', `volume=${volume}`, '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', tmp]);
-    renameSync(tmp, file);
+    // On Windows a dev server may still hold the old file: retry, then copy over it.
+    for (let i = 0; ; i++) {
+      try {
+        renameSync(tmp, file);
+        break;
+      } catch (error) {
+        if (i < 10) {
+          execFileSync(process.execPath, ['-e', 'setTimeout(() => {}, 400)']);
+          continue;
+        }
+        copyFileSync(tmp, file);
+        rmSync(tmp);
+        break;
+      }
+    }
     console.log(`angle${n}: audio muxed${volume < 1 ? ' (quieter, map view)' : ''}`);
   }
 }

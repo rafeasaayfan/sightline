@@ -24,12 +24,14 @@ A full-width console around the player: the stage and its two angles on top (spl
 
 ## The demo match
 
-`design/match/script.mjs` scripts a four-round 4v4 (who eliminates whom and when, objective captures, a 1v3 clutch); `sim.js` draws it from three cameras; `record.mjs` records each camera to `site/public/media/angle1-3.mp4` and writes `events.vtt` and the scoreboard. Edit the script and re-record to change the match:
+`design/match/script.mjs` scripts a four-round 4v4 (who eliminates whom and when, objective captures, a 1v3 clutch); `sim.js` draws it from three cameras; `record.mjs` records each camera to `site/public/media/angle1-3.mp4` and writes `events.vtt` and the scoreboard. `sound.mjs` synthesizes the soundtrack from the same script and muxes it in, and `storyboards.mjs` makes the seek-bar thumbnails and posters:
 
 ```sh
 npm i --no-save playwright-core ffmpeg-static
 FFMPEG="$(node -p "require('ffmpeg-static')")" node design/match/record.mjs --views p1
 # then --views p2 and --views overview
+node design/match/sound.mjs --mux
+node design/match/storyboards.mjs
 ```
 
 ## Set your Mux playback IDs
@@ -98,7 +100,7 @@ Without anything else it is an overlay player. A host page can add more:
 - Built on [Video.js 10](https://videojs.org) (`@videojs/html`), Apache-2.0. Started from the Video.js Scaffold skin via `@videojs/cli`.
 - Type: Barlow Condensed, Inter and JetBrains Mono, SIL Open Font License 1.1, self-hosted through Fontsource.
 - Icons: drawn for Sightline by `design/icons/generate.mjs`.
-- Footage: an original top-down match between two invented teams, rendered and recorded by `design/match/` (three cameras: Player 1 POV, Player 2 POV, map overview). Its events and scoreboard come from the same script, so the timeline matches the picture.
+- Footage and sound: an original top-down match between two invented teams, rendered by `design/match/` (three cameras: Player 1 POV, Player 2 POV, map overview), with a soundtrack synthesized from code. Its events and scoreboard come from the same script, so the timeline, the kill feed and every gunshot match the picture.
 - No game names, logos, characters or interface from any real game; team names are invented.
 
 ## Licence
