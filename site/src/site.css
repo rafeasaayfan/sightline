@@ -37,26 +37,6 @@ body {
   background: transparent;
 }
 
-/*
- * Background: ambient light from the match. A tiny canvas samples the stage's current frame and the page wears it,
- * hugely blurred, so the colour of the room follows the game. A fine grain sits over everything.
- */
-.ambient {
-  position: fixed;
-  inset: -15vh -15vw;
-  z-index: -2;
-  width: 130vw;
-  height: 130vh;
-  opacity: 0.42;
-  filter: blur(90px) saturate(1.6);
-  mask-image: radial-gradient(120% 75% at 50% 18%, #000 30%, transparent 80%);
-  pointer-events: none;
-  transition: opacity 1.2s ease;
-}
-
-.ambient:not([data-live]) {
-  opacity: 0;
-}
 body::after {
   content: "";
   position: fixed;
@@ -131,7 +111,7 @@ h1,
 h2,
 h3 {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-weight: 600;
   text-wrap: balance;
 }
@@ -185,7 +165,7 @@ code {
   padding: 8px 18px;
   background: var(--signal);
   color: var(--ground);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -201,7 +181,7 @@ code {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -289,7 +269,7 @@ main {
   padding: 5px 14px;
   background: var(--surface-raised);
   color: var(--signal);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -468,7 +448,7 @@ main {
   inset-inline-start: 10px;
   padding: 6px 14px 6px 12px;
   background: rgb(18 22 29 / 0.9);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -586,7 +566,7 @@ main {
 .deck-label {
   margin-inline-end: 6px;
   color: var(--muted);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -872,7 +852,7 @@ main {
 }
 
 .facts strong {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: clamp(28px, 3vw, 40px);
   font-weight: 700;
   line-height: 1;
@@ -968,7 +948,7 @@ main {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 14px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
 }
 
 .score-team {
@@ -1070,7 +1050,7 @@ main {
 
 .states span {
   color: var(--muted);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1104,7 +1084,7 @@ main {
   padding: 0;
   margin-bottom: 4px;
   color: var(--muted);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1846,4 +1826,837 @@ input[type="range"] {
     border-inline-start: 0;
     border-top: 1px solid var(--line-strong);
   }
+}
+
+/* =================================================================================================================
+ * Tactical: the page's final look. A neutral gunmetal ground, a recon-map background, condensed broadcast type and
+ * square corners. Colour is kept for meaning: cyan is the signal, amber and cyan are the two sides, red is live.
+ * These rules come last on purpose and win over the earlier, softer layer above.
+ * =============================================================================================================== */
+
+:root {
+  --ground: #08090b;
+  --ground-2: #0b0d10;
+  --surface: #0f1114;
+  --surface-raised: #161a1f;
+  --text: #eceef1;
+  --body: #b4b9c1;
+  --muted: #8b919a;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --stage-radius: 6px;
+  --corner: 4px;
+  --display: "Barlow Condensed", "Inter", sans-serif;
+  --tick: rgb(255 255 255 / 0.32);
+
+  scrollbar-color: #2b3038 var(--ground);
+  scrollbar-width: thin;
+}
+
+/* Custom scrollbars: a slim graphite thumb that lights up under the pointer. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ground);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid var(--ground);
+  border-radius: 10px;
+  background: #2b3038;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--signal);
+}
+
+body {
+  background:
+    radial-gradient(120% 70% at 50% -10%, rgb(255 255 255 / 0.035), transparent 60%),
+    transparent;
+}
+
+/* The recon map: drawn by terrain.ts into this canvas. */
+.terrain {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: -2;
+  width: 100vw;
+  height: 125vh;
+  opacity: 0;
+  mask-image: radial-gradient(130% 90% at 50% 0%, #000 35%, rgb(0 0 0 / 0.35) 75%, transparent 100%);
+  pointer-events: none;
+  transition: opacity 1.4s ease;
+}
+
+.terrain[data-ready] {
+  opacity: 1;
+}
+
+/* The grain stays, a little finer. */
+body::after {
+  opacity: 0.05;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.005em;
+}
+
+kbd {
+  border-radius: 3px;
+}
+
+/* ------------------------------------------------------------------------------------------------- Top bar */
+
+.top {
+  background: rgb(8 9 11 / 0.82);
+}
+
+.wordmark,
+.foot .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  background: none;
+  clip-path: none;
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.wordmark:hover {
+  color: #fff;
+}
+
+/* A reticle before the name. */
+.wordmark::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--signal), var(--signal)) center / 2px 2px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) center top / 1.5px 5px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) center bottom / 1.5px 5px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) left center / 5px 1.5px no-repeat,
+    linear-gradient(var(--signal), var(--signal)) right center / 5px 1.5px no-repeat;
+  box-shadow: inset 0 0 0 1.5px var(--signal);
+}
+
+.onair {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+}
+
+.nav {
+  gap: 0 22px;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------------------------------------- Hero */
+
+.eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eyebrow-chip {
+  padding: 0;
+  background: none;
+  clip-path: none;
+  color: var(--round);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.eyebrow-chip::before {
+  content: "● ";
+}
+
+.hero h1 {
+  font-size: clamp(54px, 8.2vw, 128px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* The second line is drawn, not filled: the outline of a word, as on a broadcast title card. */
+.hero h1 .signal {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(236 238 241 / 0.7);
+}
+
+@media (forced-colors: active) {
+  .hero h1 .signal {
+    color: CanvasText;
+    -webkit-text-stroke: 0;
+  }
+}
+
+.hero-keys kbd {
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------------------------------------- Arena */
+
+.stage {
+  position: relative;
+  box-shadow:
+    0 0 0 1px var(--line-strong),
+    0 40px 90px -30px rgb(0 0 0 / 0.95);
+}
+
+/* HUD corner ticks just outside the stage. */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  z-index: 0;
+  background:
+    linear-gradient(var(--tick), var(--tick)) left top / 16px 1px,
+    linear-gradient(var(--tick), var(--tick)) left top / 1px 16px,
+    linear-gradient(var(--tick), var(--tick)) right top / 16px 1px,
+    linear-gradient(var(--tick), var(--tick)) right top / 1px 16px,
+    linear-gradient(var(--tick), var(--tick)) left bottom / 16px 1px,
+    linear-gradient(var(--tick), var(--tick)) left bottom / 1px 16px,
+    linear-gradient(var(--tick), var(--tick)) right bottom / 16px 1px,
+    linear-gradient(var(--tick), var(--tick)) right bottom / 1px 16px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.stage-player {
+  position: relative;
+  z-index: 1;
+}
+
+.tile {
+  border-radius: var(--corner);
+  border-color: var(--line-strong);
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    border-color: rgb(255 255 255 / 0.5);
+  }
+}
+
+.tile-label {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.pill {
+  border-radius: 3px;
+}
+
+.angle-chip {
+  border-radius: var(--corner);
+}
+
+/* The deck: one hairline row of controls, no card. */
+.deck {
+  padding: 12px 0;
+  border: 0;
+  border-block: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+}
+
+.deck-label {
+  font-family: var(--display);
+  font-size: 13px;
+}
+
+.layout-option,
+.deck-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--corner);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.deck-button kbd {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+.layout-option[aria-pressed="true"],
+.deck-button[aria-pressed="true"] {
+  border-color: var(--signal);
+  background: rgb(56 225 255 / 0.08);
+  color: var(--signal);
+}
+
+@media (hover: hover) {
+  .layout-option[aria-pressed="false"]:hover,
+  .deck-button:hover {
+    border-color: rgb(255 255 255 / 0.4);
+    background: rgb(255 255 255 / 0.04);
+  }
+}
+
+.deck-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.deck-hint {
+  flex-basis: 100%;
+  font-size: 13px;
+}
+
+/* ------------------------------------------------------------------------------------------------- Recap rail */
+
+.recap-title {
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.recap-rail {
+  position: relative;
+}
+
+/* Edge fades say "there is more this way"; they follow the scroll position. */
+.recap-rail::before,
+.recap-rail::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 14px;
+  z-index: 1;
+  width: 56px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.recap-rail::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--ground), transparent);
+}
+
+.recap-rail::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--ground), transparent);
+}
+
+.recap-rail[data-more-start]::before,
+.recap-rail[data-more-end]::after {
+  opacity: 1;
+}
+
+.recap-list {
+  gap: 8px;
+  /* Room above and below so a hovered card never clips at the scroll edge. */
+  padding: 6px 2px 14px;
+  margin: -6px -2px 0;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: #2b3038 transparent;
+}
+
+.recap-list::-webkit-scrollbar {
+  height: 6px;
+}
+
+.recap-list::-webkit-scrollbar-track {
+  margin-inline: 2px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.05);
+}
+
+.recap-list::-webkit-scrollbar-thumb {
+  border: 0;
+  border-radius: 6px;
+  background: #2f353e;
+}
+
+.recap-list:hover::-webkit-scrollbar-thumb {
+  background: #4a525d;
+}
+
+.recap-list::-webkit-scrollbar-thumb:hover {
+  background: var(--signal);
+}
+
+.recap-list li {
+  scroll-snap-align: start;
+}
+
+.recap-item,
+.moment {
+  --tone: var(--text);
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--corner);
+  background: rgb(15 17 20 / 0.85);
+  backdrop-filter: none;
+  font-size: 13px;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+:is(.recap-item, .moment)[data-team="a"] {
+  --tone: var(--signal);
+}
+
+:is(.recap-item, .moment)[data-team="b"] {
+  --tone: var(--event);
+}
+
+@media (hover: hover) {
+  :is(.recap-item, .moment):hover {
+    translate: none;
+    border-color: color-mix(in srgb, var(--tone) 70%, transparent);
+    background: var(--surface-raised);
+  }
+}
+
+.recap-mark,
+:is(.recap-item, .moment)[data-kind="objective"] .recap-mark,
+:is(.recap-item, .moment)[data-kind="round"] .recap-mark {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 0;
+  background: none;
+  color: var(--tone);
+  rotate: none;
+}
+
+.recap-mark svg {
+  width: 14px;
+  height: 14px;
+}
+
+:is(.recap-item, .moment)[data-kind="round"] .recap-mark {
+  width: 2px;
+  height: 14px;
+  background: rgb(255 255 255 / 0.55);
+}
+
+.recap-item[data-now] {
+  border-color: var(--signal);
+  background: rgb(56 225 255 / 0.08);
+  box-shadow: none;
+}
+
+.recap-now {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+
+/* ------------------------------------------------------------------------------------------------- Numbered blocks */
+
+.block-num {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.block-num::after {
+  content: " /";
+  color: var(--signal);
+}
+
+.block h2 {
+  font-size: clamp(36px, 4.6vw, 64px);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+.mv-card {
+  border-color: var(--line-strong);
+  border-radius: var(--corner);
+  background: rgb(15 17 20 / 0.7);
+}
+
+.mv-card h3 {
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mv-diagram rect {
+  rx: 2px;
+}
+
+.d-stage {
+  fill: rgb(56 225 255 / 0.06);
+  stroke: var(--signal);
+  stroke-width: 1;
+}
+
+.d-tile {
+  fill: rgb(255 255 255 / 0.03);
+  stroke: rgb(255 255 255 / 0.4);
+  stroke-width: 1;
+}
+
+.facts strong {
+  font-size: clamp(36px, 3.6vw, 52px);
+  letter-spacing: 0.01em;
+}
+
+.annotated img,
+.states img,
+.contrast img {
+  border-radius: var(--corner);
+}
+
+.summary,
+.customizer,
+.tokens div {
+  border-color: var(--line-strong);
+  border-radius: var(--corner);
+  background: rgb(15 17 20 / 0.8);
+}
+
+.summary-chart,
+.snippet pre,
+.code pre {
+  border-radius: var(--corner);
+}
+
+.spec {
+  border-radius: var(--corner);
+  background: rgb(11 13 16 / 0.85);
+}
+
+.copy {
+  border-radius: 3px;
+}
+
+.states span {
+  font-size: 14px;
+}
+
+.tok {
+  border-radius: 2px;
+}
+
+/* No springy lift on the page's cards: they answer with a border, not a bounce. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .js .block.is-in .mv-card:hover {
+    scale: none;
+    border-color: rgb(255 255 255 / 0.4);
+  }
+
+  .states li:hover img {
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.5);
+  }
+}
+
+/* The intro scan line: white, not cyan. */
+@media (prefers-reduced-motion: no-preference) {
+  .stage::after {
+    background: linear-gradient(to bottom, transparent 0 46%, rgb(255 255 255 / 0.4) 49.6% 50.4%, rgb(255 255 255 / 0.05) 52%, transparent 60% 100%) no-repeat;
+    background-size: 100% 260%;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------- Multiview fullscreen */
+
+.watch-bar {
+  display: none;
+}
+
+.arena:fullscreen {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px 12px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 14px 14px;
+  background: #050607;
+}
+
+.arena:fullscreen::backdrop {
+  background: #050607;
+}
+
+.arena:fullscreen .watch-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 52px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.watch-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.watch-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--round);
+}
+
+.watch-title {
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.watch-hint {
+  margin-inline-start: auto;
+}
+
+.watch-close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--corner);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .watch-close:hover {
+    border-color: rgb(255 255 255 / 0.45);
+    background: rgb(255 255 255 / 0.06);
+  }
+}
+
+/* The stage fills its column but never grows taller than the screen allows. */
+.arena:fullscreen .stage {
+  width: min(100%, calc((100vh - 80px) * 16 / 9));
+  justify-self: center;
+  box-shadow: 0 0 0 1px var(--line-strong);
+}
+
+.arena:fullscreen .stage::before {
+  display: none;
+}
+
+.arena:fullscreen .angles {
+  align-self: center;
+  height: auto;
+}
+
+.arena:fullscreen .tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.arena:fullscreen .chips {
+  display: none;
+}
+
+.arena:fullscreen[data-layout="duo"] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.arena:fullscreen[data-layout="stage"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.arena:fullscreen[data-layout="stage"] .angles {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .arena[data-watch] .watch-bar {
+    animation: watch-bar 520ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .arena[data-watch] .stage {
+    animation: watch-stage 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .arena[data-watch] .tile {
+    animation: watch-tile 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .arena[data-watch] .tile:nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .arena[data-watch] .tile:nth-child(3) {
+    animation-delay: 180ms;
+  }
+
+  /* Closing: the arena settles back into the page. */
+  .arena[data-watch-closing] .stage {
+    animation: watch-return 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .arena[data-watch-closing] .tile {
+    animation: watch-tile 500ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes watch-stage {
+  from {
+    opacity: 0.2;
+    scale: 0.9;
+  }
+}
+
+@keyframes watch-tile {
+  from {
+    opacity: 0;
+    translate: 48px 0;
+  }
+}
+
+@keyframes watch-bar {
+  from {
+    opacity: 0;
+    translate: 0 -100%;
+  }
+}
+
+@keyframes watch-return {
+  from {
+    opacity: 0.4;
+    scale: 1.05;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------- Spoiler-free */
+
+html[data-spoilers] .recap-list,
+html[data-spoilers] .summary {
+  filter: blur(14px);
+  pointer-events: none;
+  user-select: none;
+}
+
+html[data-spoilers] .recap-rail,
+html[data-spoilers] #summary .block-head {
+  position: relative;
+}
+
+html[data-spoilers] .recap-rail::after {
+  content: "Spoiler-free is on: switch it off in the player's settings to see the events.";
+  inset: 0;
+  width: auto;
+  display: grid;
+  place-items: center;
+  background: none;
+  color: var(--text);
+  font-size: 14px;
+  opacity: 1;
+}
+
+@media (width < 640px) {
+  .watch-hint {
+    display: none;
+  }
+
+  .deck-actions {
+    width: 100%;
+  }
+
+  .deck-button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+.recap-nav {
+  display: inline-flex;
+  gap: 6px;
+  margin-inline-start: auto;
+}
+
+.recap-step {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--corner);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+@media (hover: hover) {
+  .recap-step:hover {
+    border-color: rgb(255 255 255 / 0.45);
+    background: rgb(255 255 255 / 0.05);
+  }
+}
+
+@media (width < 640px) {
+  .recap-nav {
+    display: none;
+  }
+}
+
+.hero-copy {
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+}
+
+.hero h1 {
+  font-size: clamp(52px, 7.4vw, 118px);
+}
+
+.mv-diagram rect {
+  vector-effect: non-scaling-stroke;
 }

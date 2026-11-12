@@ -86,7 +86,7 @@ Space or K play/pause · ←/→ seek 5s · ↑/↓ volume · M mute · F fullsc
 ## Credits
 
 - Built on [Video.js 10](https://videojs.org) (`@videojs/html`), Apache-2.0. Started from the Video.js Scaffold skin via `@videojs/cli`.
-- Type: Space Grotesk, Inter and JetBrains Mono, SIL Open Font License 1.1, self-hosted through Fontsource.
+- Type: Barlow Condensed, Inter and JetBrains Mono, SIL Open Font License 1.1, self-hosted through Fontsource.
 - Icons: drawn for Vantage by `design/icons/generate.mjs`.
 - Footage: an original top-down match between two invented teams, rendered and recorded by `design/match/` (three cameras: Player 1 POV, Player 2 POV, map overview). Its events and scoreboard come from the same script, so the timeline matches the picture.
 - No game names, logos, characters or interface from any real game; team names are invented.

@@ -37,13 +37,13 @@
     --vt-thumb: calc(var(--vt-u) * 4);
     --vt-track-height: 4px;
     --vt-timeline: calc(var(--vt-u) * 6);
-    --vt-band-height: calc(var(--vt-u) * 27);
+    --vt-band-height: calc(var(--vt-u) * 33);
     --vt-volume-width: calc(var(--vt-u) * 18);
     --vt-chip-slant: 7px;
     --vt-focus: 2px;
 
-    /* Type: Space Grotesk for labels, Inter for interface, JetBrains Mono for every clock. */
-    --vt-font-label: "Space Grotesk", var(--vt-font-ui);
+    /* Type: Barlow Condensed for labels, Inter for interface, JetBrains Mono for every clock. */
+    --vt-font-label: "Barlow Condensed", var(--vt-font-ui);
     --vt-font-ui: var(--media-font-family, "Inter", system-ui, sans-serif);
     --vt-font-clock: "JetBrains Mono", ui-monospace, monospace;
     --vt-text-size: calc(var(--vt-u) * 3.5);

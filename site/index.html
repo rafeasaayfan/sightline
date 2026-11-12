@@ -18,7 +18,7 @@
     <script type="module" src="./src/main.ts"></script>
   </head>
   <body>
-    <canvas class="ambient" data-ambient width="48" height="27" aria-hidden="true"></canvas>
+    <canvas class="terrain" data-terrain aria-hidden="true"></canvas>
     <a class="skip" href="#stage">Skip to the player</a>
 
     <header class="top">
@@ -53,13 +53,22 @@
           <ul class="hero-keys" aria-label="Try it">
             <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> switch angle</li>
             <li><kbd>N</kbd> next highlight</li>
-            <li><kbd>?</kbd> every shortcut</li>
+            <li><kbd>R</kbd> instant replay</li>
+            <li><kbd>W</kbd> multiview fullscreen</li>
           </ul>
         </div>
 
         <p class="visually-hidden" data-match-title>Showmatch · Azure vs Ember</p>
 
         <div class="arena" aria-label="Player" data-layout="split">
+          <div class="watch-bar" data-watch-bar>
+            <span class="watch-live"><span class="watch-dot" aria-hidden="true"></span>Multiview</span>
+            <span class="watch-title" data-watch-title></span>
+            <span class="watch-hint"><kbd>1</kbd>–<kbd>3</kbd> angles · <kbd>Esc</kbd> exit</span>
+            <button type="button" class="watch-close" data-watch-close aria-label="Exit multiview fullscreen">
+              <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+            </button>
+          </div>
           <div class="stage" id="stage" tabindex="-1">
             <div class="stage-player" data-stage>
               <img class="stage-poster" src="./poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" />
@@ -87,15 +96,32 @@
               Stage
             </button>
           </div>
+          <div class="deck-actions">
+            <button type="button" class="deck-button" data-watch>
+              <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M2.75 4.75h9v10.5h-9ZM14.25 4.75h3v4.25h-3ZM14.25 11h3v4.25h-3Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+              Multiview fullscreen <kbd>W</kbd>
+            </button>
+            <button type="button" class="deck-button" data-share>
+              <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+              <span data-share-label>Copy link to this moment</span>
+            </button>
+          </div>
           <p class="deck-hint">Click a tile or press <kbd>1</kbd>–<kbd>3</kbd>: it swaps onto the stage at the same timestamp.</p>
+          <p class="visually-hidden" role="status" data-share-status></p>
         </div>
 
         <section class="recap" id="recap" aria-labelledby="recap-title">
           <div class="section-head">
             <h2 id="recap-title" class="recap-title">Match recap</h2>
             <span class="muted">every event is a seek</span>
+            <span class="recap-nav">
+              <button type="button" class="recap-step" data-recap-step="-1" aria-label="Scroll the recap back"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M12 5l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+              <button type="button" class="recap-step" data-recap-step="1" aria-label="Scroll the recap forward"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+            </span>
           </div>
-          <ol class="recap-list" data-recap></ol>
+          <div class="recap-rail" data-recap-rail>
+            <ol class="recap-list" data-recap></ol>
+          </div>
         </section>
       </section>
 
@@ -303,7 +329,7 @@
         <ol class="steps">
           <li>
             <h3>Add Video.js 10 and the fonts</h3>
-            <div class="code"><pre><code>npm i @videojs/html @fontsource/inter @fontsource/space-grotesk @fontsource/jetbrains-mono</code></pre><button type="button" class="copy">Copy</button></div>
+            <div class="code"><pre><code>npm i @videojs/html @fontsource/inter @fontsource/barlow-condensed @fontsource/jetbrains-mono</code></pre><button type="button" class="copy">Copy</button></div>
           </li>
           <li>
             <h3>Copy the skin and import it</h3>

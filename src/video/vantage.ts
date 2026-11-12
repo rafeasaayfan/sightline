@@ -2,9 +2,12 @@
  * Vantage behaviour: event timeline, highlight navigation, event toasts and the HUD.
  *
  * Events come from a WebVTT track on the media: <track kind="metadata" label="events" src="events.vtt">. Each cue's
- * text is `kind|label`, where kind is elim, clutch, obj or round. Without that track the skin is an ordinary player:
- * no markers, highlight buttons disabled, no toasts.
+ * text is `kind|label|team`, where kind is elim, clutch, obj or round and the optional team is a or b (the side that
+ * scored, for team colours). Without that track the skin is an ordinary player: no markers, highlight buttons
+ * disabled, no kill feed.
  */
+
+import { vantageIcons } from './icons';
 
 export type Layout = 'split' | 'duo' | 'stage';
 
@@ -16,6 +19,8 @@ export interface MatchEvent {
   /** The cue's kind as written: elim, clutch, obj or round. */
   type: string;
   label: string;
+  /** The side that scored: a (first team) or b (second team), when the cue says. */
+  team?: 'a' | 'b';
 }
 
 export interface Team {
@@ -39,6 +44,8 @@ interface State {
   last: number;
   toastTimer?: number;
   focusIndex: number;
+  /** An instant replay in progress: where it started, where it hands back, and the rate to restore. */
+  replay?: { from: number; until: number; rate: number };
 }
 
 const states = new WeakMap<HTMLElement, State>();
@@ -64,11 +71,17 @@ function eventsTrack(media: HTMLMediaElement): TextTrack | undefined {
 
 function parseCues(track: TextTrack): MatchEvent[] {
   return [...(track.cues ?? [])]
-    .map((cue) => {
+    .map((cue): MatchEvent | null => {
       const text = (cue as VTTCue).text.trim();
       const [type = '', ...rest] = text.split('|');
       const kind = KIND[type.trim().toLowerCase()];
-      return kind ? { time: cue.startTime, kind, type: type.trim().toLowerCase(), label: rest.join('|').trim() } : null;
+      const last = rest.length > 1 ? rest[rest.length - 1]!.trim().toLowerCase() : '';
+      const team: 'a' | 'b' | undefined = last === 'a' || last === 'b' ? last : undefined;
+      if (team) rest.pop();
+      if (!kind) return null;
+      const event: MatchEvent = { time: cue.startTime, kind, type: type.trim().toLowerCase(), label: rest.join('|').trim() };
+      if (team) event.team = team;
+      return event;
     })
     .filter((e): e is MatchEvent => !!e && !!e.label)
     .sort((a, b) => a.time - b.time);
@@ -86,18 +99,28 @@ function renderMarkers(state: State): void {
   const usable = Number.isFinite(duration) && duration > 0 ? events.filter((e) => e.time <= duration) : [];
   layer.hidden = usable.length === 0;
 
+  let round = 1;
   usable.forEach((event, index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'vt-marker';
     button.dataset.kind = event.kind;
+    button.dataset.type = event.type;
+    if (event.team) button.dataset.team = event.team;
     button.dataset.index = String(index);
     button.style.setProperty('--vt-at', `${(event.time / duration) * 100}%`);
     button.tabIndex = index === state.focusIndex ? 0 : -1;
     button.setAttribute('aria-label', `${event.label}, ${formatTime(event.time)}. Press Enter to jump.`);
-    button.innerHTML = '<span class="vt-marker-shape" aria-hidden="true"></span>';
+    const pin = document.createElement('span');
+    pin.className = 'vt-marker-pin';
+    pin.setAttribute('aria-hidden', 'true');
+    if (event.kind === 'round') pin.textContent = `R${(round += 1)}`;
+    else pin.innerHTML = glyph(event.type);
+    button.append(pin);
     layer.append(button);
   });
+  stack(state);
+  markPast(state);
 
   for (const button of root.querySelectorAll<HTMLButtonElement>('.vt-prev, .vt-next')) {
     button.setAttribute('aria-disabled', String(usable.length === 0));
@@ -105,6 +128,39 @@ function renderMarkers(state: State): void {
   renderRounds(root, usable, duration);
   root.toggleAttribute('data-events', usable.length > 0);
   root.dispatchEvent(new CustomEvent('vantage:events', { detail: usable, bubbles: true }));
+}
+
+/** The event glyph for a cue kind: skull for an elimination, crown for a clutch, flag for an objective. */
+function glyph(type: string): string {
+  return vantageIcons[type === 'clutch' ? 'crown' : type === 'obj' ? 'flag' : 'skull'] ?? '';
+}
+
+/*
+ * Pins that would overlap at this width rise onto a second tier, so every event stays visible and clickable.
+ * Recomputed when the timeline resizes.
+ */
+function stack(state: State): void {
+  const layer = state.root.querySelector<HTMLElement>('.vt-markers');
+  if (!layer) return;
+  const width = layer.getBoundingClientRect().width;
+  if (!width) return;
+  const PIN = 22;
+  const ends = [-Infinity, -Infinity];
+  for (const marker of layer.querySelectorAll<HTMLElement>('.vt-marker')) {
+    const x = (parseFloat(marker.style.getPropertyValue('--vt-at')) / 100) * width;
+    const tier = x - ends[0]! >= PIN ? 0 : x - ends[1]! >= PIN ? 1 : 0;
+    ends[tier] = x;
+    marker.dataset.tier = String(tier);
+  }
+}
+
+/** Events already played read solid; upcoming ones read as outlines. */
+function markPast(state: State): void {
+  const now = state.media?.currentTime ?? 0;
+  for (const marker of state.root.querySelectorAll<HTMLElement>('.vt-marker')) {
+    const event = state.events[Number(marker.dataset.index)];
+    marker.toggleAttribute('data-past', !!event && event.time <= now + 0.05);
+  }
 }
 
 /** Shade alternate rounds on the timeline, so the bar reads as a map of the match. */
@@ -190,13 +246,16 @@ function span(className: string, text: string): HTMLSpanElement {
 /** Kill feed: game-style entries stacked at the top right. Eliminations read "A ⌖ B"; others show their label. */
 function toast(state: State, event: MatchEvent): void {
   const { root } = state;
-  if (root.dataset.toasts === 'off') return;
+  if (root.dataset.toasts === 'off' || root.dataset.spoilers === 'on') return;
   const feed = root.querySelector<HTMLElement>('.vt-feed');
   if (!feed) return;
   const li = document.createElement('li');
   li.className = 'vt-feed-item';
   li.dataset.kind = event.kind;
+  li.dataset.type = event.type;
+  if (event.team) li.dataset.team = event.team;
   li.append(span('vt-feed-mark', ''));
+  li.querySelector('.vt-feed-mark')!.innerHTML = glyph(event.type);
   const duel = /^[^·]+·\s*(?:1v\d\s*·\s*)?(.+?)\s*→\s*(.+)$/.exec(event.label);
   if (duel) {
     li.append(span('vt-feed-a', duel[1]!));
@@ -205,6 +264,7 @@ function toast(state: State, event: MatchEvent): void {
       '<svg class="vt-feed-x" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 0v4M8 12v4M0 8h4M12 8h4" stroke="currentColor" stroke-width="1.6"/></svg>',
     );
     li.append(span('vt-visually-hidden', ' eliminated '), span('vt-feed-b', duel[2]!));
+    li.classList.add('vt-feed-duel');
   } else {
     li.append(span('vt-feed-label', event.label));
   }
@@ -228,6 +288,8 @@ function onTime(state: State): void {
     const crossed = state.events.filter((e) => e.time > state.last && e.time <= now);
     if (crossed.length) toast(state, crossed[crossed.length - 1]!);
   }
+  if (state.replay && now >= state.replay.until) endReplay(state);
+  if (Math.floor(now) !== Math.floor(state.last)) markPast(state);
   state.last = now;
 }
 
@@ -281,6 +343,48 @@ export function setStageState(root: HTMLElement, state: { kind: 'switching' | 'u
   el.textContent = state?.text ?? '';
 }
 
+/* ---------------------------------------------------------------------------------------------- Instant replay */
+
+const REPLAY_SECONDS = 8;
+const REPLAY_RATE = 0.5;
+
+/** Replay the last 8 seconds at half speed, then carry on at the normal rate from where it started. */
+export function instantReplay(root: HTMLElement): void {
+  const state = states.get(root);
+  const media = state?.media;
+  if (!state || !media || !Number.isFinite(media.duration)) return;
+  if (state.replay) endReplay(state);
+  const until = media.currentTime;
+  const from = Math.max(0, until - REPLAY_SECONDS);
+  state.replay = { from, until, rate: media.playbackRate };
+  media.currentTime = from;
+  state.last = from;
+  media.playbackRate = REPLAY_RATE;
+  void media.play().catch(() => undefined);
+  root.toggleAttribute('data-replay', true);
+  const badge = root.querySelector<HTMLElement>('.vt-replay-badge');
+  if (badge) {
+    badge.textContent = `Instant replay · ${REPLAY_RATE}×`;
+    badge.hidden = false;
+  }
+}
+
+function endReplay(state: State): void {
+  if (!state.replay) return;
+  const { rate } = state.replay;
+  state.replay = undefined;
+  if (state.media) state.media.playbackRate = rate;
+  state.root.removeAttribute('data-replay');
+  const badge = state.root.querySelector<HTMLElement>('.vt-replay-badge');
+  if (badge) badge.hidden = true;
+}
+
+/** Reflect the page's multiview fullscreen state on the button. */
+export function setMultiview(root: HTMLElement, on: boolean): void {
+  root.querySelector<HTMLElement>('.vt-multiview')?.setAttribute('aria-pressed', String(on));
+  root.toggleAttribute('data-multiview-on', on);
+}
+
 /* ---------------------------------------------------------------------------------------------- Wiring */
 
 const editable = (el: EventTarget | null) =>
@@ -321,6 +425,12 @@ function attachMedia(state: State, media: HTMLMediaElement): void {
   media.addEventListener('timeupdate', () => onTime(state));
   media.addEventListener('seeked', () => {
     state.last = media.currentTime;
+    markPast(state);
+  });
+  // A pause, or a seek that isn't the replay's own, ends an instant replay.
+  media.addEventListener('pause', () => endReplay(state));
+  media.addEventListener('seeking', () => {
+    if (state.replay && Math.abs(media.currentTime - state.replay.from) > 0.3) endReplay(state);
   });
   refresh();
 }
@@ -339,6 +449,13 @@ function setup(root: HTMLElement): void {
 
   root.querySelector('.vt-prev')?.addEventListener('click', () => prevHighlight(root));
   root.querySelector('.vt-next')?.addEventListener('click', () => nextHighlight(root));
+  root.querySelector('.vt-replay')?.addEventListener('click', () => instantReplay(root));
+  // Multiview belongs to the page (it owns the angles); the skin asks for it.
+  root.querySelector('.vt-multiview')?.addEventListener('click', () =>
+    root.dispatchEvent(new CustomEvent('vantage:multiview', { bubbles: true })),
+  );
+  const lane = root.querySelector<HTMLElement>('.vt-markers');
+  if (lane) new ResizeObserver(() => stack(state)).observe(lane);
 
   // Markers: one tab stop, arrows move between them, Enter or click jumps.
   const layer = root.querySelector<HTMLElement>('.vt-markers');
@@ -378,6 +495,12 @@ function setup(root: HTMLElement): void {
     } else if (e.key === '?') {
       e.preventDefault();
       root.querySelector<HTMLElement>('.vt-help')?.click();
+    } else if (e.key.toLowerCase() === 'r' && !e.shiftKey) {
+      e.preventDefault();
+      instantReplay(root);
+    } else if (e.key.toLowerCase() === 'w' && !e.shiftKey && root.hasAttribute('data-multiview')) {
+      e.preventDefault();
+      root.querySelector<HTMLElement>('.vt-multiview')?.click();
     }
   });
 
@@ -390,6 +513,14 @@ function setup(root: HTMLElement): void {
     const checked = (e.currentTarget as HTMLElement & { checked?: boolean }).checked;
     root.dataset.toasts = checked === false ? 'off' : 'on';
     if (checked === false) root.querySelector('.vt-feed')?.replaceChildren();
+  });
+
+  // Settings: spoiler-free hides the score, the kill feed and the event markers.
+  root.querySelector('.vt-menu-spoilers')?.addEventListener('checked-change', (e) => {
+    const on = (e.currentTarget as HTMLElement & { checked?: boolean }).checked === true;
+    root.dataset.spoilers = on ? 'on' : 'off';
+    if (on) root.querySelector('.vt-feed')?.replaceChildren();
+    root.dispatchEvent(new CustomEvent('vantage:spoilers', { detail: on, bubbles: true }));
   });
 
   // Settings: layout. The page owns layout; the skin reports the choice and shows the item when the page opts in

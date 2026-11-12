@@ -1,8 +1,8 @@
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
-import '@fontsource/space-grotesk/600.css';
-import '@fontsource/space-grotesk/700.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
 import '@fontsource/jetbrains-mono/500.css';
 import '../styles/video/vantage.css';
 import './skin.css';
@@ -58,5 +58,5 @@ import './vantage';
 
 registerIcons('vantage', vantageIcons);
 
-export { cut, formatTime, getEvents, nextHighlight, prevHighlight, setAngle, setLayout, setScoreboard, setStageState, setSync } from './vantage';
+export { cut, formatTime, getEvents, instantReplay, nextHighlight, prevHighlight, setAngle, setLayout, setMultiview, setScoreboard, setStageState, setSync } from './vantage';
 export type { EventKind, Layout, MatchEvent, Scoreboard, Team } from './vantage';

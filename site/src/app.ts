@@ -6,6 +6,7 @@ import {
   prevHighlight,
   setAngle,
   setLayout,
+  setMultiview,
   setScoreboard,
   setStageState,
   setSync,
@@ -13,6 +14,7 @@ import {
   cut,
   type Layout,
 } from '@/video/skin';
+import { vantageIcons } from '@/video/icons';
 import { initCustomizer, renderSummary } from './sections';
 import skinTemplate from '@/video/skin.html?raw';
 
@@ -301,6 +303,87 @@ export async function start(): Promise<void> {
     syncAll(true);
   });
 
+  /* ---------------------------------------------------------------- Multiview fullscreen: the arena alone, edge to edge */
+
+  const canWatch = angles.length > 1 && document.fullscreenEnabled;
+  const watching = () => document.fullscreenElement === arena;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelector<HTMLElement>('[data-watch-title]')!.textContent = match.title;
+  const watchButton = document.querySelector<HTMLButtonElement>('[data-watch]')!;
+  watchButton.hidden = !canWatch;
+  if (canWatch) root.setAttribute('data-multiview', '');
+
+  async function toggleWatch(): Promise<void> {
+    if (!canWatch) return;
+    if (watching()) {
+      await document.exitFullscreen().catch(() => undefined);
+      return;
+    }
+    // The skin may be in its own (stage-only) fullscreen; leave it first.
+    if (document.fullscreenElement) await document.exitFullscreen().catch(() => undefined);
+    await arena.requestFullscreen({ navigationUI: 'hide' }).catch(() => undefined);
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const on = watching();
+    const was = arena.hasAttribute('data-watch');
+    if (on === was) return;
+    arena.toggleAttribute('data-watch', on);
+    setMultiview(root, on);
+    watchButton.setAttribute('aria-pressed', String(on));
+    // Closing animates the arena back into the page; opening animates in CSS on :fullscreen.
+    if (!on && !calm.matches) {
+      arena.setAttribute('data-watch-closing', '');
+      window.setTimeout(() => arena.removeAttribute('data-watch-closing'), 520);
+    }
+    if (on) root.querySelector<HTMLElement>('.vt-play')?.focus({ preventScroll: true });
+    renderAngles();
+    syncAll(true);
+  });
+  watchButton.addEventListener('click', () => void toggleWatch());
+  document.querySelector('[data-watch-close]')!.addEventListener('click', () => void toggleWatch());
+  root.addEventListener('vantage:multiview', () => void toggleWatch());
+
+  /* ---------------------------------------------------------------- Moment links: ?t=95&angle=2 */
+
+  const shareButton = document.querySelector<HTMLButtonElement>('[data-share]')!;
+  const shareLabel = shareButton.querySelector<HTMLElement>('[data-share-label]')!;
+  const shareStatus = document.querySelector<HTMLElement>('[data-share-status]')!;
+  shareButton.addEventListener('click', async () => {
+    const url = new URL(location.href);
+    url.hash = '';
+    url.searchParams.set('t', String(Math.floor(master.currentTime)));
+    url.searchParams.set('angle', String(stageAngle.id));
+    let text = `Link to ${formatTime(master.currentTime)} copied`;
+    try {
+      await navigator.clipboard.writeText(url.toString());
+    } catch {
+      history.replaceState(null, '', url);
+      text = `Link to ${formatTime(master.currentTime)} is in the address bar`;
+    }
+    shareLabel.textContent = text;
+    shareStatus.textContent = text;
+    window.setTimeout(() => (shareLabel.textContent = 'Copy link to this moment'), 2400);
+  });
+
+  const params = new URLSearchParams(location.search);
+  const startAt = Number(params.get('t'));
+  const startAngle = angles.find((a) => String(a.id) === params.get('angle'));
+  if (startAt > 0 || startAngle) {
+    const jump = () => {
+      if (startAt > 0 && Number.isFinite(master.duration)) master.currentTime = Math.min(startAt, master.duration - 1);
+      if (startAngle && startAngle.id !== stageAngle.id) void swapTo(startAngle);
+    };
+    if (master.readyState >= 1) jump();
+    else master.addEventListener('loadedmetadata', jump, { once: true });
+  }
+
+  /* ---------------------------------------------------------------- Spoiler-free: the page hides the recap and summary too */
+
+  root.addEventListener('vantage:spoilers', (e) => {
+    document.documentElement.toggleAttribute('data-spoilers', (e as CustomEvent<boolean>).detail);
+  });
+
   /* ---------------------------------------------------------------- Keys: 1–3 anywhere on the page, N when outside the player */
 
   document.addEventListener('keydown', (e) => {
@@ -312,6 +395,12 @@ export async function start(): Promise<void> {
     if (angle) {
       e.preventDefault();
       void swapTo(angle);
+      return;
+    }
+    // W outside the player opens multiview too (inside, the skin handles it).
+    if (e.key.toLowerCase() === 'w' && !e.shiftKey && !root.contains(target)) {
+      e.preventDefault();
+      void toggleWatch();
       return;
     }
     // Inside the player the skin handles N itself.
@@ -338,9 +427,12 @@ export async function start(): Promise<void> {
         button.type = 'button';
         button.className = 'recap-item';
         button.dataset.kind = event.kind;
+        button.dataset.type = event.type;
+        if (event.team) button.dataset.team = event.team;
         button.dataset.index = String(index);
         button.style.setProperty('--i', String(index));
-        button.innerHTML = `<span class="recap-mark" aria-hidden="true"></span><span class="recap-time">${formatTime(event.time)}</span><span class="recap-label">${event.label}</span><span class="recap-now" aria-hidden="true">Now</span>`;
+        const mark = event.kind === 'round' ? '' : (vantageIcons[event.type === 'clutch' ? 'crown' : event.type === 'obj' ? 'flag' : 'skull'] ?? '');
+        button.innerHTML = `<span class="recap-mark" aria-hidden="true">${mark}</span><span class="recap-time">${formatTime(event.time)}</span><span class="recap-label">${event.label}</span><span class="recap-now" aria-hidden="true">Now</span>`;
         button.addEventListener('click', () => {
           master.currentTime = event.time;
         });
@@ -349,6 +441,28 @@ export async function start(): Promise<void> {
       }),
     );
   }
+
+  // The recap rail: edge fades show where more events are; the arrows page it; the current event stays in view.
+  const rail = document.querySelector<HTMLElement>('[data-recap-rail]')!;
+  const edges = () => {
+    const max = recap.scrollWidth - recap.clientWidth;
+    rail.toggleAttribute('data-more-start', recap.scrollLeft > 4);
+    rail.toggleAttribute('data-more-end', recap.scrollLeft < max - 4);
+  };
+  recap.addEventListener('scroll', edges, { passive: true });
+  new ResizeObserver(edges).observe(recap);
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-recap-step]')) {
+    button.addEventListener('click', () => {
+      recap.scrollBy({ left: Number(button.dataset.recapStep) * recap.clientWidth * 0.8, behavior: calm.matches ? 'auto' : 'smooth' });
+    });
+  }
+  const keepInView = (item: HTMLElement) => {
+    if (getComputedStyle(recap).flexDirection === 'column') return;
+    const left = item.offsetLeft - recap.offsetLeft;
+    if (left < recap.scrollLeft || left + item.offsetWidth > recap.scrollLeft + recap.clientWidth) {
+      recap.scrollTo({ left: left - 24, behavior: calm.matches ? 'auto' : 'smooth' });
+    }
+  };
 
   root.addEventListener('vantage:events', (e) => {
     events = (e as CustomEvent<MatchEvent[]>).detail;
@@ -386,45 +500,16 @@ export async function start(): Promise<void> {
       const current = Number(button.dataset.index) === now;
       if (button.hasAttribute('data-now') === current) continue;
       button.toggleAttribute('data-now', current);
-      if (current) button.setAttribute('aria-current', 'true');
-      else button.removeAttribute('aria-current');
+      if (current) {
+        button.setAttribute('aria-current', 'true');
+        keepInView(button);
+      } else button.removeAttribute('aria-current');
     }
   }
 
   initCustomizer(root);
-  startAmbient(master, root);
   master.addEventListener('timeupdate', tick);
   master.addEventListener('seeked', tick);
   tick();
   renderAngles();
-}
-
-
-/*
- * Ambient light: the page background is the stage's current frame, sampled into a tiny canvas and blurred by CSS,
- * so the room takes its colour from the match. Drawing a frame only paints it; nothing is read back.
- */
-function startAmbient(master: HTMLMediaElement, root: HTMLElement): void {
-  const canvas = document.querySelector<HTMLCanvasElement>('[data-ambient]');
-  const ctx = canvas?.getContext('2d');
-  if (!canvas || !ctx) return;
-  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const every = calm ? 1000 : 140;
-  let last = 0;
-  const frame = (now: number) => {
-    if (now - last >= every) {
-      last = now;
-      const video = (master.shadowRoot?.querySelector('video') ?? master) as HTMLVideoElement;
-      const poster = root.querySelector<HTMLImageElement>('.media-poster-image');
-      try {
-        if (video.readyState >= 2 && video.currentTime > 0.05) ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        else if (poster?.complete && poster.naturalWidth) ctx.drawImage(poster, 0, 0, canvas.width, canvas.height);
-        canvas.dataset.live = '';
-      } catch {
-        // A frame that can't be drawn yet just keeps the last one.
-      }
-    }
-    requestAnimationFrame(frame);
-  };
-  requestAnimationFrame(frame);
 }

@@ -15,6 +15,7 @@
 </div>
 </div>
 <div class="vt-state" role="status" hidden></div>
+<div class="vt-replay-badge" role="status" hidden></div>
 <div class="vt-cut" aria-hidden="true"></div>
 <ol class="vt-feed" aria-live="polite" aria-relevant="additions" aria-label="Kill feed"></ol>
 <media-buffering-indicator class="vt-buffering">
@@ -83,6 +84,12 @@
 </button>
 <media-tooltip trigger="vt-next" side="top" class="media-popup vt-tooltip">
 <span>Next highlight</span><kbd class="vt-kbd">N</kbd>
+</media-tooltip>
+<button type="button" class="vt-button vt-replay" id="vt-replay" aria-label="Instant replay, last 8 seconds at half speed" aria-keyshortcuts="R">
+<media-icon family="vantage" name="replay" class="vt-icon vt-icon-static"></media-icon>
+</button>
+<media-tooltip trigger="vt-replay" side="top" class="media-popup vt-tooltip">
+<span>Instant replay</span><kbd class="vt-kbd">R</kbd>
 </media-tooltip>
 <div class="vt-volume">
 <media-mute-button class="vt-button vt-mute" id="vt-mute">
@@ -169,6 +176,10 @@
 <span>Kill feed</span>
 <span class="vt-menu-hint vt-toggle" aria-hidden="true"><span class="vt-toggle-on">On</span><span class="vt-toggle-off">Off</span></span>
 </media-menu-checkbox-item>
+<media-menu-checkbox-item class="vt-menu-item vt-menu-spoilers">
+<span>Spoiler-free</span>
+<span class="vt-menu-hint vt-toggle" aria-hidden="true"><span class="vt-toggle-on">On</span><span class="vt-toggle-off">Off</span></span>
+</media-menu-checkbox-item>
 <media-menu-item commandfor="vt-captions-submenu" class="vt-menu-item vt-menu-captions">
 <media-text token="menu.captions">Captions</media-text>
 <span class="vt-menu-hint"><span data-part="value"></span><media-icon family="vantage" name="chevron" class="vt-menu-chevron"></media-icon></span>
@@ -203,7 +214,9 @@
 <div><dt><kbd class="vt-kbd">↑</kbd> <kbd class="vt-kbd">↓</kbd></dt><dd>Volume</dd></div>
 <div><dt><kbd class="vt-kbd">M</kbd></dt><dd>Mute</dd></div>
 <div><dt><kbd class="vt-kbd">N</kbd> <kbd class="vt-kbd">⇧N</kbd></dt><dd>Next or previous highlight</dd></div>
+<div><dt><kbd class="vt-kbd">R</kbd></dt><dd>Instant replay</dd></div>
 <div class="vt-keys-angles"><dt><kbd class="vt-kbd">1</kbd>–<kbd class="vt-kbd">3</kbd></dt><dd>Switch angle</dd></div>
+<div class="vt-keys-multiview"><dt><kbd class="vt-kbd">W</kbd></dt><dd>Multiview fullscreen</dd></div>
 <div><dt><kbd class="vt-kbd">C</kbd></dt><dd>Captions</dd></div>
 <div><dt><kbd class="vt-kbd">F</kbd></dt><dd>Fullscreen</dd></div>
 <div><dt><kbd class="vt-kbd">Esc</kbd></dt><dd>Close menus</dd></div>
@@ -216,6 +229,13 @@
 <media-tooltip trigger="vt-pip" side="top" class="media-popup vt-tooltip">
 <media-tooltip-label></media-tooltip-label>
 <media-tooltip-shortcut class="vt-kbd"></media-tooltip-shortcut>
+</media-tooltip>
+<button type="button" class="vt-button vt-multiview" id="vt-multiview" aria-label="Multiview fullscreen" aria-keyshortcuts="W" aria-pressed="false">
+<media-icon family="vantage" name="multiview" class="vt-icon vt-multiview-enter-icon"></media-icon>
+<media-icon family="vantage" name="multiview-exit" class="vt-icon vt-multiview-exit-icon"></media-icon>
+</button>
+<media-tooltip trigger="vt-multiview" side="top" class="media-popup vt-tooltip">
+<span>Multiview fullscreen</span><kbd class="vt-kbd">W</kbd>
 </media-tooltip>
 <media-fullscreen-button class="vt-button vt-fullscreen" id="vt-fullscreen">
 <media-icon family="vantage" name="fullscreen-enter" class="vt-icon vt-fullscreen-enter-icon"></media-icon>

@@ -1573,136 +1573,6 @@
 }
 
 /* ---------------------------------------------------------------------------------------------------------------
- * The round bar: the timeline as one segment per round, an energised fill and a slanted playhead.
- * ------------------------------------------------------------------------------------------------------------- */
-@layer components {
-  .vt-timeline {
-    --vt-bar: 6px;
-  }
-
-  .vt-timeline .vt-track {
-    height: var(--vt-bar);
-    border-radius: 1px;
-    background-color: rgb(255 255 255 / 0.16);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
-    clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  }
-
-  .vt-timeline .vt-buffer {
-    background-color: rgb(255 255 255 / 0.18);
-    border-radius: 0;
-  }
-
-  /* Played range: a signal gradient that brightens toward the playhead, with a sheen that travels while playing. */
-  .vt-timeline .vt-fill {
-    border-radius: 0;
-    background-color: var(--vt-signal);
-    background-image:
-      linear-gradient(90deg, transparent 0 40%, rgb(255 255 255 / 0.55) 50%, transparent 60% 100%),
-      linear-gradient(90deg, color-mix(in srgb, var(--vt-signal) 45%, transparent), var(--vt-signal) 70%, color-mix(in srgb, var(--vt-signal) 60%, #fff));
-    background-size: 220px 100%, 100% 100%;
-    background-repeat: repeat-x, no-repeat;
-    background-position: -220px 0, 0 0;
-    box-shadow: 0 0 14px color-mix(in srgb, var(--vt-signal) 55%, transparent);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .vantage:has(.vt-play[data-started]:not([data-paused])) .vt-timeline .vt-fill {
-      animation: vt-sheen 2.4s linear infinite;
-    }
-  }
-
-  @keyframes vt-sheen {
-    to {
-      background-position: 220px 0, 0 0;
-    }
-  }
-
-  /* Round cuts: slanted notches the colour of the band. */
-  .vt-rounds {
-    height: 18px;
-    z-index: 1;
-  }
-
-  .vt-round-band[data-odd="true"] {
-    background-color: transparent;
-  }
-
-  .vt-round-gap {
-    position: absolute;
-    top: 50%;
-    left: var(--vt-at);
-    width: 5px;
-    height: 12px;
-    background-color: #0b0e14;
-    translate: -50% -50%;
-    transform: skewX(-18deg);
-  }
-
-  /* Markers sit on the bar with a dark ring so they read on the bright fill too; round ticks become the cuts. */
-  .vt-marker-shape {
-    box-shadow: 0 0 0 2px #0b0e14;
-  }
-
-  .vt-marker[data-kind="round"] .vt-marker-shape {
-    width: 3px;
-    height: 18px;
-    border-radius: 1px;
-    transform: skewX(-18deg);
-    box-shadow: none;
-  }
-
-  /* Playhead: a slanted bar with a glow, not a dot. */
-  .vt-timeline .vt-thumb {
-    width: 6px;
-    height: 22px;
-    border-radius: 2px;
-    background-color: #fff;
-    transform: skewX(-12deg);
-    box-shadow:
-      0 0 0 2px #0b0e14,
-      0 0 16px color-mix(in srgb, var(--vt-signal) 80%, transparent);
-  }
-
-  .vt-timeline .vt-slider[data-interactive] .vt-thumb {
-    scale: 1.15 1.25;
-    box-shadow:
-      0 0 0 2px #0b0e14,
-      0 0 0 5px var(--vt-halo),
-      0 0 24px var(--vt-signal);
-  }
-
-  .vt-timeline .vt-thumb:focus-visible {
-    outline-offset: 4px;
-  }
-
-  /* Hover preview: a slanted time chip over the frame. */
-  .vt-preview-time {
-    padding: 4px 12px;
-    border-radius: 0;
-    background-color: var(--vt-signal);
-    color: var(--vt-signal-text);
-    font-weight: 600;
-    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-  }
-
-  @media (forced-colors: active) {
-    .vt-timeline .vt-fill {
-      background-image: none;
-      box-shadow: none;
-    }
-
-    .vt-round-gap {
-      background-color: Canvas;
-    }
-
-    .vt-timeline .vt-thumb {
-      background-color: Highlight;
-    }
-  }
-}
-
-/* ---------------------------------------------------------------------------------------------------------------
  * Menus: a gliding highlight and a clear selected state.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
@@ -1924,6 +1794,545 @@
     .vt-feed-mark {
       forced-color-adjust: none;
       background: CanvasText;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * The event lane: a clean line for time, and above it a lane of pins, one per event, each with a glyph that says
+ * what happened (skull: elimination, crown: clutch, flag: objective, R2: round start) in the colour of the side
+ * that scored. Played events are solid; upcoming ones are quiet outlines.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .vt-timeline {
+    --vt-lane: 30px;
+    --vt-rail: 20px;
+    --vt-pin: 20px;
+    height: calc(var(--vt-lane) + var(--vt-rail));
+  }
+
+  /* The slider owns the bottom of the timeline; the lane sits above it. */
+  .vt-timeline .vt-slider {
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--vt-rail);
+  }
+
+  .vt-timeline .vt-track {
+    height: 4px;
+    border-radius: 2px;
+    background-color: rgb(255 255 255 / 0.2);
+  }
+
+  .vt-timeline .vt-slider[data-interactive] .vt-track {
+    scale: 1 1.5;
+  }
+
+  .vt-timeline .vt-buffer {
+    background-color: rgb(255 255 255 / 0.2);
+  }
+
+  .vt-timeline .vt-fill {
+    background-color: var(--vt-signal);
+  }
+
+  /* Round starts cut a small gap in the line. */
+  .vt-timeline .vt-rounds {
+    inset: auto 0 0;
+    top: auto;
+    height: var(--vt-rail);
+    translate: none;
+    z-index: 1;
+  }
+
+  .vt-round-band[data-odd="true"] {
+    background-color: transparent;
+  }
+
+  .vt-round-gap {
+    position: absolute;
+    top: 50%;
+    left: var(--vt-at);
+    width: 3px;
+    height: 10px;
+    border-radius: 1px;
+    background-color: #0b0e14;
+    translate: -50% -50%;
+  }
+
+  /* Playhead: a white knob on a soft signal ring, with a hairline up through the lane. */
+  .vt-timeline .vt-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--vt-signal) 45%, transparent),
+      0 2px 8px rgb(0 0 0 / 0.5);
+  }
+
+  .vt-timeline .vt-thumb::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    width: 1px;
+    height: calc(var(--vt-lane) - 4px);
+    background: linear-gradient(to top, rgb(255 255 255 / 0.55), transparent);
+    translate: -50% 0;
+    pointer-events: none;
+  }
+
+  .vt-timeline .vt-slider[data-interactive] .vt-thumb {
+    scale: 1.2;
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--vt-signal) 55%, transparent),
+      0 2px 10px rgb(0 0 0 / 0.55);
+  }
+
+  .vt-timeline .vt-thumb:focus-visible {
+    outline-offset: 4px;
+  }
+
+  /* Hover preview: a plain time chip. */
+  .vt-preview-time {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background-color: #fff;
+    color: var(--vt-ground);
+    font-weight: 600;
+  }
+
+  /* The lane. */
+  .vt-timeline .vt-markers {
+    inset: 0 0 auto;
+    height: calc(var(--vt-lane) + var(--vt-rail) / 2);
+    z-index: 2;
+  }
+
+  .vt-marker {
+    --vt-tone: #f3f5f8;
+    --vt-stem: 6px;
+    top: auto;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 24px;
+    height: calc(var(--vt-pin) + var(--vt-stem));
+    border-radius: 6px;
+    translate: -50% 0;
+  }
+
+  .vt-marker[data-tier="1"] {
+    --vt-stem: 18px;
+    z-index: 1;
+  }
+
+  .vt-marker[data-team="a"] {
+    --vt-tone: var(--vt-signal);
+  }
+
+  .vt-marker[data-team="b"] {
+    --vt-tone: var(--vt-event);
+  }
+
+  /* The stem ties the pin to its moment on the line. */
+  .vt-marker::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 1px;
+    height: var(--vt-stem);
+    background-color: rgb(255 255 255 / 0.28);
+    translate: -50% 0;
+  }
+
+  .vt-marker-pin {
+    display: grid;
+    place-items: center;
+    width: var(--vt-pin);
+    height: var(--vt-pin);
+    border-radius: 6px;
+    background-color: rgb(11 14 20 / 0.82);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vt-tone) 45%, transparent);
+    color: color-mix(in srgb, var(--vt-tone) 70%, transparent);
+    transition:
+      translate 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 200ms ease,
+      color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .vt-marker-pin svg {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Played: solid in the scoring side's colour. */
+  .vt-marker[data-past] .vt-marker-pin {
+    background-color: color-mix(in srgb, var(--vt-tone) 22%, rgb(11 14 20 / 0.9));
+    box-shadow: inset 0 0 0 1px var(--vt-tone);
+    color: var(--vt-tone);
+  }
+
+  /* A clutch always stands out: a filled amber-or-cyan pin with a dark crown. */
+  .vt-marker[data-type="clutch"] .vt-marker-pin {
+    background-color: var(--vt-tone);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--vt-tone) 55%, transparent);
+    color: #0b0e14;
+  }
+
+  /* Round starts: a slim text tag, not an icon. */
+  .vt-marker[data-kind="round"] .vt-marker-pin {
+    width: auto;
+    min-width: var(--vt-pin);
+    padding-inline: 4px;
+    background-color: rgb(11 14 20 / 0.7);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+    color: rgb(243 245 248 / 0.75);
+    font-family: var(--vt-font-clock);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .vt-marker[data-kind="round"][data-past] .vt-marker-pin {
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.45);
+  }
+
+  @media (hover: hover) {
+    .vt-marker:hover .vt-marker-pin {
+      translate: 0 -3px;
+      box-shadow: inset 0 0 0 1px var(--vt-tone), 0 6px 14px rgb(0 0 0 / 0.45);
+      color: var(--vt-tone);
+    }
+
+    .vt-marker[data-type="clutch"]:hover .vt-marker-pin {
+      color: #0b0e14;
+    }
+  }
+
+  .vt-marker:focus-visible {
+    outline: none;
+  }
+
+  .vt-marker:focus-visible .vt-marker-pin {
+    outline: var(--vt-focus) solid var(--vt-signal);
+    outline-offset: 2px;
+    translate: 0 -3px;
+  }
+
+  /* The old shapes are gone; the tooltip carries the label. */
+  .vt-marker-tip {
+    bottom: calc(100% + 10px);
+  }
+
+  @container media-root (width <= 640px) {
+    .vt-timeline {
+      --vt-lane: 24px;
+      --vt-pin: 16px;
+    }
+
+    .vt-marker-pin svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .vt-marker[data-kind="round"] .vt-marker-pin {
+      font-size: 9px;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .vt-marker-pin,
+    .vt-marker[data-past] .vt-marker-pin,
+    .vt-marker[data-type="clutch"] .vt-marker-pin,
+    .vt-marker[data-kind="round"] .vt-marker-pin,
+    .vt-marker[data-kind="round"][data-past] .vt-marker-pin {
+      forced-color-adjust: none;
+      background-color: Canvas;
+      box-shadow: inset 0 0 0 1px CanvasText;
+      color: CanvasText;
+    }
+
+    .vt-marker[data-past] .vt-marker-pin,
+    .vt-marker[data-kind="round"][data-past] .vt-marker-pin {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .vt-round-gap {
+      background-color: Canvas;
+    }
+
+    .vt-timeline .vt-thumb {
+      background-color: Highlight;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Buttons: a compact hover plate with a hairline border, smaller than the 44/48px hit area around it.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .vt-button {
+    background: transparent;
+  }
+
+  .vt-button::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 9px;
+    background-color: rgb(255 255 255 / 0.07);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+    opacity: 0;
+    scale: 0.85;
+    pointer-events: none;
+    transition:
+      opacity 160ms ease,
+      scale 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .vt-button > * {
+    position: relative;
+  }
+
+  @media (hover: hover) {
+    .vt-button:hover {
+      background-color: transparent;
+    }
+
+    .vt-button:not([aria-disabled="true"]):hover::before {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  /* Open menus and active toggles keep the plate, tinted with the signal. */
+  .vt-button[aria-expanded="true"],
+  .vt-captions[data-active],
+  .vt-multiview[aria-pressed="true"] {
+    background-color: transparent;
+    color: var(--vt-signal);
+  }
+
+  .vt-button[aria-expanded="true"]::before,
+  .vt-captions[data-active]::before,
+  .vt-multiview[aria-pressed="true"]::before {
+    opacity: 1;
+    scale: 1;
+    background-color: color-mix(in srgb, var(--vt-signal) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vt-signal) 40%, transparent);
+  }
+
+  .vt-button:focus-visible {
+    outline: none;
+  }
+
+  .vt-button:focus-visible::before {
+    opacity: 1;
+    scale: 1;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.16),
+      0 0 0 var(--vt-focus) var(--vt-signal);
+  }
+
+  .vt-button .vt-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Multiview only shows when the page offers it (data-multiview on the player root). */
+  .vt-multiview {
+    display: none;
+  }
+
+  .vantage[data-multiview] .vt-multiview {
+    display: inline-grid;
+  }
+
+  .vt-multiview[aria-pressed="false"] .vt-multiview-enter-icon,
+  .vt-multiview[aria-pressed="true"] .vt-multiview-exit-icon {
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
+  }
+
+  .vt-keys-multiview {
+    display: none;
+  }
+
+  .vantage[data-multiview] .vt-keys-multiview {
+    display: flex;
+  }
+
+  @container media-root (width <= 640px) {
+    .vt-replay,
+    .vt-multiview {
+      display: none;
+    }
+
+    .vantage[data-multiview] .vt-multiview {
+      display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .vt-button::before {
+      box-shadow: inset 0 0 0 1px ButtonText;
+      background-color: Canvas;
+    }
+
+    .vt-button:focus-visible::before {
+      outline: 2px solid Highlight;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Kill feed glyphs and team colours; the instant replay badge; spoiler-free mode.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .vt-feed-item {
+    --vt-tone: #f3f5f8;
+  }
+
+  .vt-feed-item[data-team="a"] {
+    --vt-tone: var(--vt-signal);
+  }
+
+  .vt-feed-item[data-team="b"] {
+    --vt-tone: var(--vt-event);
+  }
+
+  .vt-feed-item:first-child {
+    box-shadow: inset 0 -2px 0 var(--vt-tone);
+  }
+
+  .vt-feed-mark,
+  .vt-feed-item[data-kind="objective"] .vt-feed-mark,
+  .vt-feed-item[data-kind="round"] .vt-feed-mark {
+    display: grid;
+    place-items: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 0;
+    background: none;
+    color: var(--vt-tone);
+    rotate: none;
+    transform: none;
+  }
+
+  .vt-feed-mark svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .vt-feed-item[data-kind="round"] .vt-feed-mark {
+    width: 3px;
+    height: 13px;
+    background: rgb(255 255 255 / 0.6);
+  }
+
+  /* Eliminations show the skull between the names, coloured by side. */
+  .vt-feed-duel .vt-feed-mark {
+    display: none;
+  }
+
+  .vt-feed-a {
+    color: var(--vt-tone);
+  }
+
+  .vt-feed-item[data-team="a"] .vt-feed-b {
+    color: color-mix(in srgb, var(--vt-event) 80%, #fff);
+  }
+
+  .vt-feed-item[data-team="b"] .vt-feed-b {
+    color: color-mix(in srgb, var(--vt-signal) 80%, #fff);
+  }
+
+  .vt-feed-x {
+    color: rgb(243 245 248 / 0.85);
+  }
+
+  /* Instant replay: a badge at the top centre while the replay runs. */
+  .vt-replay-badge {
+    position: absolute;
+    top: calc(var(--vt-u) * 4);
+    left: 50%;
+    z-index: 27;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 10px;
+    border-radius: 8px;
+    background-color: rgb(11 14 20 / 0.85);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+    color: #fff;
+    font-family: var(--vt-font-label);
+    font-size: var(--vt-text-small);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    translate: -50% 0;
+    pointer-events: none;
+  }
+
+  .vt-replay-badge::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--vt-round);
+  }
+
+  .vt-replay-badge:not([hidden]) {
+    animation: vt-badge-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+  }
+
+  @keyframes vt-badge-in {
+    from {
+      opacity: 0;
+      translate: -50% -8px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vt-replay-badge::before {
+      animation: vt-blink 1s steps(2, jump-none) infinite;
+    }
+  }
+
+  @keyframes vt-blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  /* A replay tints the line so it reads as "not live". */
+  .vantage[data-replay] .vt-timeline .vt-fill {
+    background-color: var(--vt-round);
+  }
+
+  /* Spoiler-free: no score, no kill feed, no event pins. */
+  .vantage[data-spoilers="on"] .vt-score-teams,
+  .vantage[data-spoilers="on"] .vt-feed,
+  .vantage[data-spoilers="on"] .vt-markers,
+  .vantage[data-spoilers="on"] .vt-marker-tip {
+    display: none;
+  }
+
+  @media (forced-colors: active) {
+    .vt-replay-badge {
+      border: 1px solid CanvasText;
     }
   }
 }
