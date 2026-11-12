@@ -1,249 +1,249 @@
-<media-container class="media-skin media-container media-video vantage" data-theme="vantage" data-preset="video">
+<media-container class="media-skin media-container media-video sightline" data-theme="sightline" data-preset="video">
 <!-- Add a compatible media component here. -->
 <media-poster class="media-poster">
 <img alt="" decoding="async" class="media-poster-image">
 </media-poster>
-<div class="vt-hud">
-<div class="vt-score" hidden>
-<span class="vt-chip vt-score-round"></span>
-<span class="vt-chip vt-score-clock"></span>
-<span class="vt-chip vt-score-teams"></span>
+<div class="sl-hud">
+<div class="sl-score" hidden>
+<span class="sl-chip sl-score-round"></span>
+<span class="sl-chip sl-score-clock"></span>
+<span class="sl-chip sl-score-teams"></span>
 </div>
-<div class="vt-hud-end">
-<span class="vt-chip vt-angle" hidden></span>
-<span class="vt-sync" hidden><span class="vt-sync-dot" aria-hidden="true"></span><span class="vt-sync-label">Sync</span></span>
+<div class="sl-hud-end">
+<span class="sl-chip sl-angle" hidden></span>
+<span class="sl-sync" hidden><span class="sl-sync-dot" aria-hidden="true"></span><span class="sl-sync-label">Sync</span></span>
 </div>
 </div>
-<div class="vt-state" role="status" hidden></div>
-<div class="vt-replay-badge" role="status" hidden></div>
-<div class="vt-cut" aria-hidden="true"></div>
-<ol class="vt-feed" aria-live="polite" aria-relevant="additions" aria-label="Kill feed"></ol>
-<media-buffering-indicator class="vt-buffering">
-<span class="vt-spinner" aria-hidden="true"></span>
+<div class="sl-state" role="status" hidden></div>
+<div class="sl-replay-badge" role="status" hidden></div>
+<div class="sl-cut" aria-hidden="true"></div>
+<ol class="sl-feed" aria-live="polite" aria-relevant="additions" aria-label="Kill feed"></ol>
+<media-buffering-indicator class="sl-buffering">
+<span class="sl-spinner" aria-hidden="true"></span>
 </media-buffering-indicator>
 <media-error-dialog>
 <media-dialog-backdrop class="media-dialog-backdrop"></media-dialog-backdrop>
 <media-dialog-popup class="media-dialog-popup">
 <media-dialog-title class="media-dialog-title"></media-dialog-title>
 <media-dialog-description class="media-dialog-description"></media-dialog-description>
-<media-dialog-close class="vt-button vt-dialog-close"></media-dialog-close>
+<media-dialog-close class="sl-button sl-dialog-close"></media-dialog-close>
 </media-dialog-popup>
 </media-error-dialog>
 <media-controls>
-<media-controls-backdrop class="vt-scrim"></media-controls-backdrop>
-<media-controls-content class="vt-controls">
+<media-controls-backdrop class="sl-scrim"></media-controls-backdrop>
+<media-controls-content class="sl-controls">
 <media-tooltip-group>
-<media-play-button class="vt-center-play">
-<media-icon family="vantage" name="play-large" class="vt-center-play-icon"></media-icon>
+<media-play-button class="sl-center-play">
+<media-icon family="sightline" name="play-large" class="sl-center-play-icon"></media-icon>
 </media-play-button>
-<media-controls-group class="vt-band">
-<div class="vt-row vt-row-timeline">
-<media-time type="current" class="vt-time vt-time-current"></media-time>
-<div class="vt-timeline">
-<media-time-slider class="vt-slider" thumb-alignment="center">
-<media-slider-track class="vt-track">
-<media-slider-buffer class="vt-buffer"></media-slider-buffer>
-<media-slider-fill class="vt-fill"></media-slider-fill>
+<media-controls-group class="sl-band">
+<div class="sl-row sl-row-timeline">
+<media-time type="current" class="sl-time sl-time-current"></media-time>
+<div class="sl-timeline">
+<media-time-slider class="sl-slider" thumb-alignment="center">
+<media-slider-track class="sl-track">
+<media-slider-buffer class="sl-buffer"></media-slider-buffer>
+<media-slider-fill class="sl-fill"></media-slider-fill>
 </media-slider-track>
-<media-slider-thumb class="vt-thumb"></media-slider-thumb>
-<media-slider-preview class="vt-preview">
-<media-slider-thumbnail class="vt-preview-thumbnail">
-<img alt="" aria-hidden="true" decoding="async" class="vt-preview-image">
+<media-slider-thumb class="sl-thumb"></media-slider-thumb>
+<media-slider-preview class="sl-preview">
+<media-slider-thumbnail class="sl-preview-thumbnail">
+<img alt="" aria-hidden="true" decoding="async" class="sl-preview-image">
 </media-slider-thumbnail>
-<media-slider-value type="pointer" class="vt-preview-time"></media-slider-value>
+<media-slider-value type="pointer" class="sl-preview-time"></media-slider-value>
 </media-slider-preview>
 </media-time-slider>
-<div class="vt-rounds" aria-hidden="true"></div>
-<div class="vt-markers" role="toolbar" aria-label="Match events" hidden></div>
-<div class="vt-marker-tip" aria-hidden="true" hidden>
-<span class="vt-marker-tip-label"></span>
-<span class="vt-marker-tip-time"></span>
+<div class="sl-rounds" aria-hidden="true"></div>
+<div class="sl-markers" role="toolbar" aria-label="Match events" hidden></div>
+<div class="sl-marker-tip" aria-hidden="true" hidden>
+<span class="sl-marker-tip-label"></span>
+<span class="sl-marker-tip-time"></span>
 </div>
 </div>
-<media-time type="duration" class="vt-time vt-time-duration"></media-time>
+<media-time type="duration" class="sl-time sl-time-duration"></media-time>
 </div>
-<div class="vt-row vt-row-buttons">
-<media-play-button class="vt-button vt-play" id="vt-play">
-<media-icon family="vantage" name="play" class="vt-icon vt-play-icon"></media-icon>
-<media-icon family="vantage" name="pause" class="vt-icon vt-pause-icon"></media-icon>
-<media-icon family="vantage" name="restart" class="vt-icon vt-restart-icon"></media-icon>
+<div class="sl-row sl-row-buttons">
+<media-play-button class="sl-button sl-play" id="sl-play">
+<media-icon family="sightline" name="play" class="sl-icon sl-play-icon"></media-icon>
+<media-icon family="sightline" name="pause" class="sl-icon sl-pause-icon"></media-icon>
+<media-icon family="sightline" name="restart" class="sl-icon sl-restart-icon"></media-icon>
 </media-play-button>
-<media-tooltip trigger="vt-play" side="top" class="media-popup vt-tooltip">
+<media-tooltip trigger="sl-play" side="top" class="media-popup sl-tooltip">
 <media-tooltip-label></media-tooltip-label>
-<media-tooltip-shortcut class="vt-kbd"></media-tooltip-shortcut>
+<media-tooltip-shortcut class="sl-kbd"></media-tooltip-shortcut>
 </media-tooltip>
-<span class="vt-time-compact" aria-hidden="true"><media-time type="current" class="vt-time"></media-time><span class="vt-time-sep">/</span><media-time type="duration" class="vt-time vt-time-duration"></media-time></span>
-<button type="button" class="vt-button vt-prev" id="vt-prev" aria-label="Previous highlight" aria-keyshortcuts="Shift+N" aria-disabled="true">
-<media-icon family="vantage" name="highlight-prev" class="vt-icon vt-icon-static"></media-icon>
+<span class="sl-time-compact" aria-hidden="true"><media-time type="current" class="sl-time"></media-time><span class="sl-time-sep">/</span><media-time type="duration" class="sl-time sl-time-duration"></media-time></span>
+<button type="button" class="sl-button sl-prev" id="sl-prev" aria-label="Previous highlight" aria-keyshortcuts="Shift+N" aria-disabled="true">
+<media-icon family="sightline" name="highlight-prev" class="sl-icon sl-icon-static"></media-icon>
 </button>
-<media-tooltip trigger="vt-prev" side="top" class="media-popup vt-tooltip">
-<span>Previous highlight</span><kbd class="vt-kbd">⇧N</kbd>
+<media-tooltip trigger="sl-prev" side="top" class="media-popup sl-tooltip">
+<span>Previous highlight</span><kbd class="sl-kbd">⇧N</kbd>
 </media-tooltip>
-<button type="button" class="vt-button vt-next" id="vt-next" aria-label="Next highlight" aria-keyshortcuts="N" aria-disabled="true">
-<media-icon family="vantage" name="highlight-next" class="vt-icon vt-icon-static"></media-icon>
+<button type="button" class="sl-button sl-next" id="sl-next" aria-label="Next highlight" aria-keyshortcuts="N" aria-disabled="true">
+<media-icon family="sightline" name="highlight-next" class="sl-icon sl-icon-static"></media-icon>
 </button>
-<media-tooltip trigger="vt-next" side="top" class="media-popup vt-tooltip">
-<span>Next highlight</span><kbd class="vt-kbd">N</kbd>
+<media-tooltip trigger="sl-next" side="top" class="media-popup sl-tooltip">
+<span>Next highlight</span><kbd class="sl-kbd">N</kbd>
 </media-tooltip>
-<button type="button" class="vt-button vt-replay" id="vt-replay" aria-label="Instant replay, last 8 seconds at half speed" aria-keyshortcuts="R">
-<media-icon family="vantage" name="replay" class="vt-icon vt-icon-static"></media-icon>
+<button type="button" class="sl-button sl-replay" id="sl-replay" aria-label="Instant replay, last 8 seconds at half speed" aria-keyshortcuts="R">
+<media-icon family="sightline" name="replay" class="sl-icon sl-icon-static"></media-icon>
 </button>
-<media-tooltip trigger="vt-replay" side="top" class="media-popup vt-tooltip">
-<span>Instant replay</span><kbd class="vt-kbd">R</kbd>
+<media-tooltip trigger="sl-replay" side="top" class="media-popup sl-tooltip">
+<span>Instant replay</span><kbd class="sl-kbd">R</kbd>
 </media-tooltip>
-<div class="vt-volume">
-<media-mute-button class="vt-button vt-mute" id="vt-mute">
-<media-icon family="vantage" name="volume-off" class="vt-icon vt-volume-off-icon"></media-icon>
-<media-icon family="vantage" name="volume-low" class="vt-icon vt-volume-low-icon"></media-icon>
-<media-icon family="vantage" name="volume-high" class="vt-icon vt-volume-high-icon"></media-icon>
+<div class="sl-volume">
+<media-mute-button class="sl-button sl-mute" id="sl-mute">
+<media-icon family="sightline" name="volume-off" class="sl-icon sl-volume-off-icon"></media-icon>
+<media-icon family="sightline" name="volume-low" class="sl-icon sl-volume-low-icon"></media-icon>
+<media-icon family="sightline" name="volume-high" class="sl-icon sl-volume-high-icon"></media-icon>
 </media-mute-button>
-<media-tooltip trigger="vt-mute" side="top" class="media-popup vt-tooltip">
+<media-tooltip trigger="sl-mute" side="top" class="media-popup sl-tooltip">
 <media-tooltip-label></media-tooltip-label>
-<media-tooltip-shortcut class="vt-kbd"></media-tooltip-shortcut>
+<media-tooltip-shortcut class="sl-kbd"></media-tooltip-shortcut>
 </media-tooltip>
-<media-volume-slider class="vt-slider vt-volume-slider" thumb-alignment="edge">
-<media-slider-track class="vt-track">
-<media-slider-fill class="vt-fill vt-volume-fill"></media-slider-fill>
+<media-volume-slider class="sl-slider sl-volume-slider" thumb-alignment="edge">
+<media-slider-track class="sl-track">
+<media-slider-fill class="sl-fill sl-volume-fill"></media-slider-fill>
 </media-slider-track>
-<media-slider-thumb class="vt-thumb vt-thumb-small"></media-slider-thumb>
+<media-slider-thumb class="sl-thumb sl-thumb-small"></media-slider-thumb>
 </media-volume-slider>
 </div>
-<span class="vt-spacer"></span>
-<span class="vt-keyhints" aria-hidden="true"><span class="vt-keyhint-angles"><kbd class="vt-kbd">1–3</kbd> angles</span><span><kbd class="vt-kbd">N</kbd> next highlight</span></span>
-<media-captions-button menu-for="vt-captions-menu" class="vt-button vt-captions" id="vt-captions">
-<media-icon family="vantage" name="captions-off" class="vt-icon vt-captions-off-icon"></media-icon>
-<media-icon family="vantage" name="captions-on" class="vt-icon vt-captions-on-icon"></media-icon>
+<span class="sl-spacer"></span>
+<span class="sl-keyhints" aria-hidden="true"><span class="sl-keyhint-angles"><kbd class="sl-kbd">1–3</kbd> angles</span><span><kbd class="sl-kbd">N</kbd> next highlight</span></span>
+<media-captions-button menu-for="sl-captions-menu" class="sl-button sl-captions" id="sl-captions">
+<media-icon family="sightline" name="captions-off" class="sl-icon sl-captions-off-icon"></media-icon>
+<media-icon family="sightline" name="captions-on" class="sl-icon sl-captions-on-icon"></media-icon>
 </media-captions-button>
-<media-tooltip trigger="vt-captions" side="top" class="media-popup vt-tooltip">
+<media-tooltip trigger="sl-captions" side="top" class="media-popup sl-tooltip">
 <media-tooltip-label></media-tooltip-label>
-<media-tooltip-shortcut class="vt-kbd"></media-tooltip-shortcut>
+<media-tooltip-shortcut class="sl-kbd"></media-tooltip-shortcut>
 </media-tooltip>
-<media-menu side="top" align="end" class="media-popup vt-menu" id="vt-captions-menu">
-<media-menu-content class="vt-menu-content">
-<media-captions-radio-group class="vt-menu-group">
+<media-menu side="top" align="end" class="media-popup sl-menu" id="sl-captions-menu">
+<media-menu-content class="sl-menu-content">
+<media-captions-radio-group class="sl-menu-group">
 <template>
-<media-menu-radio-item class="vt-menu-item vt-menu-radio">
-<span data-part="label" class="vt-menu-label"></span>
-<media-menu-item-indicator force-mount class="vt-menu-indicator"></media-menu-item-indicator>
+<media-menu-radio-item class="sl-menu-item sl-menu-radio">
+<span data-part="label" class="sl-menu-label"></span>
+<media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator>
 </media-menu-radio-item>
 </template>
 </media-captions-radio-group>
 </media-menu-content>
 </media-menu>
-<button type="button" commandfor="vt-settings-menu" class="vt-button vt-settings" id="vt-settings">
-<media-icon family="vantage" name="gear" class="vt-icon vt-icon-static"></media-icon>
-<media-text class="vt-visually-hidden" token="menu.settings">Settings</media-text>
+<button type="button" commandfor="sl-settings-menu" class="sl-button sl-settings" id="sl-settings">
+<media-icon family="sightline" name="gear" class="sl-icon sl-icon-static"></media-icon>
+<media-text class="sl-visually-hidden" token="menu.settings">Settings</media-text>
 </button>
-<media-tooltip trigger="vt-settings" side="top" class="media-popup vt-tooltip">
+<media-tooltip trigger="sl-settings" side="top" class="media-popup sl-tooltip">
 <media-text token="menu.settings">Settings</media-text>
 </media-tooltip>
-<media-menu side="top" align="end" class="media-popup vt-menu" id="vt-settings-menu">
-<media-menu-content class="vt-menu-content">
-<media-menu-item commandfor="vt-speed-menu" class="vt-menu-item">
+<media-menu side="top" align="end" class="media-popup sl-menu" id="sl-settings-menu">
+<media-menu-content class="sl-menu-content">
+<media-menu-item commandfor="sl-speed-menu" class="sl-menu-item">
 <media-text token="menu.speed">Speed</media-text>
-<span class="vt-menu-hint"><span data-part="value"></span><media-icon family="vantage" name="chevron" class="vt-menu-chevron"></media-icon></span>
+<span class="sl-menu-hint"><span data-part="value"></span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>
 </media-menu-item>
-<media-menu-content class="vt-menu-content" id="vt-speed-menu">
-<media-menu-item class="vt-menu-item vt-menu-back">
-<media-icon family="vantage" name="chevron" class="vt-menu-chevron vt-menu-chevron-back"></media-icon>
+<media-menu-content class="sl-menu-content" id="sl-speed-menu">
+<media-menu-item class="sl-menu-item sl-menu-back">
+<media-icon family="sightline" name="chevron" class="sl-menu-chevron sl-menu-chevron-back"></media-icon>
 <media-text token="menu.speed">Speed</media-text>
 </media-menu-item>
-<media-playback-rate-radio-group class="vt-menu-group">
+<media-playback-rate-radio-group class="sl-menu-group">
 <template>
-<media-menu-radio-item class="vt-menu-item vt-menu-radio">
-<span data-part="label" class="vt-menu-label"></span>
-<media-menu-item-indicator force-mount class="vt-menu-indicator"></media-menu-item-indicator>
+<media-menu-radio-item class="sl-menu-item sl-menu-radio">
+<span data-part="label" class="sl-menu-label"></span>
+<media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator>
 </media-menu-radio-item>
 </template>
 </media-playback-rate-radio-group>
 </media-menu-content>
-<media-menu-item commandfor="vt-layout-menu" class="vt-menu-item vt-menu-layout">
+<media-menu-item commandfor="sl-layout-menu" class="sl-menu-item sl-menu-layout">
 <span>Layout</span>
-<span class="vt-menu-hint"><span class="vt-layout-value">70 / 30</span><media-icon family="vantage" name="chevron" class="vt-menu-chevron"></media-icon></span>
+<span class="sl-menu-hint"><span class="sl-layout-value">70 / 30</span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>
 </media-menu-item>
-<media-menu-content class="vt-menu-content" id="vt-layout-menu">
-<media-menu-item class="vt-menu-item vt-menu-back">
-<media-icon family="vantage" name="chevron" class="vt-menu-chevron vt-menu-chevron-back"></media-icon>
+<media-menu-content class="sl-menu-content" id="sl-layout-menu">
+<media-menu-item class="sl-menu-item sl-menu-back">
+<media-icon family="sightline" name="chevron" class="sl-menu-chevron sl-menu-chevron-back"></media-icon>
 <span>Layout</span>
 </media-menu-item>
-<media-menu-radio-group class="vt-menu-group vt-layout-group" value="split">
-<media-menu-radio-item value="split" class="vt-menu-item vt-menu-radio"><span class="vt-menu-label">70 / 30 · stage and angles</span><media-menu-item-indicator force-mount class="vt-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
-<media-menu-radio-item value="duo" class="vt-menu-item vt-menu-radio"><span class="vt-menu-label">50 / 50 · side by side</span><media-menu-item-indicator force-mount class="vt-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
-<media-menu-radio-item value="stage" class="vt-menu-item vt-menu-radio"><span class="vt-menu-label">Stage only</span><media-menu-item-indicator force-mount class="vt-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
+<media-menu-radio-group class="sl-menu-group sl-layout-group" value="split">
+<media-menu-radio-item value="split" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">70 / 30 · stage and angles</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
+<media-menu-radio-item value="duo" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">50 / 50 · side by side</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
+<media-menu-radio-item value="stage" class="sl-menu-item sl-menu-radio"><span class="sl-menu-label">Stage only</span><media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator></media-menu-radio-item>
 </media-menu-radio-group>
 </media-menu-content>
-<media-menu-checkbox-item checked class="vt-menu-item vt-menu-toasts">
+<media-menu-checkbox-item checked class="sl-menu-item sl-menu-toasts">
 <span>Kill feed</span>
-<span class="vt-menu-hint vt-toggle" aria-hidden="true"><span class="vt-toggle-on">On</span><span class="vt-toggle-off">Off</span></span>
+<span class="sl-menu-hint sl-toggle" aria-hidden="true"><span class="sl-toggle-on">On</span><span class="sl-toggle-off">Off</span></span>
 </media-menu-checkbox-item>
-<media-menu-checkbox-item class="vt-menu-item vt-menu-spoilers">
+<media-menu-checkbox-item class="sl-menu-item sl-menu-spoilers">
 <span>Spoiler-free</span>
-<span class="vt-menu-hint vt-toggle" aria-hidden="true"><span class="vt-toggle-on">On</span><span class="vt-toggle-off">Off</span></span>
+<span class="sl-menu-hint sl-toggle" aria-hidden="true"><span class="sl-toggle-on">On</span><span class="sl-toggle-off">Off</span></span>
 </media-menu-checkbox-item>
-<media-menu-item commandfor="vt-captions-submenu" class="vt-menu-item vt-menu-captions">
+<media-menu-item commandfor="sl-captions-submenu" class="sl-menu-item sl-menu-captions">
 <media-text token="menu.captions">Captions</media-text>
-<span class="vt-menu-hint"><span data-part="value"></span><media-icon family="vantage" name="chevron" class="vt-menu-chevron"></media-icon></span>
+<span class="sl-menu-hint"><span data-part="value"></span><media-icon family="sightline" name="chevron" class="sl-menu-chevron"></media-icon></span>
 </media-menu-item>
-<media-menu-content class="vt-menu-content" id="vt-captions-submenu">
-<media-menu-item class="vt-menu-item vt-menu-back">
-<media-icon family="vantage" name="chevron" class="vt-menu-chevron vt-menu-chevron-back"></media-icon>
+<media-menu-content class="sl-menu-content" id="sl-captions-submenu">
+<media-menu-item class="sl-menu-item sl-menu-back">
+<media-icon family="sightline" name="chevron" class="sl-menu-chevron sl-menu-chevron-back"></media-icon>
 <media-text token="menu.captions">Captions</media-text>
 </media-menu-item>
-<media-captions-radio-group class="vt-menu-group">
+<media-captions-radio-group class="sl-menu-group">
 <template>
-<media-menu-radio-item class="vt-menu-item vt-menu-radio">
-<span data-part="label" class="vt-menu-label"></span>
-<media-menu-item-indicator force-mount class="vt-menu-indicator"></media-menu-item-indicator>
+<media-menu-radio-item class="sl-menu-item sl-menu-radio">
+<span data-part="label" class="sl-menu-label"></span>
+<media-menu-item-indicator force-mount class="sl-menu-indicator"></media-menu-item-indicator>
 </media-menu-radio-item>
 </template>
 </media-captions-radio-group>
 </media-menu-content>
 </media-menu-content>
 </media-menu>
-<button type="button" commandfor="vt-keys" class="vt-button vt-help" id="vt-help" aria-label="Keyboard shortcuts" aria-keyshortcuts="Shift+?">
-<media-icon family="vantage" name="keyboard" class="vt-icon vt-icon-static"></media-icon>
+<button type="button" commandfor="sl-keys" class="sl-button sl-help" id="sl-help" aria-label="Keyboard shortcuts" aria-keyshortcuts="Shift+?">
+<media-icon family="sightline" name="keyboard" class="sl-icon sl-icon-static"></media-icon>
 </button>
-<media-tooltip trigger="vt-help" side="top" class="media-popup vt-tooltip">
-<span>Keyboard shortcuts</span><kbd class="vt-kbd">?</kbd>
+<media-tooltip trigger="sl-help" side="top" class="media-popup sl-tooltip">
+<span>Keyboard shortcuts</span><kbd class="sl-kbd">?</kbd>
 </media-tooltip>
-<media-popover side="top" align="end" class="media-popup vt-menu vt-keys" id="vt-keys">
-<p class="vt-keys-title">Keyboard</p>
-<dl class="vt-keys-list">
-<div><dt><kbd class="vt-kbd">Space</kbd> <kbd class="vt-kbd">K</kbd></dt><dd>Play or pause</dd></div>
-<div><dt><kbd class="vt-kbd">←</kbd> <kbd class="vt-kbd">→</kbd></dt><dd>Seek 5 seconds</dd></div>
-<div><dt><kbd class="vt-kbd">↑</kbd> <kbd class="vt-kbd">↓</kbd></dt><dd>Volume</dd></div>
-<div><dt><kbd class="vt-kbd">M</kbd></dt><dd>Mute</dd></div>
-<div><dt><kbd class="vt-kbd">N</kbd> <kbd class="vt-kbd">⇧N</kbd></dt><dd>Next or previous highlight</dd></div>
-<div><dt><kbd class="vt-kbd">R</kbd></dt><dd>Instant replay</dd></div>
-<div class="vt-keys-angles"><dt><kbd class="vt-kbd">1</kbd>–<kbd class="vt-kbd">3</kbd></dt><dd>Switch angle</dd></div>
-<div class="vt-keys-multiview"><dt><kbd class="vt-kbd">W</kbd></dt><dd>Multiview fullscreen</dd></div>
-<div><dt><kbd class="vt-kbd">C</kbd></dt><dd>Captions</dd></div>
-<div><dt><kbd class="vt-kbd">F</kbd></dt><dd>Fullscreen</dd></div>
-<div><dt><kbd class="vt-kbd">Esc</kbd></dt><dd>Close menus</dd></div>
+<media-popover side="top" align="end" class="media-popup sl-menu sl-keys" id="sl-keys">
+<p class="sl-keys-title">Keyboard</p>
+<dl class="sl-keys-list">
+<div><dt><kbd class="sl-kbd">Space</kbd> <kbd class="sl-kbd">K</kbd></dt><dd>Play or pause</dd></div>
+<div><dt><kbd class="sl-kbd">←</kbd> <kbd class="sl-kbd">→</kbd></dt><dd>Seek 5 seconds</dd></div>
+<div><dt><kbd class="sl-kbd">↑</kbd> <kbd class="sl-kbd">↓</kbd></dt><dd>Volume</dd></div>
+<div><dt><kbd class="sl-kbd">M</kbd></dt><dd>Mute</dd></div>
+<div><dt><kbd class="sl-kbd">N</kbd> <kbd class="sl-kbd">⇧N</kbd></dt><dd>Next or previous highlight</dd></div>
+<div><dt><kbd class="sl-kbd">R</kbd></dt><dd>Instant replay</dd></div>
+<div class="sl-keys-angles"><dt><kbd class="sl-kbd">1</kbd>–<kbd class="sl-kbd">3</kbd></dt><dd>Switch angle</dd></div>
+<div class="sl-keys-multiview"><dt><kbd class="sl-kbd">W</kbd></dt><dd>Multiview fullscreen</dd></div>
+<div><dt><kbd class="sl-kbd">C</kbd></dt><dd>Captions</dd></div>
+<div><dt><kbd class="sl-kbd">F</kbd></dt><dd>Fullscreen</dd></div>
+<div><dt><kbd class="sl-kbd">Esc</kbd></dt><dd>Close menus</dd></div>
 </dl>
 </media-popover>
-<media-pip-button class="vt-button vt-pip" id="vt-pip">
-<media-icon family="vantage" name="pip-enter" class="vt-icon vt-pip-enter-icon"></media-icon>
-<media-icon family="vantage" name="pip-exit" class="vt-icon vt-pip-exit-icon"></media-icon>
+<media-pip-button class="sl-button sl-pip" id="sl-pip">
+<media-icon family="sightline" name="pip-enter" class="sl-icon sl-pip-enter-icon"></media-icon>
+<media-icon family="sightline" name="pip-exit" class="sl-icon sl-pip-exit-icon"></media-icon>
 </media-pip-button>
-<media-tooltip trigger="vt-pip" side="top" class="media-popup vt-tooltip">
+<media-tooltip trigger="sl-pip" side="top" class="media-popup sl-tooltip">
 <media-tooltip-label></media-tooltip-label>
-<media-tooltip-shortcut class="vt-kbd"></media-tooltip-shortcut>
+<media-tooltip-shortcut class="sl-kbd"></media-tooltip-shortcut>
 </media-tooltip>
-<button type="button" class="vt-button vt-multiview" id="vt-multiview" aria-label="Multiview fullscreen" aria-keyshortcuts="W" aria-pressed="false">
-<media-icon family="vantage" name="multiview" class="vt-icon vt-multiview-enter-icon"></media-icon>
-<media-icon family="vantage" name="multiview-exit" class="vt-icon vt-multiview-exit-icon"></media-icon>
+<button type="button" class="sl-button sl-multiview" id="sl-multiview" aria-label="Multiview fullscreen" aria-keyshortcuts="W" aria-pressed="false">
+<media-icon family="sightline" name="multiview" class="sl-icon sl-multiview-enter-icon"></media-icon>
+<media-icon family="sightline" name="multiview-exit" class="sl-icon sl-multiview-exit-icon"></media-icon>
 </button>
-<media-tooltip trigger="vt-multiview" side="top" class="media-popup vt-tooltip">
-<span>Multiview fullscreen</span><kbd class="vt-kbd">W</kbd>
+<media-tooltip trigger="sl-multiview" side="top" class="media-popup sl-tooltip">
+<span>Multiview fullscreen</span><kbd class="sl-kbd">W</kbd>
 </media-tooltip>
-<media-fullscreen-button class="vt-button vt-fullscreen" id="vt-fullscreen">
-<media-icon family="vantage" name="fullscreen-enter" class="vt-icon vt-fullscreen-enter-icon"></media-icon>
-<media-icon family="vantage" name="fullscreen-exit" class="vt-icon vt-fullscreen-exit-icon"></media-icon>
+<media-fullscreen-button class="sl-button sl-fullscreen" id="sl-fullscreen">
+<media-icon family="sightline" name="fullscreen-enter" class="sl-icon sl-fullscreen-enter-icon"></media-icon>
+<media-icon family="sightline" name="fullscreen-exit" class="sl-icon sl-fullscreen-exit-icon"></media-icon>
 </media-fullscreen-button>
-<media-tooltip trigger="vt-fullscreen" side="top" align="end" class="media-popup vt-tooltip">
+<media-tooltip trigger="sl-fullscreen" side="top" align="end" class="media-popup sl-tooltip">
 <media-tooltip-label></media-tooltip-label>
-<media-tooltip-shortcut class="vt-kbd"></media-tooltip-shortcut>
+<media-tooltip-shortcut class="sl-kbd"></media-tooltip-shortcut>
 </media-tooltip>
 </div>
 </media-controls-group>
@@ -269,5 +269,5 @@
 <media-gesture type="doubletap" action="seekStep" region="left"></media-gesture>
 <media-gesture type="doubletap" action="toggleFullscreen" region="center"></media-gesture>
 <media-gesture type="doubletap" action="seekStep" region="right"></media-gesture>
-<media-status-announcer class="vt-visually-hidden"></media-status-announcer>
+<media-status-announcer class="sl-visually-hidden"></media-status-announcer>
 </media-container>

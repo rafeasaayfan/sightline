@@ -4,7 +4,7 @@ import '@fontsource/inter/600.css';
 import '@fontsource/barlow-condensed/600.css';
 import '@fontsource/barlow-condensed/700.css';
 import '@fontsource/jetbrains-mono/500.css';
-import '../styles/video/vantage.css';
+import '../styles/video/sightline.css';
 import './skin.css';
 import '@videojs/html/i18n';
 import '@videojs/html/ui/container';
@@ -53,10 +53,10 @@ import '@videojs/html/ui/hotkey';
 import '@videojs/html/ui/gesture';
 import '@videojs/html/ui/status-announcer';
 import { registerIcons } from '@videojs/html/icons';
-import { vantageIcons } from './icons';
-import './vantage';
+import { sightlineIcons } from './icons';
+import './sightline';
 
-registerIcons('vantage', vantageIcons);
+registerIcons('sightline', sightlineIcons);
 
-export { cut, formatTime, getEvents, instantReplay, nextHighlight, prevHighlight, setAngle, setLayout, setMultiview, setScoreboard, setStageState, setSync } from './vantage';
-export type { EventKind, Layout, MatchEvent, Scoreboard, Team } from './vantage';
+export { cut, formatTime, getEvents, instantReplay, nextHighlight, prevHighlight, setAngle, setLayout, setMultiview, setScoreboard, setStageState, setSync } from './sightline';
+export type { EventKind, Layout, MatchEvent, Scoreboard, Team } from './sightline';

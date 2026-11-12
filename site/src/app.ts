@@ -14,7 +14,7 @@ import {
   cut,
   type Layout,
 } from '@/video/skin';
-import { vantageIcons } from '@/video/icons';
+import { sightlineIcons } from '@/video/icons';
 import { initCustomizer, renderSummary } from './sections';
 import skinTemplate from '@/video/skin.html?raw';
 
@@ -84,7 +84,7 @@ function createStage(slot: HTMLElement, match: Match, angle: Angle): { root: HTM
   }
   slot.replaceChildren(player);
 
-  const root = player.querySelector<HTMLElement>('.vantage')!;
+  const root = player.querySelector<HTMLElement>('.sightline')!;
   const el = player.querySelector<MediaEl>('mux-video')!;
   applyCrop(el, angle);
   return { root, media: el };
@@ -297,7 +297,7 @@ export async function start(): Promise<void> {
     syncAll(true);
   }
   for (const b of layoutButtons) b.addEventListener('click', () => applyLayout(b.dataset.layoutOption as Layout));
-  root.addEventListener('vantage:layout', (e) => applyLayout((e as CustomEvent<Layout>).detail));
+  root.addEventListener('sightline:layout', (e) => applyLayout((e as CustomEvent<Layout>).detail));
   wide.addEventListener('change', () => {
     renderAngles();
     syncAll(true);
@@ -336,13 +336,13 @@ export async function start(): Promise<void> {
       arena.setAttribute('data-watch-closing', '');
       window.setTimeout(() => arena.removeAttribute('data-watch-closing'), 520);
     }
-    if (on) root.querySelector<HTMLElement>('.vt-play')?.focus({ preventScroll: true });
+    if (on) root.querySelector<HTMLElement>('.sl-play')?.focus({ preventScroll: true });
     renderAngles();
     syncAll(true);
   });
   watchButton.addEventListener('click', () => void toggleWatch());
   document.querySelector('[data-watch-close]')!.addEventListener('click', () => void toggleWatch());
-  root.addEventListener('vantage:multiview', () => void toggleWatch());
+  root.addEventListener('sightline:multiview', () => void toggleWatch());
 
   /* ---------------------------------------------------------------- Moment links: ?t=95&angle=2 */
 
@@ -380,7 +380,7 @@ export async function start(): Promise<void> {
 
   /* ---------------------------------------------------------------- Spoiler-free: the page hides the recap and summary too */
 
-  root.addEventListener('vantage:spoilers', (e) => {
+  root.addEventListener('sightline:spoilers', (e) => {
     document.documentElement.toggleAttribute('data-spoilers', (e as CustomEvent<boolean>).detail);
   });
 
@@ -431,7 +431,7 @@ export async function start(): Promise<void> {
         if (event.team) button.dataset.team = event.team;
         button.dataset.index = String(index);
         button.style.setProperty('--i', String(index));
-        const mark = event.kind === 'round' ? '' : (vantageIcons[event.type === 'clutch' ? 'crown' : event.type === 'obj' ? 'flag' : 'skull'] ?? '');
+        const mark = event.kind === 'round' ? '' : (sightlineIcons[event.type === 'clutch' ? 'crown' : event.type === 'obj' ? 'flag' : 'skull'] ?? '');
         button.innerHTML = `<span class="recap-mark" aria-hidden="true">${mark}</span><span class="recap-time">${formatTime(event.time)}</span><span class="recap-label">${event.label}</span><span class="recap-now" aria-hidden="true">Now</span>`;
         button.addEventListener('click', () => {
           master.currentTime = event.time;
@@ -464,7 +464,7 @@ export async function start(): Promise<void> {
     }
   };
 
-  root.addEventListener('vantage:events', (e) => {
+  root.addEventListener('sightline:events', (e) => {
     events = (e as CustomEvent<MatchEvent[]>).detail;
     renderRecap();
     renderSummary({ match, events, teams: [teamA, teamB], duration: master.duration, seek: (t) => (master.currentTime = t) });

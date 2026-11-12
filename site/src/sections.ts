@@ -135,7 +135,7 @@ export function initCustomizer(root: HTMLElement): void {
     root.dataset.toasts = data.get('toasts') ? 'on' : 'off';
     form.querySelector('[data-radius-value]')!.textContent = `${radius}px`;
     const off = ['hud', 'toasts', 'keyhints'].filter((k) => !data.get(k)).map((k) => `data-${k}="off"`);
-    out.textContent = `.vantage {
+    out.textContent = `.sightline {
   --media-accent-color: ${accent};
   --media-border-radius: ${radius}px;
 }${off.length ? `

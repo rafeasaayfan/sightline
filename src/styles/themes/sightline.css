@@ -1,0 +1,133 @@
+@layer base.theme, base.preset, base.preferences;
+
+/*
+ * Sightline tokens. The public properties packaged skins expose keep working: `--media-accent-color` replaces the
+ * signal cyan, `--media-border-radius` the stage radius, `--media-font-family` the interface face, and
+ * `--media-scale-unit` resizes everything through `--media-spacing`.
+ */
+@layer base.preset {
+  .media-skin[data-theme="sightline"] {
+    /* Palette. */
+    --sl-ground: #0a0d12;
+    --sl-ground-96: rgb(10 13 18 / 0.96);
+    --sl-ground-82: rgb(10 13 18 / 0.82);
+    --sl-surface: #12161d;
+    --sl-surface-86: rgb(18 22 29 / 0.86);
+    --sl-text: #f3f5f8;
+    --sl-muted: #a7afbd; /* Lifted from #9AA3B2 so it holds 4.5:1 on the scrim over a white frame. */
+    --sl-line: rgb(255 255 255 / 0.1);
+    --sl-line-strong: rgb(255 255 255 / 0.2);
+    --sl-signal: var(--media-accent-color, #38e1ff);
+    --sl-signal-text: var(--media-accent-text-color, #0a0d12);
+    --sl-event: #ffb020;
+    --sl-round: #ff4d5e;
+    --sl-sync: #5cf2a0;
+    --sl-track: rgb(255 255 255 / 0.4); /* 3.3:1 against the band over a white frame. */
+    --sl-buffer: color-mix(in srgb, var(--sl-signal) 35%, transparent);
+    --sl-hover: rgb(255 255 255 / 0.08);
+    --sl-active: color-mix(in srgb, var(--sl-signal) 18%, transparent);
+    --sl-halo: color-mix(in srgb, var(--sl-signal) 45%, transparent);
+
+    /* Geometry. One unit is 4px at the default scale. */
+    --sl-u: var(--media-spacing);
+    --sl-radius: calc(var(--sl-u) * 2);
+    --sl-radius-stage: var(--media-border-radius, calc(var(--sl-u) * 3.5));
+    --sl-target: calc(var(--sl-u) * 11);
+    --sl-icon: calc(var(--sl-u) * 5);
+    --sl-thumb: calc(var(--sl-u) * 4);
+    --sl-track-height: 4px;
+    --sl-timeline: calc(var(--sl-u) * 6);
+    --sl-band-height: calc(var(--sl-u) * 33);
+    --sl-volume-width: calc(var(--sl-u) * 18);
+    --sl-chip-slant: 7px;
+    --sl-focus: 2px;
+
+    /* Type: Barlow Condensed for labels, Inter for interface, JetBrains Mono for every clock. */
+    --sl-font-label: "Barlow Condensed", var(--sl-font-ui);
+    --sl-font-ui: var(--media-font-family, "Inter", system-ui, sans-serif);
+    --sl-font-clock: "JetBrains Mono", ui-monospace, monospace;
+    --sl-text-size: calc(var(--sl-u) * 3.5);
+    --sl-text-small: calc(var(--sl-u) * 3.25);
+    --sl-text-tiny: calc(var(--sl-u) * 2.75);
+
+    /* Motion: short, opacity and transform only; collapsed under reduced motion. */
+    --sl-duration: 160ms;
+    --sl-duration-fast: 100ms;
+    --sl-ease: cubic-bezier(0.2, 0, 0, 1);
+
+    /* Captions rise above the band while it shows. */
+    --media-caption-controls-y: calc((var(--sl-band-height) + var(--sl-u) * 2) * -1);
+
+    /* Map onto the tokens shared skin styles read. */
+    --media-background: transparent;
+    --media-foreground: var(--sl-text);
+    --media-accent: var(--sl-signal);
+    --media-accent-foreground: var(--sl-signal-text);
+    --media-primary: var(--sl-signal);
+    --media-primary-foreground: var(--sl-signal-text);
+    --media-popover: var(--sl-surface);
+    --media-popover-foreground: var(--sl-text);
+    --media-ring: var(--sl-signal);
+    --media-backdrop: var(--sl-ground);
+    --media-video-border-radius: var(--sl-radius-stage);
+    --media-popover-boundary-offset: calc(var(--sl-u) * 2);
+    --media-tooltip-boundary-offset: calc(var(--sl-u) * 2);
+    --media-popup-translate-distance: var(--sl-u);
+    --media-hidden-popup-scale: 0.97;
+    --media-hidden-popup-blur: 0px;
+    --media-shadow-surface: none;
+    --media-shadow-surface-inset: none;
+    --media-backdrop-filter-surface: none;
+    --media-backdrop-filter-indicator: none;
+    --media-backdrop-filter-dialog: none;
+  }
+
+  /* Touch: 48px targets and a larger thumb. */
+  @media (pointer: coarse) {
+    .media-skin[data-theme="sightline"] {
+      --sl-target: calc(var(--sl-u) * 12);
+      --sl-thumb: calc(var(--sl-u) * 4.5);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .media-skin[data-theme="sightline"] {
+      --sl-duration: 0ms;
+      --sl-duration-fast: 0ms;
+    }
+  }
+
+  /* Reduced transparency or more contrast: a solid band and solid chips. */
+  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    .media-skin[data-theme="sightline"] {
+      --sl-ground-96: var(--sl-ground);
+      --sl-ground-82: var(--sl-ground);
+      --sl-surface-86: var(--sl-surface);
+      --sl-muted: #c9cfd9;
+      --sl-track: rgb(255 255 255 / 0.5);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .media-skin[data-theme="sightline"] {
+      --sl-ground: Canvas;
+      --sl-ground-96: Canvas;
+      --sl-ground-82: Canvas;
+      --sl-surface: Canvas;
+      --sl-surface-86: Canvas;
+      --sl-text: CanvasText;
+      --sl-muted: CanvasText;
+      --sl-signal: Highlight;
+      --sl-signal-text: HighlightText;
+      --sl-event: CanvasText;
+      --sl-round: CanvasText;
+      --sl-sync: CanvasText;
+      --sl-track: CanvasText;
+      --sl-buffer: GrayText;
+      --sl-line: CanvasText;
+      --media-popover: Canvas;
+      --media-popover-foreground: CanvasText;
+      --media-ring: Highlight;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /*
- * Vantage behaviour: event timeline, highlight navigation, event toasts and the HUD.
+ * Sightline behaviour: event timeline, highlight navigation, event toasts and the HUD.
  *
  * Events come from a WebVTT track on the media: <track kind="metadata" label="events" src="events.vtt">. Each cue's
  * text is `kind|label|team`, where kind is elim, clutch, obj or round and the optional team is a or b (the side that
@@ -7,7 +7,7 @@
  * disabled, no kill feed.
  */
 
-import { vantageIcons } from './icons';
+import { sightlineIcons } from './icons';
 
 export type Layout = 'split' | 'duo' | 'stage';
 
@@ -91,7 +91,7 @@ function parseCues(track: TextTrack): MatchEvent[] {
 
 function renderMarkers(state: State): void {
   const { root, media, events } = state;
-  const layer = root.querySelector<HTMLElement>('.vt-markers');
+  const layer = root.querySelector<HTMLElement>('.sl-markers');
   const duration = media?.duration ?? NaN;
   if (!layer) return;
 
@@ -103,16 +103,16 @@ function renderMarkers(state: State): void {
   usable.forEach((event, index) => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'vt-marker';
+    button.className = 'sl-marker';
     button.dataset.kind = event.kind;
     button.dataset.type = event.type;
     if (event.team) button.dataset.team = event.team;
     button.dataset.index = String(index);
-    button.style.setProperty('--vt-at', `${(event.time / duration) * 100}%`);
+    button.style.setProperty('--sl-at', `${(event.time / duration) * 100}%`);
     button.tabIndex = index === state.focusIndex ? 0 : -1;
     button.setAttribute('aria-label', `${event.label}, ${formatTime(event.time)}. Press Enter to jump.`);
     const pin = document.createElement('span');
-    pin.className = 'vt-marker-pin';
+    pin.className = 'sl-marker-pin';
     pin.setAttribute('aria-hidden', 'true');
     if (event.kind === 'round') pin.textContent = `R${(round += 1)}`;
     else pin.innerHTML = glyph(event.type);
@@ -122,17 +122,17 @@ function renderMarkers(state: State): void {
   stack(state);
   markPast(state);
 
-  for (const button of root.querySelectorAll<HTMLButtonElement>('.vt-prev, .vt-next')) {
+  for (const button of root.querySelectorAll<HTMLButtonElement>('.sl-prev, .sl-next')) {
     button.setAttribute('aria-disabled', String(usable.length === 0));
   }
   renderRounds(root, usable, duration);
   root.toggleAttribute('data-events', usable.length > 0);
-  root.dispatchEvent(new CustomEvent('vantage:events', { detail: usable, bubbles: true }));
+  root.dispatchEvent(new CustomEvent('sightline:events', { detail: usable, bubbles: true }));
 }
 
 /** The event glyph for a cue kind: skull for an elimination, crown for a clutch, flag for an objective. */
 function glyph(type: string): string {
-  return vantageIcons[type === 'clutch' ? 'crown' : type === 'obj' ? 'flag' : 'skull'] ?? '';
+  return sightlineIcons[type === 'clutch' ? 'crown' : type === 'obj' ? 'flag' : 'skull'] ?? '';
 }
 
 /*
@@ -140,14 +140,14 @@ function glyph(type: string): string {
  * Recomputed when the timeline resizes.
  */
 function stack(state: State): void {
-  const layer = state.root.querySelector<HTMLElement>('.vt-markers');
+  const layer = state.root.querySelector<HTMLElement>('.sl-markers');
   if (!layer) return;
   const width = layer.getBoundingClientRect().width;
   if (!width) return;
   const PIN = 22;
   const ends = [-Infinity, -Infinity];
-  for (const marker of layer.querySelectorAll<HTMLElement>('.vt-marker')) {
-    const x = (parseFloat(marker.style.getPropertyValue('--vt-at')) / 100) * width;
+  for (const marker of layer.querySelectorAll<HTMLElement>('.sl-marker')) {
+    const x = (parseFloat(marker.style.getPropertyValue('--sl-at')) / 100) * width;
     const tier = x - ends[0]! >= PIN ? 0 : x - ends[1]! >= PIN ? 1 : 0;
     ends[tier] = x;
     marker.dataset.tier = String(tier);
@@ -157,7 +157,7 @@ function stack(state: State): void {
 /** Events already played read solid; upcoming ones read as outlines. */
 function markPast(state: State): void {
   const now = state.media?.currentTime ?? 0;
-  for (const marker of state.root.querySelectorAll<HTMLElement>('.vt-marker')) {
+  for (const marker of state.root.querySelectorAll<HTMLElement>('.sl-marker')) {
     const event = state.events[Number(marker.dataset.index)];
     marker.toggleAttribute('data-past', !!event && event.time <= now + 0.05);
   }
@@ -165,7 +165,7 @@ function markPast(state: State): void {
 
 /** Shade alternate rounds on the timeline, so the bar reads as a map of the match. */
 function renderRounds(root: HTMLElement, events: MatchEvent[], duration: number): void {
-  const layer = root.querySelector<HTMLElement>('.vt-rounds');
+  const layer = root.querySelector<HTMLElement>('.sl-rounds');
   if (!layer) return;
   layer.replaceChildren();
   const starts = events.filter((e) => e.kind === 'round').map((e) => e.time);
@@ -173,23 +173,23 @@ function renderRounds(root: HTMLElement, events: MatchEvent[], duration: number)
   const edges = [0, ...starts, duration];
   for (let i = 0; i < edges.length - 1; i++) {
     const band = document.createElement('span');
-    band.className = 'vt-round-band';
+    band.className = 'sl-round-band';
     band.dataset.odd = String(i % 2 === 1);
-    band.style.setProperty('--vt-from', `${(edges[i]! / duration) * 100}%`);
-    band.style.setProperty('--vt-to', `${(edges[i + 1]! / duration) * 100}%`);
+    band.style.setProperty('--sl-from', `${(edges[i]! / duration) * 100}%`);
+    band.style.setProperty('--sl-to', `${(edges[i + 1]! / duration) * 100}%`);
     layer.append(band);
     // A slanted cut where each new round begins: the bar reads as one segment per round.
     if (i > 0) {
       const gap = document.createElement('span');
-      gap.className = 'vt-round-gap';
-      gap.style.setProperty('--vt-at', `${(edges[i]! / duration) * 100}%`);
+      gap.className = 'sl-round-gap';
+      gap.style.setProperty('--sl-at', `${(edges[i]! / duration) * 100}%`);
       layer.append(gap);
     }
   }
 }
 
 function showTip(state: State, marker: HTMLElement | null): void {
-  const tip = state.root.querySelector<HTMLElement>('.vt-marker-tip');
+  const tip = state.root.querySelector<HTMLElement>('.sl-marker-tip');
   if (!tip) return;
   if (!marker) {
     tip.hidden = true;
@@ -197,9 +197,9 @@ function showTip(state: State, marker: HTMLElement | null): void {
   }
   const event = state.events[Number(marker.dataset.index)];
   if (!event) return;
-  tip.querySelector('.vt-marker-tip-label')!.textContent = event.label;
-  tip.querySelector('.vt-marker-tip-time')!.textContent = `${formatTime(event.time)} · press Enter to jump`;
-  tip.style.setProperty('--vt-at', marker.style.getPropertyValue('--vt-at'));
+  tip.querySelector('.sl-marker-tip-label')!.textContent = event.label;
+  tip.querySelector('.sl-marker-tip-time')!.textContent = `${formatTime(event.time)} · press Enter to jump`;
+  tip.style.setProperty('--sl-at', marker.style.getPropertyValue('--sl-at'));
   tip.dataset.kind = event.kind;
   tip.hidden = false;
 }
@@ -247,29 +247,29 @@ function span(className: string, text: string): HTMLSpanElement {
 function toast(state: State, event: MatchEvent): void {
   const { root } = state;
   if (root.dataset.toasts === 'off' || root.dataset.spoilers === 'on') return;
-  const feed = root.querySelector<HTMLElement>('.vt-feed');
+  const feed = root.querySelector<HTMLElement>('.sl-feed');
   if (!feed) return;
   const li = document.createElement('li');
-  li.className = 'vt-feed-item';
+  li.className = 'sl-feed-item';
   li.dataset.kind = event.kind;
   li.dataset.type = event.type;
   if (event.team) li.dataset.team = event.team;
-  li.append(span('vt-feed-mark', ''));
-  li.querySelector('.vt-feed-mark')!.innerHTML = glyph(event.type);
+  li.append(span('sl-feed-mark', ''));
+  li.querySelector('.sl-feed-mark')!.innerHTML = glyph(event.type);
   const duel = /^[^·]+·\s*(?:1v\d\s*·\s*)?(.+?)\s*→\s*(.+)$/.exec(event.label);
   if (duel) {
-    li.append(span('vt-feed-a', duel[1]!));
+    li.append(span('sl-feed-a', duel[1]!));
     li.insertAdjacentHTML(
       'beforeend',
-      '<svg class="vt-feed-x" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 0v4M8 12v4M0 8h4M12 8h4" stroke="currentColor" stroke-width="1.6"/></svg>',
+      '<svg class="sl-feed-x" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 0v4M8 12v4M0 8h4M12 8h4" stroke="currentColor" stroke-width="1.6"/></svg>',
     );
-    li.append(span('vt-visually-hidden', ' eliminated '), span('vt-feed-b', duel[2]!));
-    li.classList.add('vt-feed-duel');
+    li.append(span('sl-visually-hidden', ' eliminated '), span('sl-feed-b', duel[2]!));
+    li.classList.add('sl-feed-duel');
   } else {
-    li.append(span('vt-feed-label', event.label));
+    li.append(span('sl-feed-label', event.label));
   }
-  li.append(span('vt-feed-time', formatTime(event.time)));
-  li.querySelector('.vt-feed-mark')!.setAttribute('aria-hidden', 'true');
+  li.append(span('sl-feed-time', formatTime(event.time)));
+  li.querySelector('.sl-feed-mark')!.setAttribute('aria-hidden', 'true');
   feed.prepend(li);
   while (feed.children.length > FEED_MAX) feed.lastElementChild?.remove();
   window.setTimeout(() => {
@@ -299,7 +299,7 @@ const pad2 = (n: number) => String(n).padStart(2, '0');
 
 /** Show a scoreboard in the HUD, or hide it with null. */
 export function setScoreboard(root: HTMLElement, board: Scoreboard | null): void {
-  const score = root.querySelector<HTMLElement>('.vt-score');
+  const score = root.querySelector<HTMLElement>('.sl-score');
   if (!score) return;
   score.hidden = !board;
   if (!board) return;
@@ -308,18 +308,18 @@ export function setScoreboard(root: HTMLElement, board: Scoreboard | null): void
     const el = score.querySelector<HTMLElement>(sel)!;
     if (el.innerHTML !== html) el.innerHTML = html;
   };
-  set('.vt-score-round', `RND ${pad2(board.round)}`);
-  set('.vt-score-clock', board.clock);
+  set('.sl-score-round', `RND ${pad2(board.round)}`);
+  set('.sl-score-clock', board.clock);
   set(
-    '.vt-score-teams',
-    `<span class="vt-team vt-team-a">${a.name}</span> ${a.score} <span class="vt-score-dot" aria-hidden="true">·</span> ${b.score} <span class="vt-team vt-team-b">${b.name}</span>`,
+    '.sl-score-teams',
+    `<span class="sl-team sl-team-a">${a.name}</span> ${a.score} <span class="sl-score-dot" aria-hidden="true">·</span> ${b.score} <span class="sl-team sl-team-b">${b.name}</span>`,
   );
   score.setAttribute('aria-label', `Round ${board.round}, ${a.name} ${a.score}, ${b.name} ${b.score}`);
 }
 
 /** Show the active angle label in the HUD, or hide it with null. */
 export function setAngle(root: HTMLElement, label: string | null): void {
-  const el = root.querySelector<HTMLElement>('.vt-angle');
+  const el = root.querySelector<HTMLElement>('.sl-angle');
   if (!el) return;
   el.hidden = !label;
   el.textContent = label ?? '';
@@ -327,7 +327,7 @@ export function setAngle(root: HTMLElement, label: string | null): void {
 
 /** Show the sync pill: 'ok' (in sync), 'drift' (correcting), or null to hide. */
 export function setSync(root: HTMLElement, status: 'ok' | 'drift' | null): void {
-  const el = root.querySelector<HTMLElement>('.vt-sync');
+  const el = root.querySelector<HTMLElement>('.sl-sync');
   if (!el) return;
   el.hidden = !status;
   if (status) el.dataset.status = status;
@@ -336,7 +336,7 @@ export function setSync(root: HTMLElement, status: 'ok' | 'drift' | null): void 
 
 /** Show a stage message: switching angles, or an angle that failed. Null clears it. */
 export function setStageState(root: HTMLElement, state: { kind: 'switching' | 'unavailable'; text: string } | null): void {
-  const el = root.querySelector<HTMLElement>('.vt-state');
+  const el = root.querySelector<HTMLElement>('.sl-state');
   if (!el) return;
   el.hidden = !state;
   el.dataset.kind = state?.kind ?? '';
@@ -362,7 +362,7 @@ export function instantReplay(root: HTMLElement): void {
   media.playbackRate = REPLAY_RATE;
   void media.play().catch(() => undefined);
   root.toggleAttribute('data-replay', true);
-  const badge = root.querySelector<HTMLElement>('.vt-replay-badge');
+  const badge = root.querySelector<HTMLElement>('.sl-replay-badge');
   if (badge) {
     badge.textContent = `Instant replay · ${REPLAY_RATE}×`;
     badge.hidden = false;
@@ -375,13 +375,13 @@ function endReplay(state: State): void {
   state.replay = undefined;
   if (state.media) state.media.playbackRate = rate;
   state.root.removeAttribute('data-replay');
-  const badge = state.root.querySelector<HTMLElement>('.vt-replay-badge');
+  const badge = state.root.querySelector<HTMLElement>('.sl-replay-badge');
   if (badge) badge.hidden = true;
 }
 
 /** Reflect the page's multiview fullscreen state on the button. */
 export function setMultiview(root: HTMLElement, on: boolean): void {
-  root.querySelector<HTMLElement>('.vt-multiview')?.setAttribute('aria-pressed', String(on));
+  root.querySelector<HTMLElement>('.sl-multiview')?.setAttribute('aria-pressed', String(on));
   root.toggleAttribute('data-multiview-on', on);
 }
 
@@ -447,26 +447,26 @@ function setup(root: HTMLElement): void {
     if (m) attachMedia(state, m);
   }).observe(root, { childList: true, subtree: true });
 
-  root.querySelector('.vt-prev')?.addEventListener('click', () => prevHighlight(root));
-  root.querySelector('.vt-next')?.addEventListener('click', () => nextHighlight(root));
-  root.querySelector('.vt-replay')?.addEventListener('click', () => instantReplay(root));
+  root.querySelector('.sl-prev')?.addEventListener('click', () => prevHighlight(root));
+  root.querySelector('.sl-next')?.addEventListener('click', () => nextHighlight(root));
+  root.querySelector('.sl-replay')?.addEventListener('click', () => instantReplay(root));
   // Multiview belongs to the page (it owns the angles); the skin asks for it.
-  root.querySelector('.vt-multiview')?.addEventListener('click', () =>
-    root.dispatchEvent(new CustomEvent('vantage:multiview', { bubbles: true })),
+  root.querySelector('.sl-multiview')?.addEventListener('click', () =>
+    root.dispatchEvent(new CustomEvent('sightline:multiview', { bubbles: true })),
   );
-  const lane = root.querySelector<HTMLElement>('.vt-markers');
+  const lane = root.querySelector<HTMLElement>('.sl-markers');
   if (lane) new ResizeObserver(() => stack(state)).observe(lane);
 
   // Markers: one tab stop, arrows move between them, Enter or click jumps.
-  const layer = root.querySelector<HTMLElement>('.vt-markers');
+  const layer = root.querySelector<HTMLElement>('.sl-markers');
   if (layer) {
     layer.addEventListener('click', (e) => {
-      const marker = (e.target as Element).closest<HTMLElement>('.vt-marker');
+      const marker = (e.target as Element).closest<HTMLElement>('.sl-marker');
       const event = marker && state.events[Number(marker.dataset.index)];
       if (event) seek(state, event.time);
     });
     layer.addEventListener('keydown', (e) => {
-      const markers = [...layer.querySelectorAll<HTMLElement>('.vt-marker')];
+      const markers = [...layer.querySelectorAll<HTMLElement>('.sl-marker')];
       const current = markers.indexOf(document.activeElement as HTMLElement);
       if (current < 0) return;
       const keys: Record<string, number> = { ArrowRight: current + 1, ArrowLeft: current - 1, Home: 0, End: markers.length - 1 };
@@ -480,7 +480,7 @@ function setup(root: HTMLElement): void {
       state.focusIndex = next;
     });
     for (const type of ['pointerover', 'focusin'] as const) {
-      layer.addEventListener(type, (e) => showTip(state, (e.target as Element).closest<HTMLElement>('.vt-marker')));
+      layer.addEventListener(type, (e) => showTip(state, (e.target as Element).closest<HTMLElement>('.sl-marker')));
     }
     for (const type of ['pointerout', 'focusout'] as const) layer.addEventListener(type, () => showTip(state, null));
   }
@@ -494,13 +494,13 @@ function setup(root: HTMLElement): void {
       else nextHighlight(root);
     } else if (e.key === '?') {
       e.preventDefault();
-      root.querySelector<HTMLElement>('.vt-help')?.click();
+      root.querySelector<HTMLElement>('.sl-help')?.click();
     } else if (e.key.toLowerCase() === 'r' && !e.shiftKey) {
       e.preventDefault();
       instantReplay(root);
     } else if (e.key.toLowerCase() === 'w' && !e.shiftKey && root.hasAttribute('data-multiview')) {
       e.preventDefault();
-      root.querySelector<HTMLElement>('.vt-multiview')?.click();
+      root.querySelector<HTMLElement>('.sl-multiview')?.click();
     }
   });
 
@@ -509,28 +509,28 @@ function setup(root: HTMLElement): void {
   new MutationObserver(() => glide(root)).observe(root, { childList: true, subtree: true });
 
   // Settings: event toasts on or off.
-  root.querySelector('.vt-menu-toasts')?.addEventListener('checked-change', (e) => {
+  root.querySelector('.sl-menu-toasts')?.addEventListener('checked-change', (e) => {
     const checked = (e.currentTarget as HTMLElement & { checked?: boolean }).checked;
     root.dataset.toasts = checked === false ? 'off' : 'on';
-    if (checked === false) root.querySelector('.vt-feed')?.replaceChildren();
+    if (checked === false) root.querySelector('.sl-feed')?.replaceChildren();
   });
 
   // Settings: spoiler-free hides the score, the kill feed and the event markers.
-  root.querySelector('.vt-menu-spoilers')?.addEventListener('checked-change', (e) => {
+  root.querySelector('.sl-menu-spoilers')?.addEventListener('checked-change', (e) => {
     const on = (e.currentTarget as HTMLElement & { checked?: boolean }).checked === true;
     root.dataset.spoilers = on ? 'on' : 'off';
-    if (on) root.querySelector('.vt-feed')?.replaceChildren();
-    root.dispatchEvent(new CustomEvent('vantage:spoilers', { detail: on, bubbles: true }));
+    if (on) root.querySelector('.sl-feed')?.replaceChildren();
+    root.dispatchEvent(new CustomEvent('sightline:spoilers', { detail: on, bubbles: true }));
   });
 
   // Settings: layout. The page owns layout; the skin reports the choice and shows the item when the page opts in
   // with data-layout on the player root.
-  const layout = root.querySelector<HTMLElement & { value?: string }>('.vt-layout-group');
+  const layout = root.querySelector<HTMLElement & { value?: string }>('.sl-layout-group');
   layout?.addEventListener('value-change', () => {
     const value = layout.value === 'stage' || layout.value === 'duo' ? layout.value : 'split';
     root.dataset.layout = value;
-    root.querySelector('.vt-layout-value')!.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
-    root.dispatchEvent(new CustomEvent('vantage:layout', { detail: value, bubbles: true }));
+    root.querySelector('.sl-layout-value')!.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
+    root.dispatchEvent(new CustomEvent('sightline:layout', { detail: value, bubbles: true }));
   });
 }
 
@@ -547,10 +547,10 @@ export function cut(root: HTMLElement): void {
  * up on its own.
  */
 function glide(root: HTMLElement): void {
-  for (const content of root.querySelectorAll<HTMLElement>('.vt-menu-content')) {
-    if (content.querySelector(':scope > .vt-glide')) continue;
+  for (const content of root.querySelectorAll<HTMLElement>('.sl-menu-content')) {
+    if (content.querySelector(':scope > .sl-glide')) continue;
     const bar = document.createElement('span');
-    bar.className = 'vt-glide';
+    bar.className = 'sl-glide';
     bar.setAttribute('aria-hidden', 'true');
     content.prepend(bar);
     const moveTo = (item: HTMLElement | null) => {
@@ -575,9 +575,9 @@ function glide(root: HTMLElement): void {
 /** Reflect a layout chosen outside the menu (the page's own layout button) in the settings menu. */
 export function setLayout(root: HTMLElement, value: Layout): void {
   root.dataset.layout = value;
-  const layout = root.querySelector<HTMLElement & { value?: string }>('.vt-layout-group');
+  const layout = root.querySelector<HTMLElement & { value?: string }>('.sl-layout-group');
   if (layout && layout.value !== value) layout.value = value;
-  const label = root.querySelector('.vt-layout-value');
+  const label = root.querySelector('.sl-layout-value');
   if (label) label.textContent = value === 'stage' ? 'Stage only' : value === 'duo' ? '50 / 50' : '70 / 30';
 }
 
@@ -587,22 +587,22 @@ export function setLayout(root: HTMLElement, value: Layout): void {
  */
 document.addEventListener('focusin', (event) => {
   const target = event.target as Element | null;
-  const controls = target?.closest?.('.vantage media-controls');
+  const controls = target?.closest?.('.sightline media-controls');
   if (controls && target?.matches(':focus-visible')) controls.setAttribute('visibility', 'always');
 });
 document.addEventListener('focusout', (event) => {
-  const controls = (event.target as Element | null)?.closest?.('.vantage media-controls');
+  const controls = (event.target as Element | null)?.closest?.('.sightline media-controls');
   const next = event.relatedTarget as Node | null;
   if (controls && !(next && controls.contains(next))) controls.setAttribute('visibility', 'auto');
 });
 
-/** Set up every Vantage player on the page, now and as new ones mount. */
+/** Set up every Sightline player on the page, now and as new ones mount. */
 function scan(): void {
-  for (const root of document.querySelectorAll<HTMLElement>('.vantage')) setup(root);
+  for (const root of document.querySelectorAll<HTMLElement>('.sightline')) setup(root);
 }
 
 new MutationObserver((records) => {
-  if (records.some((r) => [...r.addedNodes].some((n) => n instanceof Element && (n.matches('.vantage') || n.querySelector('.vantage'))))) scan();
+  if (records.some((r) => [...r.addedNodes].some((n) => n instanceof Element && (n.matches('.sightline') || n.querySelector('.sightline'))))) scan();
 }).observe(document.documentElement, { childList: true, subtree: true });
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan, { once: true });

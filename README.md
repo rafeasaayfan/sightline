@@ -1,6 +1,6 @@
-# Vantage
+# Sightline
 
-Vantage is a [Video.js 10](https://videojs.org) skin for watching play, not films: esports, gameplay recordings and multi-camera sports. The main angle takes the stage and two more angles stay live beside it; click one, or press 1–3, and it swaps onto the stage at the same timestamp. The seek bar is an event timeline, with eliminations, objectives and round starts as markers you can tab to, and a broadcast-style HUD carries the scoreboard and the active angle.
+Sightline is a [Video.js 10](https://videojs.org) skin for watching play, not films: esports, gameplay recordings and multi-camera sports. The main angle takes the stage and two more angles stay live beside it; click one, or press 1–3, and it swaps onto the stage at the same timestamp. The seek bar is an event timeline, with eliminations, objectives and round starts as markers you can tab to, and a broadcast-style HUD carries the scoreboard and the active angle.
 
 It is an HTML skin styled with plain CSS, built from the Video.js Scaffold skin with `npx @videojs/cli skin create`. The design mockups are in `design/reference/`.
 
@@ -12,8 +12,8 @@ Eight numbered sections around a live multiview hero: 01 Multiview (70/30, 50/50
 
 - `src/`: the skin, and only the skin. It works on any video; with no events track it is an ordinary player.
   - `src/video/skin.html`, `skin.css`, `skin.ts`: markup, styles and element registration.
-  - `src/video/vantage.ts`: event timeline, highlight navigation, toasts, HUD API.
-  - `src/styles/themes/vantage.css`: tokens.
+  - `src/video/sightline.ts`: event timeline, highlight navigation, toasts, HUD API.
+  - `src/styles/themes/sightline.css`: tokens.
 - `site/`: the public demo page (what you deploy and submit).
   - `site/public/match.json`: **the file you edit**: angles, Mux playback IDs, teams, scoreboard.
   - `site/public/events.vtt`: the match events.
@@ -77,7 +77,7 @@ npm run site:preview # check the build at http://localhost:4191
 `site/dist/` is a static folder with relative paths and an `.htaccess`, so it works at a domain root, in a subfolder, or on a subdomain.
 
 - **Netlify:** drag the `site/dist` folder onto https://app.netlify.com/drop.
-- **Shared hosting (cPanel):** create a subdomain (for example `vantage.yourdomain.com`), turn on free SSL (AutoSSL / Let's Encrypt), then upload the **contents** of `site/dist/` (including the hidden `.htaccess`) into the subdomain's folder with File Manager or FTP.
+- **Shared hosting (cPanel):** create a subdomain (for example `sightline.yourdomain.com`), turn on free SSL (AutoSSL / Let's Encrypt), then upload the **contents** of `site/dist/` (including the hidden `.htaccess`) into the subdomain's folder with File Manager or FTP.
 
 ## Keyboard
 
@@ -87,7 +87,7 @@ Space or K play/pause · ←/→ seek 5s · ↑/↓ volume · M mute · F fullsc
 
 - Built on [Video.js 10](https://videojs.org) (`@videojs/html`), Apache-2.0. Started from the Video.js Scaffold skin via `@videojs/cli`.
 - Type: Barlow Condensed, Inter and JetBrains Mono, SIL Open Font License 1.1, self-hosted through Fontsource.
-- Icons: drawn for Vantage by `design/icons/generate.mjs`.
+- Icons: drawn for Sightline by `design/icons/generate.mjs`.
 - Footage: an original top-down match between two invented teams, rendered and recorded by `design/match/` (three cameras: Player 1 POV, Player 2 POV, map overview). Its events and scoreboard come from the same script, so the timeline matches the picture.
 - No game names, logos, characters or interface from any real game; team names are invented.
 

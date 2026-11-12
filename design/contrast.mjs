@@ -1,4 +1,4 @@
-// Measures Vantage contrast over the worst footage: a white frame and a black frame behind every translucent surface.
+// Measures Sightline contrast over the worst footage: a white frame and a black frame behind every translucent surface.
 //
 //   node design/contrast.mjs        table
 //   node design/contrast.mjs --md   Markdown (design/contrast.md)

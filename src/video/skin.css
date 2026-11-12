@@ -1,14 +1,14 @@
 /*
- * Vantage: a Video.js 10 skin for watching play.
+ * Sightline: a Video.js 10 skin for watching play.
  *
- * Tokens live in ../styles/themes/vantage.css. Rules are scoped to the skin root and style state through the data
+ * Tokens live in ../styles/themes/sightline.css. Rules are scoped to the skin root and style state through the data
  * attributes Video.js components set. Event markers are told apart by shape as well as colour.
  */
 
 @layer components {
   /* ------------------------------------------------------------------------------------------- Frame and media */
 
-  .vantage {
+  .sightline {
     position: relative;
     display: block;
     width: 100%;
@@ -18,27 +18,27 @@
     border-radius: var(--media-video-border-radius);
     box-shadow: 0 0 0 1px var(--media-border-color, transparent);
     background-color: #000;
-    color: var(--vt-text);
-    font-family: var(--vt-font-ui);
-    font-size: var(--vt-text-size);
+    color: var(--sl-text);
+    font-family: var(--sl-font-ui);
+    font-size: var(--sl-text-size);
     line-height: 1.4;
     outline: none;
     container: media-root / inline-size;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .vantage:focus-visible {
-    outline: var(--vt-focus) solid var(--vt-signal);
-    outline-offset: calc(var(--vt-focus) * -1);
+  .sightline:focus-visible {
+    outline: var(--sl-focus) solid var(--sl-signal);
+    outline-offset: calc(var(--sl-focus) * -1);
   }
 
-  .vantage:fullscreen {
+  .sightline:fullscreen {
     aspect-ratio: auto;
     width: 100%;
     height: 100%;
   }
 
-  .vantage > slot::slotted(video) {
+  .sightline > slot::slotted(video) {
     display: block;
     width: 100%;
     margin: 0;
@@ -48,7 +48,7 @@
     height: 100% !important;
   }
 
-  .vt-visually-hidden {
+  .sl-visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -58,16 +58,16 @@
     white-space: nowrap;
   }
 
-  .vantage .media-poster {
+  .sightline .media-poster {
     position: absolute;
     inset: 0;
   }
 
-  .vantage .media-poster:not([data-visible]) {
+  .sightline .media-poster:not([data-visible]) {
     display: none;
   }
 
-  .vantage .media-poster-image {
+  .sightline .media-poster-image {
     width: 100%;
     height: 100%;
     object-fit: var(--media-object-fit, contain);
@@ -76,26 +76,26 @@
 
   /* ------------------------------------------------------------------------------------------- The slanted chip */
 
-  .vt-chip {
+  .sl-chip {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 7px 16px 7px 14px;
-    background-color: var(--vt-surface-86);
-    color: var(--vt-text);
-    font-family: var(--vt-font-label);
-    font-size: var(--vt-text-small);
+    background-color: var(--sl-surface-86);
+    color: var(--sl-text);
+    font-family: var(--sl-font-label);
+    font-size: var(--sl-text-small);
     font-weight: 600;
     letter-spacing: 0.06em;
     line-height: 1.2;
     text-transform: uppercase;
     white-space: nowrap;
-    clip-path: polygon(var(--vt-chip-slant) 0, 100% 0, calc(100% - var(--vt-chip-slant)) 100%, 0 100%);
+    clip-path: polygon(var(--sl-chip-slant) 0, 100% 0, calc(100% - var(--sl-chip-slant)) 100%, 0 100%);
   }
 
   /* ------------------------------------------------------------------------------------------- HUD */
 
-  .vt-hud {
+  .sl-hud {
     position: absolute;
     inset-inline: 0;
     top: 0;
@@ -105,91 +105,91 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
-    padding: calc(var(--vt-u) * 4);
+    padding: calc(var(--sl-u) * 4);
     pointer-events: none;
   }
 
-  .vt-score {
+  .sl-score {
     display: flex;
     align-items: center;
   }
 
-  .vt-score .vt-chip + .vt-chip {
+  .sl-score .sl-chip + .sl-chip {
     margin-inline-start: -4px;
   }
 
-  .vt-score-round {
-    box-shadow: inset 0 2px 0 var(--vt-signal);
+  .sl-score-round {
+    box-shadow: inset 0 2px 0 var(--sl-signal);
   }
 
-  .vt-score-clock {
-    font-family: var(--vt-font-clock);
+  .sl-score-clock {
+    font-family: var(--sl-font-clock);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0;
   }
 
-  .vt-team-a {
-    color: var(--vt-signal);
+  .sl-team-a {
+    color: var(--sl-signal);
   }
 
-  .vt-team-b {
-    color: var(--vt-event);
+  .sl-team-b {
+    color: var(--sl-event);
   }
 
-  .vt-score-dot {
-    color: var(--vt-muted);
+  .sl-score-dot {
+    color: var(--sl-muted);
   }
 
-  .vt-hud-end {
+  .sl-hud-end {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-inline-start: auto;
   }
 
-  .vt-angle {
-    background-color: var(--vt-signal);
-    color: var(--vt-signal-text);
-    font-size: var(--vt-text-tiny);
+  .sl-angle {
+    background-color: var(--sl-signal);
+    color: var(--sl-signal-text);
+    font-size: var(--sl-text-tiny);
     font-weight: 700;
     letter-spacing: 0.12em;
   }
 
-  .vt-sync {
+  .sl-sync {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 6px 10px;
     border-radius: 999px;
-    background-color: var(--vt-surface-86);
-    color: var(--vt-muted);
-    font-size: var(--vt-text-tiny);
+    background-color: var(--sl-surface-86);
+    color: var(--sl-muted);
+    font-size: var(--sl-text-tiny);
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  .vt-sync-dot {
+  .sl-sync-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--vt-sync);
+    background-color: var(--sl-sync);
   }
 
   /* Correcting drift: the dot turns amber and hollow, a shape change as well as a colour one. */
-  .vt-sync[data-status="drift"] .vt-sync-dot {
+  .sl-sync[data-status="drift"] .sl-sync-dot {
     background-color: transparent;
-    box-shadow: inset 0 0 0 2px var(--vt-event);
+    box-shadow: inset 0 0 0 2px var(--sl-event);
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .vt-sync[data-status="ok"] .vt-sync-dot {
-      animation: vt-pulse 2.4s ease-in-out infinite;
+    .sl-sync[data-status="ok"] .sl-sync-dot {
+      animation: sl-pulse 2.4s ease-in-out infinite;
     }
   }
 
-  @keyframes vt-pulse {
+  @keyframes sl-pulse {
     50% {
       opacity: 0.45;
     }
@@ -197,198 +197,198 @@
 
   /* ------------------------------------------------------------------------------------------- Stage messages */
 
-  .vt-state {
+  .sl-state {
     position: absolute;
     top: 50%;
     left: 50%;
     z-index: 35;
     max-width: calc(100% - 32px);
     padding: 12px 16px;
-    border-radius: var(--vt-radius);
-    background-color: var(--vt-surface);
-    box-shadow: 0 0 0 1px var(--vt-line);
-    color: var(--vt-muted);
-    font-size: var(--vt-text-small);
+    border-radius: var(--sl-radius);
+    background-color: var(--sl-surface);
+    box-shadow: 0 0 0 1px var(--sl-line);
+    color: var(--sl-muted);
+    font-size: var(--sl-text-small);
     text-align: center;
     translate: -50% -50%;
     pointer-events: none;
   }
 
-  .vt-state[data-kind="unavailable"] {
+  .sl-state[data-kind="unavailable"] {
     background-color: #1a0d10;
-    box-shadow: 0 0 0 1px var(--vt-round);
+    box-shadow: 0 0 0 1px var(--sl-round);
     color: #ffc2c8;
   }
 
   /* ------------------------------------------------------------------------------------------- Event toast */
 
-  .vt-toast-region {
+  .sl-toast-region {
     position: absolute;
     left: 50%;
-    bottom: calc(var(--vt-band-height) + var(--vt-u) * 4);
+    bottom: calc(var(--sl-band-height) + var(--sl-u) * 4);
     z-index: 26;
     max-width: calc(100% - 32px);
     translate: -50% 0;
     pointer-events: none;
   }
 
-  .vt-toast {
+  .sl-toast {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 8px 14px 8px 12px;
     border-radius: 6px;
     background-color: rgb(18 22 29 / 0.92);
-    box-shadow: inset 3px 0 0 var(--vt-toast-tone, var(--vt-event));
-    font-size: var(--vt-text-small);
+    box-shadow: inset 3px 0 0 var(--sl-toast-tone, var(--sl-event));
+    font-size: var(--sl-text-small);
     font-weight: 500;
     white-space: nowrap;
   }
 
-  .vt-toast:not([hidden]) {
-    animation: vt-toast-in var(--vt-duration) var(--vt-ease);
+  .sl-toast:not([hidden]) {
+    animation: sl-toast-in var(--sl-duration) var(--sl-ease);
   }
 
-  @keyframes vt-toast-in {
+  @keyframes sl-toast-in {
     from {
       opacity: 0;
       translate: 0 6px;
     }
   }
 
-  .vt-toast[data-kind="objective"] {
-    --vt-toast-tone: var(--vt-signal);
+  .sl-toast[data-kind="objective"] {
+    --sl-toast-tone: var(--sl-signal);
   }
 
-  .vt-toast[data-kind="round"] {
-    --vt-toast-tone: var(--vt-round);
+  .sl-toast[data-kind="round"] {
+    --sl-toast-tone: var(--sl-round);
   }
 
-  .vt-toast-label {
+  .sl-toast-label {
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .vt-toast-time {
-    color: var(--vt-muted);
-    font-family: var(--vt-font-clock);
+  .sl-toast-time {
+    color: var(--sl-muted);
+    font-family: var(--sl-font-clock);
     font-variant-numeric: tabular-nums;
   }
 
   /* Marker shapes, shared by the timeline, the toast and the tooltip. */
-  .vt-toast-mark,
-  .vt-marker-shape {
+  .sl-toast-mark,
+  .sl-marker-shape {
     flex-shrink: 0;
     width: 10px;
     height: 10px;
-    background-color: var(--vt-event);
+    background-color: var(--sl-event);
     rotate: 45deg;
   }
 
-  [data-kind="objective"] > .vt-toast-mark,
-  [data-kind="objective"] > .vt-marker-shape {
+  [data-kind="objective"] > .sl-toast-mark,
+  [data-kind="objective"] > .sl-marker-shape {
     width: 9px;
     height: 9px;
     border-radius: 2px;
-    background-color: var(--vt-signal);
+    background-color: var(--sl-signal);
     rotate: none;
   }
 
-  [data-kind="round"] > .vt-toast-mark,
-  [data-kind="round"] > .vt-marker-shape {
+  [data-kind="round"] > .sl-toast-mark,
+  [data-kind="round"] > .sl-marker-shape {
     width: 2px;
     height: 16px;
-    background-color: var(--vt-round);
+    background-color: var(--sl-round);
     rotate: none;
   }
 
   /* ------------------------------------------------------------------------------------------- Controls surface */
 
-  .vt-controls {
+  .sl-controls {
     position: absolute;
     inset: 0;
     z-index: 30;
     pointer-events: none;
   }
 
-  .vt-scrim {
+  .sl-scrim {
     position: absolute;
     inset: auto 0 0;
-    height: calc(var(--vt-band-height) + var(--vt-u) * 10);
+    height: calc(var(--sl-band-height) + var(--sl-u) * 10);
     background-image: linear-gradient(
       to top,
-      var(--vt-ground-96) 0%,
-      var(--vt-ground-82) calc(var(--vt-band-height) * 0.85),
+      var(--sl-ground-96) 0%,
+      var(--sl-ground-82) calc(var(--sl-band-height) * 0.85),
       transparent 100%
     );
     pointer-events: none;
-    transition: opacity var(--vt-duration) var(--vt-ease);
+    transition: opacity var(--sl-duration) var(--sl-ease);
   }
 
-  .vt-scrim:not([data-visible]),
-  .vt-controls:not([data-visible]) .vt-band {
+  .sl-scrim:not([data-visible]),
+  .sl-controls:not([data-visible]) .sl-band {
     opacity: 0;
   }
 
-  .vt-controls:not([data-visible]) .vt-band {
+  .sl-controls:not([data-visible]) .sl-band {
     pointer-events: none;
   }
 
   /* ------------------------------------------------------------------------------------------- Band */
 
-  .vt-band {
+  .sl-band {
     position: absolute;
     inset-inline: 0;
     bottom: 0;
     display: flex;
     flex-direction: column;
-    gap: calc(var(--vt-u) * 1);
-    padding: calc(var(--vt-u) * 2) calc(var(--vt-u) * 3) calc(var(--vt-u) * 2);
+    gap: calc(var(--sl-u) * 1);
+    padding: calc(var(--sl-u) * 2) calc(var(--sl-u) * 3) calc(var(--sl-u) * 2);
     pointer-events: auto;
-    transition: opacity var(--vt-duration) var(--vt-ease);
+    transition: opacity var(--sl-duration) var(--sl-ease);
   }
 
-  .vt-row {
+  .sl-row {
     display: flex;
     align-items: center;
   }
 
-  .vt-row-timeline {
-    gap: calc(var(--vt-u) * 3);
-    padding-inline: calc(var(--vt-u) * 1);
+  .sl-row-timeline {
+    gap: calc(var(--sl-u) * 3);
+    padding-inline: calc(var(--sl-u) * 1);
   }
 
-  .vt-row-buttons {
-    gap: var(--vt-u);
+  .sl-row-buttons {
+    gap: var(--sl-u);
   }
 
   /* Playback controls keep their order in right-to-left layouts, as Video.js defines. */
-  .vt-row:dir(rtl),
-  [dir="rtl"] .vt-row,
-  .vt-volume:dir(rtl),
-  [dir="rtl"] .vt-volume {
+  .sl-row:dir(rtl),
+  [dir="rtl"] .sl-row,
+  .sl-volume:dir(rtl),
+  [dir="rtl"] .sl-volume {
     flex-direction: row-reverse;
   }
 
-  .vt-spacer {
+  .sl-spacer {
     flex: 1 1 auto;
   }
 
   /* ------------------------------------------------------------------------------------------- Buttons */
 
-  .vt-button {
+  .sl-button {
     position: relative;
     display: inline-grid;
     place-items: center;
     flex-shrink: 0;
-    width: var(--vt-target);
-    height: var(--vt-target);
+    width: var(--sl-target);
+    height: var(--sl-target);
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: var(--vt-radius);
+    border-radius: var(--sl-radius);
     background: transparent;
-    color: var(--vt-text);
+    color: var(--sl-text);
     font: inherit;
     cursor: pointer;
     outline: none;
@@ -397,78 +397,78 @@
   }
 
   @media (hover: hover) {
-    .vt-button:hover {
-      background-color: var(--vt-hover);
+    .sl-button:hover {
+      background-color: var(--sl-hover);
     }
   }
 
-  .vt-button[aria-expanded="true"],
-  .vt-captions[data-active] {
-    background-color: var(--vt-active);
-    color: var(--vt-signal);
+  .sl-button[aria-expanded="true"],
+  .sl-captions[data-active] {
+    background-color: var(--sl-active);
+    color: var(--sl-signal);
   }
 
-  .vt-button:focus-visible {
-    outline: var(--vt-focus) solid var(--vt-signal);
+  .sl-button:focus-visible {
+    outline: var(--sl-focus) solid var(--sl-signal);
     outline-offset: 2px;
   }
 
-  .vt-button[aria-disabled="true"],
-  .vt-button:disabled {
+  .sl-button[aria-disabled="true"],
+  .sl-button:disabled {
     cursor: not-allowed;
     opacity: 0.4;
   }
 
   /* State icons share one cell and morph: the outgoing icon shrinks and turns away as the incoming one arrives. */
-  .vt-icon {
+  .sl-icon {
     grid-area: 1 / 1;
-    width: var(--vt-icon);
-    height: var(--vt-icon);
+    width: var(--sl-icon);
+    height: var(--sl-icon);
     display: block;
     opacity: 0;
     scale: 0.55;
     rotate: -24deg;
     pointer-events: none;
     transition:
-      opacity var(--vt-duration) var(--vt-ease),
+      opacity var(--sl-duration) var(--sl-ease),
       scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
       rotate 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .vt-icon-static {
+  .sl-icon-static {
     opacity: 1;
     scale: 1;
     rotate: 0deg;
   }
 
   /* Press: a quick, springy squeeze on the whole button. */
-  .vt-button {
+  .sl-button {
     transition:
       background-color 160ms ease,
       color 160ms ease,
       scale 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .vt-button:active {
+  .sl-button:active {
     scale: 0.88;
     transition-duration: 60ms;
   }
 
-  .vt-play:not([data-ended]):not([data-started]) .vt-play-icon,
-  .vt-play:not([data-ended])[data-paused] .vt-play-icon,
-  .vt-play[data-started]:not([data-paused]):not([data-ended]) .vt-pause-icon,
-  .vt-play[data-ended] .vt-restart-icon,
-  .vt-mute[data-volume-level="off"] .vt-volume-off-icon,
-  .vt-mute[data-volume-level="low"] .vt-volume-low-icon,
-  .vt-mute[data-volume-level="medium"] .vt-volume-high-icon,
-  .vt-mute[data-volume-level="high"] .vt-volume-high-icon,
-  .vt-mute:not([data-volume-level]) .vt-volume-high-icon,
-  .vt-captions:not([data-active]) .vt-captions-off-icon,
-  .vt-captions[data-active] .vt-captions-on-icon,
-  .vt-pip:not([data-pip]) .vt-pip-enter-icon,
-  .vt-pip[data-pip] .vt-pip-exit-icon,
-  .vt-fullscreen:not([data-fullscreen]) .vt-fullscreen-enter-icon,
-  .vt-fullscreen[data-fullscreen] .vt-fullscreen-exit-icon {
+  .sl-play:not([data-ended]):not([data-started]) .sl-play-icon,
+  .sl-play:not([data-ended])[data-paused] .sl-play-icon,
+  .sl-play[data-started]:not([data-paused]):not([data-ended]) .sl-pause-icon,
+  .sl-play[data-ended] .sl-restart-icon,
+  .sl-mute[data-volume-level="off"] .sl-volume-off-icon,
+  .sl-mute[data-volume-level="low"] .sl-volume-low-icon,
+  .sl-mute[data-volume-level="medium"] .sl-volume-high-icon,
+  .sl-mute[data-volume-level="high"] .sl-volume-high-icon,
+  .sl-mute:not([data-volume-level]) .sl-volume-high-icon,
+  .sl-captions:not([data-active]) .sl-captions-off-icon,
+  .sl-captions[data-active] .sl-captions-on-icon,
+  .sl-pip:not([data-pip]) .sl-pip-enter-icon,
+  .sl-pip[data-pip] .sl-pip-exit-icon,
+  .sl-fullscreen:not([data-fullscreen]) .sl-fullscreen-enter-icon,
+  .sl-fullscreen[data-fullscreen] .sl-fullscreen-exit-icon {
     opacity: 1;
     scale: 1;
     rotate: 0deg;
@@ -476,47 +476,47 @@
 
   /* ------------------------------------------------------------------------------------------- Clocks */
 
-  .vt-time {
+  .sl-time {
     flex-shrink: 0;
-    font-family: var(--vt-font-clock);
-    font-size: var(--vt-text-small);
+    font-family: var(--sl-font-clock);
+    font-size: var(--sl-text-small);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     white-space: nowrap;
   }
 
-  .vt-time-duration {
-    color: var(--vt-muted);
+  .sl-time-duration {
+    color: var(--sl-muted);
   }
 
-  .vt-time[data-unavailable] {
+  .sl-time[data-unavailable] {
     opacity: 0.6;
   }
 
-  .vt-time-compact {
+  .sl-time-compact {
     display: none;
     align-items: center;
     gap: 4px;
     padding-inline: 4px;
   }
 
-  .vt-time-sep {
-    color: var(--vt-muted);
-    font-family: var(--vt-font-clock);
-    font-size: var(--vt-text-small);
+  .sl-time-sep {
+    color: var(--sl-muted);
+    font-family: var(--sl-font-clock);
+    font-size: var(--sl-text-small);
   }
 
   /* ------------------------------------------------------------------------------------------- Event timeline */
 
-  .vt-timeline {
+  .sl-timeline {
     position: relative;
     flex: 1 1 auto;
     min-width: 0;
-    height: var(--vt-timeline);
+    height: var(--sl-timeline);
   }
 
-  .vt-slider {
+  .sl-slider {
     position: relative;
     display: flex;
     align-items: center;
@@ -526,127 +526,127 @@
     touch-action: none;
   }
 
-  .vt-slider[data-disabled] {
+  .sl-slider[data-disabled] {
     cursor: not-allowed;
     opacity: 0.45;
   }
 
-  .vt-track {
+  .sl-track {
     position: absolute;
     inset-inline: 0;
-    height: var(--vt-track-height);
+    height: var(--sl-track-height);
     border-radius: 2px;
-    background-color: var(--vt-track);
+    background-color: var(--sl-track);
   }
 
-  .vt-buffer,
-  .vt-fill {
+  .sl-buffer,
+  .sl-fill {
     position: absolute;
     inset-block: 0;
     left: 0;
     border-radius: inherit;
   }
 
-  .vt-buffer {
+  .sl-buffer {
     width: var(--media-slider-buffer, 0%);
-    background-color: var(--vt-buffer);
+    background-color: var(--sl-buffer);
   }
 
-  .vt-fill {
+  .sl-fill {
     width: var(--media-slider-fill, 0%);
-    background-color: var(--vt-signal);
+    background-color: var(--sl-signal);
   }
 
-  .vt-slider[data-dragging] .vt-fill {
+  .sl-slider[data-dragging] .sl-fill {
     width: var(--media-slider-pointer, 0%);
   }
 
   /* White thumb on a signal halo; grows on hover, focus and drag. */
-  .vt-thumb {
+  .sl-thumb {
     position: absolute;
     top: 50%;
     left: var(--media-slider-fill, 0%);
     z-index: 2;
-    width: var(--vt-thumb);
-    height: var(--vt-thumb);
+    width: var(--sl-thumb);
+    height: var(--sl-thumb);
     border-radius: 50%;
-    background-color: var(--vt-text);
-    box-shadow: 0 0 0 3px var(--vt-halo);
+    background-color: var(--sl-text);
+    box-shadow: 0 0 0 3px var(--sl-halo);
     outline: none;
     translate: -50% -50%;
-    transition: scale var(--vt-duration-fast) var(--vt-ease);
+    transition: scale var(--sl-duration-fast) var(--sl-ease);
   }
 
-  .vt-slider[data-dragging] .vt-thumb {
+  .sl-slider[data-dragging] .sl-thumb {
     left: var(--media-slider-pointer, 0%);
   }
 
-  .vt-slider[data-interactive] .vt-thumb {
+  .sl-slider[data-interactive] .sl-thumb {
     scale: 1.25;
   }
 
-  .vt-thumb:focus-visible {
-    outline: var(--vt-focus) solid var(--vt-signal);
+  .sl-thumb:focus-visible {
+    outline: var(--sl-focus) solid var(--sl-signal);
     outline-offset: 3px;
   }
 
-  .vt-thumb-small {
-    --vt-thumb: calc(var(--vt-u) * 3);
+  .sl-thumb-small {
+    --sl-thumb: calc(var(--sl-u) * 3);
   }
 
-  .vt-preview {
-    bottom: calc(100% + var(--vt-u) * 2);
+  .sl-preview {
+    bottom: calc(100% + var(--sl-u) * 2);
     display: grid;
     justify-items: center;
     gap: 6px;
     opacity: 0;
-    transition: opacity var(--vt-duration-fast) linear;
+    transition: opacity var(--sl-duration-fast) linear;
   }
 
-  .vt-slider[data-pointing] .vt-preview,
-  .vt-slider[data-dragging] .vt-preview {
+  .sl-slider[data-pointing] .sl-preview,
+  .sl-slider[data-dragging] .sl-preview {
     opacity: 1;
   }
 
-  .vt-preview-thumbnail {
+  .sl-preview-thumbnail {
     display: block;
-    max-width: calc(var(--vt-u) * 40);
+    max-width: calc(var(--sl-u) * 40);
     overflow: hidden;
-    border-radius: var(--vt-radius);
-    box-shadow: 0 0 0 1px var(--vt-line-strong);
+    border-radius: var(--sl-radius);
+    box-shadow: 0 0 0 1px var(--sl-line-strong);
   }
 
-  .vt-preview-thumbnail:not(:has(img[src])) {
+  .sl-preview-thumbnail:not(:has(img[src])) {
     display: none;
   }
 
-  .vt-preview-image {
+  .sl-preview-image {
     display: block;
   }
 
-  .vt-preview-time {
+  .sl-preview-time {
     padding: 4px 8px;
     border-radius: 6px;
-    background-color: var(--vt-text);
-    color: var(--vt-ground);
-    font-family: var(--vt-font-clock);
-    font-size: var(--vt-text-tiny);
+    background-color: var(--sl-text);
+    color: var(--sl-ground);
+    font-family: var(--sl-font-clock);
+    font-size: var(--sl-text-tiny);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
   }
 
   /* Markers sit on the track. Each is a 24px target around its shape. */
-  .vt-markers {
+  .sl-markers {
     position: absolute;
     inset: 0;
     z-index: 1;
     pointer-events: none;
   }
 
-  .vt-marker {
+  .sl-marker {
     position: absolute;
     top: 50%;
-    left: var(--vt-at);
+    left: var(--sl-at);
     display: grid;
     place-items: center;
     width: 24px;
@@ -662,173 +662,173 @@
     pointer-events: auto;
   }
 
-  .vt-marker:focus-visible {
-    outline: var(--vt-focus) solid var(--vt-signal);
+  .sl-marker:focus-visible {
+    outline: var(--sl-focus) solid var(--sl-signal);
     outline-offset: 0;
   }
 
   @media (hover: hover) {
-    .vt-marker:hover .vt-marker-shape {
+    .sl-marker:hover .sl-marker-shape {
       scale: 1.3;
     }
   }
 
-  .vt-marker-shape {
-    transition: scale var(--vt-duration-fast) var(--vt-ease);
+  .sl-marker-shape {
+    transition: scale var(--sl-duration-fast) var(--sl-ease);
   }
 
-  .vt-marker-tip {
+  .sl-marker-tip {
     position: absolute;
     bottom: calc(100% + 6px);
-    left: clamp(80px, var(--vt-at), calc(100% - 80px));
+    left: clamp(80px, var(--sl-at), calc(100% - 80px));
     z-index: 3;
     display: flex;
     flex-direction: column;
     gap: 2px;
     padding: 10px 12px;
-    border-radius: var(--vt-radius);
-    background-color: var(--vt-text);
+    border-radius: var(--sl-radius);
+    background-color: var(--sl-text);
     box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
-    color: var(--vt-ground);
+    color: var(--sl-ground);
     white-space: nowrap;
     translate: -50% 0;
     pointer-events: none;
   }
 
-  .vt-marker-tip-label {
-    font-size: var(--vt-text-small);
+  .sl-marker-tip-label {
+    font-size: var(--sl-text-small);
     font-weight: 600;
   }
 
-  .vt-marker-tip-time {
+  .sl-marker-tip-time {
     color: #3f4652;
-    font-family: var(--vt-font-clock);
-    font-size: var(--vt-text-tiny);
+    font-family: var(--sl-font-clock);
+    font-size: var(--sl-text-tiny);
   }
 
   /* ------------------------------------------------------------------------------------------- Volume */
 
-  .vt-volume {
+  .sl-volume {
     display: flex;
     flex-shrink: 0;
     align-items: center;
   }
 
-  .vt-volume-slider {
-    width: var(--vt-volume-width);
-    height: var(--vt-target);
-    margin-left: calc(var(--vt-u) * 1);
-    margin-right: calc(var(--vt-u) * 2);
+  .sl-volume-slider {
+    width: var(--sl-volume-width);
+    height: var(--sl-target);
+    margin-left: calc(var(--sl-u) * 1);
+    margin-right: calc(var(--sl-u) * 2);
   }
 
-  .vt-volume-fill {
-    background-color: var(--vt-text);
+  .sl-volume-fill {
+    background-color: var(--sl-text);
   }
 
   @media (hover: none) {
-    .vt-volume-slider {
+    .sl-volume-slider {
       display: none;
     }
   }
 
   /* ------------------------------------------------------------------------------------------- Key hints */
 
-  .vt-keyhints {
+  .sl-keyhints {
     display: flex;
     align-items: center;
     gap: 14px;
     margin-inline-end: 8px;
-    color: var(--vt-muted);
-    font-size: var(--vt-text-tiny);
+    color: var(--sl-muted);
+    font-size: var(--sl-text-tiny);
     font-weight: 600;
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
 
-  .vt-keyhints > span {
+  .sl-keyhints > span {
     display: inline-flex;
     align-items: center;
     gap: 6px;
   }
 
-  .vt-keyhint-angles,
-  .vt-keys-angles {
+  .sl-keyhint-angles,
+  .sl-keys-angles {
     display: none !important;
   }
 
-  .vantage[data-angles] .vt-keyhint-angles {
+  .sightline[data-angles] .sl-keyhint-angles {
     display: inline-flex !important;
   }
 
-  .vantage[data-angles] .vt-keys-angles {
+  .sightline[data-angles] .sl-keys-angles {
     display: flex !important;
   }
 
-  .vt-kbd {
+  .sl-kbd {
     display: inline-block;
     min-width: 1.6em;
     padding: 1px 6px;
     border-radius: 4px;
-    box-shadow: inset 0 0 0 1px var(--vt-line-strong);
-    color: var(--vt-muted);
-    font-family: var(--vt-font-clock);
-    font-size: var(--vt-text-tiny);
+    box-shadow: inset 0 0 0 1px var(--sl-line-strong);
+    color: var(--sl-muted);
+    font-family: var(--sl-font-clock);
+    font-size: var(--sl-text-tiny);
     font-weight: 500;
     line-height: 1.5;
     text-align: center;
   }
 
-  .vt-kbd:empty {
+  .sl-kbd:empty {
     display: none;
   }
 
   /* ------------------------------------------------------------------------------------------- Centre play and buffering */
 
-  .vt-center-play {
+  .sl-center-play {
     position: absolute;
-    top: calc((100% - var(--vt-band-height)) / 2);
+    top: calc((100% - var(--sl-band-height)) / 2);
     left: 50%;
     display: grid;
     place-items: center;
-    width: calc(var(--vt-u) * 14);
-    height: calc(var(--vt-u) * 14);
+    width: calc(var(--sl-u) * 14);
+    height: calc(var(--sl-u) * 14);
     border-radius: 50%;
-    background-color: var(--vt-signal);
-    color: var(--vt-signal-text);
+    background-color: var(--sl-signal);
+    color: var(--sl-signal-text);
     box-shadow: 0 8px 28px rgb(0 0 0 / 0.45);
     cursor: pointer;
     outline: none;
     pointer-events: auto;
     translate: -50% -50%;
-    transition: scale var(--vt-duration-fast) var(--vt-ease);
+    transition: scale var(--sl-duration-fast) var(--sl-ease);
   }
 
   @media (hover: hover) {
-    .vt-center-play:hover {
+    .sl-center-play:hover {
       scale: 1.05;
     }
   }
 
   /* Over raw footage the ring sits on a dark halo so it holds 3:1 on any frame. */
-  .vt-center-play:focus-visible {
-    outline: var(--vt-focus) solid transparent;
+  .sl-center-play:focus-visible {
+    outline: var(--sl-focus) solid transparent;
     outline-offset: 2px;
     box-shadow:
-      0 0 0 2px var(--vt-ground),
-      0 0 0 4px var(--vt-signal),
-      0 0 0 6px var(--vt-ground);
+      0 0 0 2px var(--sl-ground),
+      0 0 0 4px var(--sl-signal),
+      0 0 0 6px var(--sl-ground);
   }
 
-  .vt-center-play[data-started] {
+  .sl-center-play[data-started] {
     display: none;
   }
 
-  .vt-center-play-icon {
-    width: calc(var(--vt-u) * 6);
-    height: calc(var(--vt-u) * 6);
+  .sl-center-play-icon {
+    width: calc(var(--sl-u) * 6);
+    height: calc(var(--sl-u) * 6);
   }
 
-  .vt-buffering {
+  .sl-buffering {
     position: absolute;
     inset: 0;
     z-index: 20;
@@ -837,67 +837,67 @@
     pointer-events: none;
   }
 
-  .vt-buffering:not([data-visible]) {
+  .sl-buffering:not([data-visible]) {
     display: none;
   }
 
-  .vt-spinner {
-    width: calc(var(--vt-u) * 7);
-    height: calc(var(--vt-u) * 7);
+  .sl-spinner {
+    width: calc(var(--sl-u) * 7);
+    height: calc(var(--sl-u) * 7);
     border: 3px solid transparent;
-    border-top-color: var(--vt-signal);
-    border-right-color: var(--vt-signal);
+    border-top-color: var(--sl-signal);
+    border-right-color: var(--sl-signal);
     border-radius: 50%;
-    animation: vt-spin 0.9s linear infinite;
+    animation: sl-spin 0.9s linear infinite;
   }
 
-  @keyframes vt-spin {
+  @keyframes sl-spin {
     to {
       rotate: 1turn;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .vt-spinner {
+    .sl-spinner {
       animation: none;
     }
   }
 
   /* ------------------------------------------------------------------------------------------- Popups */
 
-  .vantage .media-popup {
+  .sightline .media-popup {
     margin: 0;
     border: 0 solid;
     overflow: visible;
-    color: var(--vt-text);
+    color: var(--sl-text);
     transition-property: opacity, scale;
-    transition-duration: var(--vt-duration-fast);
-    transition-timing-function: var(--vt-ease);
+    transition-duration: var(--sl-duration-fast);
+    transition-timing-function: var(--sl-ease);
   }
 
-  .vantage .media-popup[data-side="top"] {
+  .sightline .media-popup[data-side="top"] {
     transform-origin: bottom;
   }
 
-  .vantage .media-popup:is([data-starting-style], [data-ending-style]) {
+  .sightline .media-popup:is([data-starting-style], [data-ending-style]) {
     opacity: 0;
     scale: var(--media-hidden-popup-scale);
   }
 
-  .vt-tooltip {
-    --media-tooltip-side-offset: calc(var(--vt-u) * 3);
+  .sl-tooltip {
+    --media-tooltip-side-offset: calc(var(--sl-u) * 3);
     z-index: 20;
     padding: 6px 10px;
     border-radius: 6px;
-    background-color: var(--vt-surface);
-    box-shadow: 0 0 0 1px var(--vt-line);
-    font-size: var(--vt-text-small);
+    background-color: var(--sl-surface);
+    box-shadow: 0 0 0 1px var(--sl-line);
+    font-size: var(--sl-text-small);
     font-weight: 500;
     white-space: nowrap;
     pointer-events: none;
   }
 
-  .vt-tooltip[data-open] {
+  .sl-tooltip[data-open] {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -905,25 +905,25 @@
 
   /* ------------------------------------------------------------------------------------------- Menus */
 
-  .vt-menu {
-    --media-popover-side-offset: calc(var(--vt-u) * 3);
+  .sl-menu {
+    --media-popover-side-offset: calc(var(--sl-u) * 3);
     --media-popup-side-offset: var(--media-popover-side-offset);
     z-index: 20;
     width: var(--media-menu-width);
-    min-width: calc(var(--vt-u) * 60);
+    min-width: calc(var(--sl-u) * 60);
     max-width: var(--media-menu-available-width);
     height: var(--media-menu-height);
-    max-height: min(var(--media-menu-available-height, calc(var(--vt-u) * 80)), calc(var(--vt-u) * 80));
+    max-height: min(var(--media-menu-available-height, calc(var(--sl-u) * 80)), calc(var(--sl-u) * 80));
     padding: 0;
     border-radius: 10px;
-    background-color: var(--vt-surface);
+    background-color: var(--sl-surface);
     box-shadow:
       0 0 0 1px rgb(255 255 255 / 0.12),
       0 12px 32px rgb(0 0 0 / 0.5);
     overflow: hidden !important;
   }
 
-  .vt-menu-content {
+  .sl-menu-content {
     position: absolute;
     inset-inline: 0;
     top: 0;
@@ -936,197 +936,197 @@
     outline: none;
     clip-path: inset(0);
     transition-property: translate, clip-path;
-    transition-duration: var(--vt-duration);
-    transition-timing-function: var(--vt-ease);
+    transition-duration: var(--sl-duration);
+    transition-timing-function: var(--sl-ease);
   }
 
-  .vt-menu-content[data-submenu] {
+  .sl-menu-content[data-submenu] {
     z-index: 10;
   }
 
-  .vt-menu-content:not([data-submenu])[data-child-open] {
+  .sl-menu-content:not([data-submenu])[data-child-open] {
     clip-path: inset(0 0 0 100%);
     translate: -100% 0;
   }
 
-  .vt-menu-content:not([data-submenu])[data-child-open]:dir(rtl) {
+  .sl-menu-content:not([data-submenu])[data-child-open]:dir(rtl) {
     clip-path: inset(0 100% 0 0);
     translate: 100% 0;
   }
 
-  .vt-menu-item {
+  .sl-menu-item {
     display: flex;
     flex-shrink: 0;
     align-items: center;
     gap: 10px;
     width: 100%;
-    min-height: var(--vt-target);
+    min-height: var(--sl-target);
     padding-inline: 12px;
     border-radius: 6px;
-    font-size: var(--vt-text-size);
+    font-size: var(--sl-text-size);
     text-align: start;
     white-space: nowrap;
     cursor: pointer;
     outline: none;
   }
 
-  .vt-menu-item[data-highlighted] {
-    background-color: var(--vt-active);
+  .sl-menu-item[data-highlighted] {
+    background-color: var(--sl-active);
   }
 
-  .vt-menu-item:focus-visible {
-    outline: var(--vt-focus) solid var(--vt-signal);
+  .sl-menu-item:focus-visible {
+    outline: var(--sl-focus) solid var(--sl-signal);
     outline-offset: -2px;
   }
 
-  .vt-menu-item[data-availability="unavailable"],
-  .vt-menu-item[data-availability="unsupported"] {
+  .sl-menu-item[data-availability="unavailable"],
+  .sl-menu-item[data-availability="unsupported"] {
     display: none;
   }
 
-  .vt-menu-back {
+  .sl-menu-back {
     margin-bottom: 4px;
     padding-inline-start: 4px;
-    font-family: var(--vt-font-label);
+    font-family: var(--sl-font-label);
     font-weight: 600;
-    box-shadow: 0 1px 0 var(--vt-line);
+    box-shadow: 0 1px 0 var(--sl-line);
     border-end-start-radius: 0;
     border-end-end-radius: 0;
   }
 
-  .vt-menu-hint {
+  .sl-menu-hint {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     margin-inline-start: auto;
     padding-inline-start: 16px;
-    color: var(--vt-muted);
+    color: var(--sl-muted);
     font-variant-numeric: tabular-nums;
   }
 
-  .vt-menu-chevron {
-    width: var(--vt-icon);
-    height: var(--vt-icon);
+  .sl-menu-chevron {
+    width: var(--sl-icon);
+    height: var(--sl-icon);
   }
 
-  .vt-menu-chevron:dir(rtl),
-  .vt-menu-chevron-back:dir(ltr) {
+  .sl-menu-chevron:dir(rtl),
+  .sl-menu-chevron-back:dir(ltr) {
     scale: -1 1;
   }
 
-  .vt-menu-chevron-back:dir(rtl) {
+  .sl-menu-chevron-back:dir(rtl) {
     scale: none;
   }
 
-  .vt-menu-group {
+  .sl-menu-group {
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .vt-menu-label {
+  .sl-menu-label {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   /* The selected row carries a signal square. */
-  .vt-menu-indicator {
+  .sl-menu-indicator {
     display: grid;
     place-items: center;
-    width: var(--vt-icon);
-    height: var(--vt-icon);
+    width: var(--sl-icon);
+    height: var(--sl-icon);
     margin-inline-start: auto;
   }
 
-  .vt-menu-indicator::before {
+  .sl-menu-indicator::before {
     content: "";
     width: 8px;
     height: 8px;
     border-radius: 2px;
-    background-color: var(--vt-signal);
+    background-color: var(--sl-signal);
     scale: 0;
-    transition: scale var(--vt-duration-fast) var(--vt-ease);
+    transition: scale var(--sl-duration-fast) var(--sl-ease);
   }
 
-  .vt-menu-radio[aria-checked="true"] .vt-menu-indicator::before {
+  .sl-menu-radio[aria-checked="true"] .sl-menu-indicator::before {
     scale: 1;
   }
 
-  .vt-menu-radio[aria-checked="true"] {
-    color: var(--vt-signal);
+  .sl-menu-radio[aria-checked="true"] {
+    color: var(--sl-signal);
   }
 
-  .vt-toggle-off,
-  .vt-menu-toasts[aria-checked="false"] .vt-toggle-on {
+  .sl-toggle-off,
+  .sl-menu-toasts[aria-checked="false"] .sl-toggle-on {
     display: none;
   }
 
-  .vt-menu-toasts[aria-checked="false"] .vt-toggle-off {
+  .sl-menu-toasts[aria-checked="false"] .sl-toggle-off {
     display: inline;
   }
 
-  .vt-menu-toasts[aria-checked="true"] .vt-toggle-on {
-    color: var(--vt-signal);
+  .sl-menu-toasts[aria-checked="true"] .sl-toggle-on {
+    color: var(--sl-signal);
   }
 
   /* Layout only shows when the page offers it (data-layout on the player root). */
-  .vantage:not([data-layout]) .vt-menu-layout {
+  .sightline:not([data-layout]) .sl-menu-layout {
     display: none;
   }
 
-  .vt-keys {
-    min-width: calc(var(--vt-u) * 66);
+  .sl-keys {
+    min-width: calc(var(--sl-u) * 66);
     padding: 12px 14px;
   }
 
-  .vt-keys-title {
+  .sl-keys-title {
     margin: 0 0 8px;
-    color: var(--vt-muted);
-    font-family: var(--vt-font-label);
-    font-size: var(--vt-text-tiny);
+    color: var(--sl-muted);
+    font-family: var(--sl-font-label);
+    font-size: var(--sl-text-tiny);
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
-  .vt-keys-list {
+  .sl-keys-list {
     display: grid;
     gap: 6px;
     margin: 0;
   }
 
-  .vt-keys-list > div {
+  .sl-keys-list > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
   }
 
-  .vt-keys-list dt {
+  .sl-keys-list dt {
     display: flex;
     gap: 4px;
   }
 
-  .vt-keys-list dd {
+  .sl-keys-list dd {
     margin: 0;
-    font-size: var(--vt-text-small);
+    font-size: var(--sl-text-small);
   }
 
   /* ------------------------------------------------------------------------------------------- Error dialog */
 
-  .vantage .media-dialog-backdrop {
+  .sightline .media-dialog-backdrop {
     position: absolute;
     inset: 0;
     z-index: 40;
     background-color: rgb(10 13 18 / 0.75);
   }
 
-  .vantage .media-dialog-backdrop:not([data-open]) {
+  .sightline .media-dialog-backdrop:not([data-open]) {
     display: none;
   }
 
-  .vantage .media-dialog-popup {
+  .sightline .media-dialog-popup {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1137,129 +1137,129 @@
     max-width: 420px;
     padding: 20px;
     border-radius: 12px;
-    background-color: var(--vt-surface);
-    box-shadow: 0 0 0 1px var(--vt-round);
+    background-color: var(--sl-surface);
+    box-shadow: 0 0 0 1px var(--sl-round);
     outline: none;
     translate: -50% -50%;
   }
 
-  .vantage .media-dialog-popup:not([data-open]) {
+  .sightline .media-dialog-popup:not([data-open]) {
     display: none;
   }
 
-  .vantage .media-dialog-title {
-    font-family: var(--vt-font-label);
-    font-size: calc(var(--vt-text-size) * 1.2);
+  .sightline .media-dialog-title {
+    font-family: var(--sl-font-label);
+    font-size: calc(var(--sl-text-size) * 1.2);
     font-weight: 600;
   }
 
-  .vantage .media-dialog-description {
-    color: var(--vt-muted);
+  .sightline .media-dialog-description {
+    color: var(--sl-muted);
   }
 
-  .vt-dialog-close {
+  .sl-dialog-close {
     justify-self: end;
     width: auto;
     padding-inline: 16px;
-    box-shadow: inset 0 0 0 1px var(--vt-line-strong);
+    box-shadow: inset 0 0 0 1px var(--sl-line-strong);
     font-weight: 600;
   }
 
   /* ------------------------------------------------------------------------------------------- Captions */
 
-  .vantage video::cue,
-  .vantage *::part(video)::cue {
-    color: var(--vt-text);
+  .sightline video::cue,
+  .sightline *::part(video)::cue {
+    color: var(--sl-text);
     background-color: rgb(10 13 18 / 0.85);
-    font: 500 clamp(14px, 2.2cqi, 30px) / 1.45 var(--vt-font-ui);
+    font: 500 clamp(14px, 2.2cqi, 30px) / 1.45 var(--sl-font-ui);
   }
 
   /* ------------------------------------------------------------------------------------------- Responsive */
 
   @container media-root (width < 900px) {
-    .vt-keyhints {
+    .sl-keyhints {
       display: none;
     }
   }
 
   /* Phones and small embeds: the timeline spans the width; one row of the essential buttons. */
   @container media-root (width <= 640px) {
-    .vt-band {
-      padding: calc(var(--vt-u) * 3) calc(var(--vt-u) * 2) calc(var(--vt-u) * 1);
+    .sl-band {
+      padding: calc(var(--sl-u) * 3) calc(var(--sl-u) * 2) calc(var(--sl-u) * 1);
       gap: 0;
     }
 
-    .vt-row-timeline {
-      padding-inline: calc(var(--vt-u) * 2);
+    .sl-row-timeline {
+      padding-inline: calc(var(--sl-u) * 2);
     }
 
-    .vt-row-timeline .vt-time {
+    .sl-row-timeline .sl-time {
       display: none;
     }
 
-    .vt-row-buttons {
+    .sl-row-buttons {
       gap: 0;
     }
 
-    .vt-time-compact {
+    .sl-time-compact {
       display: inline-flex;
     }
 
-    .vt-prev,
-    .vt-captions,
-    .vt-help,
-    .vt-pip,
-    .vt-volume-slider {
+    .sl-prev,
+    .sl-captions,
+    .sl-help,
+    .sl-pip,
+    .sl-volume-slider {
       display: none;
     }
 
     /* The spacer sits after the volume group; move the gap after the clock instead. */
-    .vt-time-compact {
+    .sl-time-compact {
       margin-right: auto;
     }
 
-    .vt-spacer {
+    .sl-spacer {
       display: none;
     }
 
-    .vt-hud {
-      padding: calc(var(--vt-u) * 2.5);
+    .sl-hud {
+      padding: calc(var(--sl-u) * 2.5);
     }
 
     /* Phones: the compact scoreboard only; the angle is in the chip row under the stage. */
-    .vt-score-clock,
-    .vt-hud-end {
+    .sl-score-clock,
+    .sl-hud-end {
       display: none;
     }
 
-    .vt-chip {
+    .sl-chip {
       padding: 5px 12px 5px 10px;
-      font-size: var(--vt-text-tiny);
+      font-size: var(--sl-text-tiny);
     }
 
-    .vt-center-play[data-started][data-paused]:not([data-ended]) {
+    .sl-center-play[data-started][data-paused]:not([data-ended]) {
       display: grid;
     }
 
     /* Centred in the space between the HUD (about 36px) and the compact band (about 88px). */
-    .vt-center-play {
+    .sl-center-play {
       top: calc((100% - 88px - 36px) / 2 + 36px);
-      width: calc(var(--vt-u) * 12);
-      height: calc(var(--vt-u) * 12);
+      width: calc(var(--sl-u) * 12);
+      height: calc(var(--sl-u) * 12);
     }
 
-    .vt-center-play-icon {
-      width: calc(var(--vt-u) * 5);
-      height: calc(var(--vt-u) * 5);
+    .sl-center-play-icon {
+      width: calc(var(--sl-u) * 5);
+      height: calc(var(--sl-u) * 5);
     }
   }
 
   @container media-root (width < 380px) {
-    .vt-next {
+    .sl-next {
       display: none;
     }
 
-    .vt-angle {
+    .sl-angle {
       display: none;
     }
   }
@@ -1267,73 +1267,73 @@
   /* ------------------------------------------------------------------------------------------- Preferences */
 
   @media (prefers-reduced-motion: reduce) {
-    .vantage *,
-    .vantage *::before,
-    .vantage *::after {
+    .sightline *,
+    .sightline *::before,
+    .sightline *::after {
       animation-duration: 0ms !important;
       transition-duration: 0ms !important;
     }
   }
 
   @media (forced-colors: active) {
-    .vt-scrim {
+    .sl-scrim {
       background-image: none;
     }
 
-    .vt-band {
+    .sl-band {
       background-color: Canvas;
       border-top: 1px solid CanvasText;
     }
 
-    .vt-button {
+    .sl-button {
       forced-color-adjust: none;
       color: ButtonText;
       background-color: ButtonFace;
       box-shadow: inset 0 0 0 1px ButtonText;
     }
 
-    .vt-button:focus-visible,
-    .vt-button[aria-expanded="true"] {
+    .sl-button:focus-visible,
+    .sl-button[aria-expanded="true"] {
       color: HighlightText;
       background-color: Highlight;
     }
 
-    .vt-track,
-    .vt-fill,
-    .vt-buffer,
-    .vt-thumb,
-    .vt-marker-shape,
-    .vt-toast-mark,
-    .vt-menu-indicator::before {
+    .sl-track,
+    .sl-fill,
+    .sl-buffer,
+    .sl-thumb,
+    .sl-marker-shape,
+    .sl-toast-mark,
+    .sl-menu-indicator::before {
       forced-color-adjust: none;
     }
 
-    .vt-track {
+    .sl-track {
       background-color: Canvas;
       box-shadow: 0 0 0 1px CanvasText;
     }
 
-    .vt-fill {
+    .sl-fill {
       background-color: Highlight;
     }
 
-    .vt-thumb {
+    .sl-thumb {
       background-color: Highlight;
       box-shadow: 0 0 0 2px CanvasText;
     }
 
     /* Markers keep their shapes; the shape carries the meaning. */
-    .vt-marker-shape,
-    .vt-toast-mark {
+    .sl-marker-shape,
+    .sl-toast-mark {
       background-color: CanvasText;
     }
 
-    .vt-chip,
-    .vt-sync,
-    .vt-tooltip,
-    .vt-menu,
-    .vt-toast,
-    .vt-state {
+    .sl-chip,
+    .sl-sync,
+    .sl-tooltip,
+    .sl-menu,
+    .sl-toast,
+    .sl-state {
       border: 1px solid CanvasText;
     }
   }
@@ -1341,7 +1341,7 @@
 
 @layer components {
   /* Round bands: alternate rounds get a faint tint on the timeline, so the bar reads as a map of the match. */
-  .vt-rounds {
+  .sl-rounds {
     position: absolute;
     inset-inline: 0;
     top: 50%;
@@ -1350,19 +1350,19 @@
     pointer-events: none;
   }
 
-  .vt-round-band {
+  .sl-round-band {
     position: absolute;
     inset-block: 0;
-    left: var(--vt-from);
-    width: calc(var(--vt-to) - var(--vt-from));
+    left: var(--sl-from);
+    width: calc(var(--sl-to) - var(--sl-from));
   }
 
-  .vt-round-band[data-odd="true"] {
+  .sl-round-band[data-odd="true"] {
     background-color: rgb(255 255 255 / 0.06);
   }
 
   /* The broadcast cut: a signal line sweeps across the stage when the angle changes. */
-  .vt-cut {
+  .sl-cut {
     position: absolute;
     inset: 0;
     z-index: 24;
@@ -1370,15 +1370,15 @@
     opacity: 0;
   }
 
-  .vantage[data-cut] .vt-cut {
+  .sightline[data-cut] .sl-cut {
     background:
       linear-gradient(90deg, transparent 0 46%, rgb(56 225 255 / 0.55) 49.5% 50.5%, transparent 54% 100%) no-repeat,
       rgb(10 13 18 / 0.18);
     background-size: 220% 100%, auto;
-    animation: vt-cut 380ms cubic-bezier(0.3, 0, 0.2, 1) forwards;
+    animation: sl-cut 380ms cubic-bezier(0.3, 0, 0.2, 1) forwards;
   }
 
-  @keyframes vt-cut {
+  @keyframes sl-cut {
     0% {
       opacity: 1;
       background-position: 100% 0, 0 0;
@@ -1393,15 +1393,15 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .vantage[data-cut] .vt-cut {
+    .sightline[data-cut] .sl-cut {
       animation: none;
       opacity: 0;
     }
   }
 
   /* Hosts can hide the HUD or the key hints: data-hud="off", data-keyhints="off" on the player root. */
-  .vantage[data-hud="off"] .vt-hud,
-  .vantage[data-keyhints="off"] .vt-keyhints {
+  .sightline[data-hud="off"] .sl-hud,
+  .sightline[data-keyhints="off"] .sl-keyhints {
     display: none;
   }
 }
@@ -1413,153 +1413,153 @@
 @layer components {
   /* The played range and thumb glide between time updates instead of stepping; they follow the pointer exactly
      while dragging or seeking. */
-  .vt-timeline .vt-fill {
+  .sl-timeline .sl-fill {
     transition: width 260ms linear;
   }
 
-  .vt-timeline .vt-thumb {
+  .sl-timeline .sl-thumb {
     transition:
       left 260ms linear,
       scale 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
       box-shadow 200ms ease;
   }
 
-  .vt-slider:is([data-dragging], [data-seeking]) .vt-fill,
-  .vt-slider:is([data-dragging], [data-seeking]) .vt-thumb {
+  .sl-slider:is([data-dragging], [data-seeking]) .sl-fill,
+  .sl-slider:is([data-dragging], [data-seeking]) .sl-thumb {
     transition-property: scale, box-shadow;
   }
 
   /* The track thickens under the pointer or focus, so it is easier to hit and clearly "live". */
-  .vt-track {
-    transition: scale 200ms var(--vt-ease), background-color 200ms ease;
+  .sl-track {
+    transition: scale 200ms var(--sl-ease), background-color 200ms ease;
   }
 
-  .vt-slider[data-interactive] .vt-track {
+  .sl-slider[data-interactive] .sl-track {
     scale: 1 1.6;
   }
 
-  .vt-slider[data-interactive] .vt-thumb {
-    box-shadow: 0 0 0 5px var(--vt-halo), 0 0 18px var(--vt-halo);
+  .sl-slider[data-interactive] .sl-thumb {
+    box-shadow: 0 0 0 5px var(--sl-halo), 0 0 18px var(--sl-halo);
   }
 
   /* Hover preview rises into place. */
-  .vt-preview {
+  .sl-preview {
     translate: 0 6px;
     scale: 0.96;
     transform-origin: bottom center;
     transition:
       opacity 160ms ease,
-      translate 220ms var(--vt-ease),
-      scale 220ms var(--vt-ease);
+      translate 220ms var(--sl-ease),
+      scale 220ms var(--sl-ease);
   }
 
-  .vt-slider:is([data-pointing], [data-dragging]) .vt-preview {
+  .sl-slider:is([data-pointing], [data-dragging]) .sl-preview {
     translate: 0 0;
     scale: 1;
   }
 
   /* Markers lift on hover and focus. */
-  .vt-marker-shape {
+  .sl-marker-shape {
     transition: scale 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .vt-marker:focus-visible .vt-marker-shape {
+  .sl-marker:focus-visible .sl-marker-shape {
     scale: 1.35;
   }
 
-  .vt-marker-tip:not([hidden]) {
-    animation: vt-rise 180ms var(--vt-ease);
+  .sl-marker-tip:not([hidden]) {
+    animation: sl-rise 180ms var(--sl-ease);
   }
 
   /* Menus, popovers and tooltips open from their button with a short rise. */
-  .vantage .media-popup {
+  .sightline .media-popup {
     transition-property: opacity, scale, translate;
     transition-duration: 200ms;
     transition-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.1);
   }
 
-  .vantage .media-popup:is([data-starting-style], [data-ending-style]) {
+  .sightline .media-popup:is([data-starting-style], [data-ending-style]) {
     opacity: 0;
     scale: 0.94;
     translate: 0 8px;
   }
 
-  .vt-menu[data-align="end"],
-  .vt-keys[data-align="end"] {
+  .sl-menu[data-align="end"],
+  .sl-keys[data-align="end"] {
     transform-origin: bottom right;
   }
 
-  .vt-menu-item {
+  .sl-menu-item {
     transition: background-color 140ms ease, color 140ms ease;
   }
 
-  .vt-menu-chevron {
-    transition: translate 160ms var(--vt-ease);
+  .sl-menu-chevron {
+    transition: translate 160ms var(--sl-ease);
   }
 
-  .vt-menu-item[data-highlighted] .vt-menu-chevron:not(.vt-menu-chevron-back) {
+  .sl-menu-item[data-highlighted] .sl-menu-chevron:not(.sl-menu-chevron-back) {
     translate: 2px 0;
   }
 
   /* Submenus slide across. */
-  .vt-menu-content {
+  .sl-menu-content {
     transition-duration: 240ms;
   }
 
   /* The band slides down a little as it fades when the player goes idle, and returns at once. */
-  .vt-band {
+  .sl-band {
     transition:
-      opacity 260ms var(--vt-ease),
-      translate 320ms var(--vt-ease);
+      opacity 260ms var(--sl-ease),
+      translate 320ms var(--sl-ease);
   }
 
-  .vt-controls:not([data-visible]) .vt-band {
+  .sl-controls:not([data-visible]) .sl-band {
     translate: 0 10px;
   }
 
-  .vt-controls[data-visible] .vt-band {
+  .sl-controls[data-visible] .sl-band {
     transition-duration: 140ms, 180ms;
   }
 
   /* The HUD and angle label fade with the controls but stay as a quiet hint. */
-  .vt-hud {
+  .sl-hud {
     transition: opacity 300ms ease;
   }
 
   /* Centre play breathes a halo until the match starts. */
-  .vt-center-play::after {
+  .sl-center-play::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    box-shadow: 0 0 0 0 var(--vt-halo);
+    box-shadow: 0 0 0 0 var(--sl-halo);
     pointer-events: none;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .vt-center-play:not([data-started])::after {
-      animation: vt-breathe 2.2s ease-out infinite;
+    .sl-center-play:not([data-started])::after {
+      animation: sl-breathe 2.2s ease-out infinite;
     }
   }
 
-  @keyframes vt-breathe {
+  @keyframes sl-breathe {
     0% {
-      box-shadow: 0 0 0 0 var(--vt-halo);
+      box-shadow: 0 0 0 0 var(--sl-halo);
     }
     100% {
       box-shadow: 0 0 0 22px transparent;
     }
   }
 
-  .vt-center-play {
+  .sl-center-play {
     transition: scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .vt-center-play:active {
+  .sl-center-play:active {
     scale: 0.92;
   }
 
-  @keyframes vt-rise {
+  @keyframes sl-rise {
     from {
       opacity: 0;
       translate: -50% 6px;
@@ -1567,7 +1567,7 @@
   }
 
   /* Volume rule thickens on interaction too. */
-  .vt-volume-slider[data-interactive] .vt-track {
+  .sl-volume-slider[data-interactive] .sl-track {
     scale: 1 1.5;
   }
 }
@@ -1576,15 +1576,15 @@
  * Menus: a gliding highlight and a clear selected state.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
-  .vt-glide {
+  .sl-glide {
     position: absolute;
     top: 0;
     left: 6px;
     right: 6px;
     z-index: 0;
     border-radius: 8px;
-    background: color-mix(in srgb, var(--vt-signal) 16%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vt-signal) 30%, transparent);
+    background: color-mix(in srgb, var(--sl-signal) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sl-signal) 30%, transparent);
     opacity: 0;
     pointer-events: none;
     transition:
@@ -1593,37 +1593,37 @@
       opacity 160ms ease;
   }
 
-  .vt-glide[data-on] {
+  .sl-glide[data-on] {
     opacity: 1;
   }
 
-  .vt-menu-content > :not(.vt-glide),
-  .vt-menu-group > * {
+  .sl-menu-content > :not(.sl-glide),
+  .sl-menu-group > * {
     position: relative;
     z-index: 1;
   }
 
   /* The glide is the hover; rows stay transparent so it can travel under them. */
-  .vt-menu-item[data-highlighted] {
+  .sl-menu-item[data-highlighted] {
     background-color: transparent;
   }
 
-  .vt-menu-item {
+  .sl-menu-item {
     min-height: 44px;
     border-radius: 8px;
   }
 
   /* Selected: the label brightens and a check pops into a signal disc. */
-  .vt-menu-radio {
+  .sl-menu-radio {
     color: rgb(243 245 248 / 0.78);
   }
 
-  .vt-menu-radio[aria-checked="true"] {
-    color: var(--vt-text);
+  .sl-menu-radio[aria-checked="true"] {
+    color: var(--sl-text);
     font-weight: 600;
   }
 
-  .vt-menu-indicator {
+  .sl-menu-indicator {
     position: relative;
     width: 22px;
     height: 22px;
@@ -1632,36 +1632,36 @@
     transition: background-color 180ms ease, box-shadow 180ms ease;
   }
 
-  .vt-menu-indicator::before {
+  .sl-menu-indicator::before {
     content: "";
     width: 9px;
     height: 5px;
     border-radius: 0;
     background: none;
-    border-left: 2px solid var(--vt-signal-text);
-    border-bottom: 2px solid var(--vt-signal-text);
+    border-left: 2px solid var(--sl-signal-text);
+    border-bottom: 2px solid var(--sl-signal-text);
     rotate: -45deg;
     translate: 0 -1px;
     scale: 0;
     transition: scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .vt-menu-radio[aria-checked="true"] .vt-menu-indicator {
-    background-color: var(--vt-signal);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--vt-signal) 60%, transparent);
+  .sl-menu-radio[aria-checked="true"] .sl-menu-indicator {
+    background-color: var(--sl-signal);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--sl-signal) 60%, transparent);
   }
 
-  .vt-menu-radio[aria-checked="true"] .vt-menu-indicator::before {
+  .sl-menu-radio[aria-checked="true"] .sl-menu-indicator::before {
     scale: 1;
   }
 
   @media (forced-colors: active) {
-    .vt-glide {
+    .sl-glide {
       background: Highlight;
       opacity: 0.4;
     }
 
-    .vt-menu-radio[aria-checked="true"] .vt-menu-indicator {
+    .sl-menu-radio[aria-checked="true"] .sl-menu-indicator {
       background-color: Highlight;
     }
   }
@@ -1671,10 +1671,10 @@
  * Kill feed: the game-style stack at the top right.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
-  .vt-feed {
+  .sl-feed {
     position: absolute;
-    top: calc(var(--vt-u) * 15);
-    right: calc(var(--vt-u) * 4);
+    top: calc(var(--sl-u) * 15);
+    right: calc(var(--sl-u) * 4);
     z-index: 26;
     display: flex;
     flex-direction: column;
@@ -1686,85 +1686,85 @@
     pointer-events: none;
   }
 
-  .vt-feed-item {
+  .sl-feed-item {
     display: flex;
     align-items: center;
     gap: 9px;
     padding: 7px 18px 7px 14px;
     background: linear-gradient(90deg, rgb(10 13 18 / 0.55), rgb(10 13 18 / 0.92) 30%);
-    color: var(--vt-text);
-    font-family: var(--vt-font-label);
-    font-size: var(--vt-text-small);
+    color: var(--sl-text);
+    font-family: var(--sl-font-label);
+    font-size: var(--sl-text-small);
     font-weight: 600;
     letter-spacing: 0.02em;
     white-space: nowrap;
     clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-    animation: vt-feed-in 320ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+    animation: sl-feed-in 320ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
     transition: opacity 400ms ease, translate 400ms ease;
   }
 
-  .vt-feed-item:first-child {
+  .sl-feed-item:first-child {
     background: linear-gradient(90deg, rgb(10 13 18 / 0.6), rgb(18 22 29 / 0.96) 30%);
-    box-shadow: inset 0 -2px 0 var(--vt-feed-tone, var(--vt-event));
+    box-shadow: inset 0 -2px 0 var(--sl-feed-tone, var(--sl-event));
   }
 
-  .vt-feed-item[data-kind="objective"] {
-    --vt-feed-tone: var(--vt-signal);
+  .sl-feed-item[data-kind="objective"] {
+    --sl-feed-tone: var(--sl-signal);
   }
 
-  .vt-feed-item[data-kind="round"] {
-    --vt-feed-tone: var(--vt-round);
+  .sl-feed-item[data-kind="round"] {
+    --sl-feed-tone: var(--sl-round);
   }
 
-  .vt-feed-item[data-leaving] {
+  .sl-feed-item[data-leaving] {
     opacity: 0;
     translate: 24px 0;
   }
 
-  .vt-feed-mark {
+  .sl-feed-mark {
     width: 8px;
     height: 8px;
-    background: var(--vt-feed-tone, var(--vt-event));
+    background: var(--sl-feed-tone, var(--sl-event));
     rotate: 45deg;
   }
 
-  .vt-feed-item[data-kind="objective"] .vt-feed-mark {
+  .sl-feed-item[data-kind="objective"] .sl-feed-mark {
     border-radius: 2px;
     rotate: none;
   }
 
-  .vt-feed-item[data-kind="round"] .vt-feed-mark {
+  .sl-feed-item[data-kind="round"] .sl-feed-mark {
     width: 3px;
     height: 13px;
     rotate: none;
     transform: skewX(-18deg);
   }
 
-  .vt-feed-a {
-    color: var(--vt-text);
+  .sl-feed-a {
+    color: var(--sl-text);
   }
 
-  .vt-feed-b {
-    color: var(--vt-muted);
+  .sl-feed-b {
+    color: var(--sl-muted);
     text-decoration: line-through;
     text-decoration-color: rgb(255 255 255 / 0.35);
   }
 
-  .vt-feed-x {
+  .sl-feed-x {
     width: 14px;
     height: 14px;
-    color: var(--vt-event);
+    color: var(--sl-event);
   }
 
-  .vt-feed-time {
+  .sl-feed-time {
     margin-inline-start: 4px;
-    color: var(--vt-muted);
-    font-family: var(--vt-font-clock);
-    font-size: var(--vt-text-tiny);
+    color: var(--sl-muted);
+    font-family: var(--sl-font-clock);
+    font-size: var(--sl-text-tiny);
     font-weight: 500;
   }
 
-  @keyframes vt-feed-in {
+  @keyframes sl-feed-in {
     from {
       opacity: 0;
       translate: 40px 0;
@@ -1772,26 +1772,26 @@
   }
 
   @container media-root (width <= 640px) {
-    .vt-feed {
-      top: calc(var(--vt-u) * 11);
-      right: calc(var(--vt-u) * 2.5);
+    .sl-feed {
+      top: calc(var(--sl-u) * 11);
+      right: calc(var(--sl-u) * 2.5);
     }
 
-    .vt-feed-item:not(:first-child) {
+    .sl-feed-item:not(:first-child) {
       display: none;
     }
 
-    .vt-feed-time {
+    .sl-feed-time {
       display: none;
     }
   }
 
   @media (forced-colors: active) {
-    .vt-feed-item {
+    .sl-feed-item {
       border: 1px solid CanvasText;
     }
 
-    .vt-feed-mark {
+    .sl-feed-mark {
       forced-color-adjust: none;
       background: CanvasText;
     }
@@ -1804,55 +1804,55 @@
  * that scored. Played events are solid; upcoming ones are quiet outlines.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
-  .vt-timeline {
-    --vt-lane: 30px;
-    --vt-rail: 20px;
-    --vt-pin: 20px;
-    height: calc(var(--vt-lane) + var(--vt-rail));
+  .sl-timeline {
+    --sl-lane: 30px;
+    --sl-rail: 20px;
+    --sl-pin: 20px;
+    height: calc(var(--sl-lane) + var(--sl-rail));
   }
 
   /* The slider owns the bottom of the timeline; the lane sits above it. */
-  .vt-timeline .vt-slider {
+  .sl-timeline .sl-slider {
     position: absolute;
     inset: auto 0 0;
-    height: var(--vt-rail);
+    height: var(--sl-rail);
   }
 
-  .vt-timeline .vt-track {
+  .sl-timeline .sl-track {
     height: 4px;
     border-radius: 2px;
     background-color: rgb(255 255 255 / 0.2);
   }
 
-  .vt-timeline .vt-slider[data-interactive] .vt-track {
+  .sl-timeline .sl-slider[data-interactive] .sl-track {
     scale: 1 1.5;
   }
 
-  .vt-timeline .vt-buffer {
+  .sl-timeline .sl-buffer {
     background-color: rgb(255 255 255 / 0.2);
   }
 
-  .vt-timeline .vt-fill {
-    background-color: var(--vt-signal);
+  .sl-timeline .sl-fill {
+    background-color: var(--sl-signal);
   }
 
   /* Round starts cut a small gap in the line. */
-  .vt-timeline .vt-rounds {
+  .sl-timeline .sl-rounds {
     inset: auto 0 0;
     top: auto;
-    height: var(--vt-rail);
+    height: var(--sl-rail);
     translate: none;
     z-index: 1;
   }
 
-  .vt-round-band[data-odd="true"] {
+  .sl-round-band[data-odd="true"] {
     background-color: transparent;
   }
 
-  .vt-round-gap {
+  .sl-round-gap {
     position: absolute;
     top: 50%;
-    left: var(--vt-at);
+    left: var(--sl-at);
     width: 3px;
     height: 10px;
     border-radius: 1px;
@@ -1861,58 +1861,58 @@
   }
 
   /* Playhead: a white knob on a soft signal ring, with a hairline up through the lane. */
-  .vt-timeline .vt-thumb {
+  .sl-timeline .sl-thumb {
     width: 14px;
     height: 14px;
     border-radius: 50%;
     background-color: #fff;
     box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--vt-signal) 45%, transparent),
+      0 0 0 3px color-mix(in srgb, var(--sl-signal) 45%, transparent),
       0 2px 8px rgb(0 0 0 / 0.5);
   }
 
-  .vt-timeline .vt-thumb::after {
+  .sl-timeline .sl-thumb::after {
     content: "";
     position: absolute;
     left: 50%;
     bottom: 100%;
     width: 1px;
-    height: calc(var(--vt-lane) - 4px);
+    height: calc(var(--sl-lane) - 4px);
     background: linear-gradient(to top, rgb(255 255 255 / 0.55), transparent);
     translate: -50% 0;
     pointer-events: none;
   }
 
-  .vt-timeline .vt-slider[data-interactive] .vt-thumb {
+  .sl-timeline .sl-slider[data-interactive] .sl-thumb {
     scale: 1.2;
     box-shadow:
-      0 0 0 4px color-mix(in srgb, var(--vt-signal) 55%, transparent),
+      0 0 0 4px color-mix(in srgb, var(--sl-signal) 55%, transparent),
       0 2px 10px rgb(0 0 0 / 0.55);
   }
 
-  .vt-timeline .vt-thumb:focus-visible {
+  .sl-timeline .sl-thumb:focus-visible {
     outline-offset: 4px;
   }
 
   /* Hover preview: a plain time chip. */
-  .vt-preview-time {
+  .sl-preview-time {
     padding: 4px 9px;
     border-radius: 6px;
     background-color: #fff;
-    color: var(--vt-ground);
+    color: var(--sl-ground);
     font-weight: 600;
   }
 
   /* The lane. */
-  .vt-timeline .vt-markers {
+  .sl-timeline .sl-markers {
     inset: 0 0 auto;
-    height: calc(var(--vt-lane) + var(--vt-rail) / 2);
+    height: calc(var(--sl-lane) + var(--sl-rail) / 2);
     z-index: 2;
   }
 
-  .vt-marker {
-    --vt-tone: #f3f5f8;
-    --vt-stem: 6px;
+  .sl-marker {
+    --sl-tone: #f3f5f8;
+    --sl-stem: 6px;
     top: auto;
     bottom: 0;
     display: flex;
@@ -1920,45 +1920,45 @@
     align-items: center;
     justify-content: flex-start;
     width: 24px;
-    height: calc(var(--vt-pin) + var(--vt-stem));
+    height: calc(var(--sl-pin) + var(--sl-stem));
     border-radius: 6px;
     translate: -50% 0;
   }
 
-  .vt-marker[data-tier="1"] {
-    --vt-stem: 18px;
+  .sl-marker[data-tier="1"] {
+    --sl-stem: 18px;
     z-index: 1;
   }
 
-  .vt-marker[data-team="a"] {
-    --vt-tone: var(--vt-signal);
+  .sl-marker[data-team="a"] {
+    --sl-tone: var(--sl-signal);
   }
 
-  .vt-marker[data-team="b"] {
-    --vt-tone: var(--vt-event);
+  .sl-marker[data-team="b"] {
+    --sl-tone: var(--sl-event);
   }
 
   /* The stem ties the pin to its moment on the line. */
-  .vt-marker::after {
+  .sl-marker::after {
     content: "";
     position: absolute;
     left: 50%;
     bottom: 0;
     width: 1px;
-    height: var(--vt-stem);
+    height: var(--sl-stem);
     background-color: rgb(255 255 255 / 0.28);
     translate: -50% 0;
   }
 
-  .vt-marker-pin {
+  .sl-marker-pin {
     display: grid;
     place-items: center;
-    width: var(--vt-pin);
-    height: var(--vt-pin);
+    width: var(--sl-pin);
+    height: var(--sl-pin);
     border-radius: 6px;
     background-color: rgb(11 14 20 / 0.82);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vt-tone) 45%, transparent);
-    color: color-mix(in srgb, var(--vt-tone) 70%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sl-tone) 45%, transparent);
+    color: color-mix(in srgb, var(--sl-tone) 70%, transparent);
     transition:
       translate 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
       background-color 200ms ease,
@@ -1966,111 +1966,111 @@
       box-shadow 200ms ease;
   }
 
-  .vt-marker-pin svg {
+  .sl-marker-pin svg {
     display: block;
     width: 12px;
     height: 12px;
   }
 
   /* Played: solid in the scoring side's colour. */
-  .vt-marker[data-past] .vt-marker-pin {
-    background-color: color-mix(in srgb, var(--vt-tone) 22%, rgb(11 14 20 / 0.9));
-    box-shadow: inset 0 0 0 1px var(--vt-tone);
-    color: var(--vt-tone);
+  .sl-marker[data-past] .sl-marker-pin {
+    background-color: color-mix(in srgb, var(--sl-tone) 22%, rgb(11 14 20 / 0.9));
+    box-shadow: inset 0 0 0 1px var(--sl-tone);
+    color: var(--sl-tone);
   }
 
   /* A clutch always stands out: a filled amber-or-cyan pin with a dark crown. */
-  .vt-marker[data-type="clutch"] .vt-marker-pin {
-    background-color: var(--vt-tone);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--vt-tone) 55%, transparent);
+  .sl-marker[data-type="clutch"] .sl-marker-pin {
+    background-color: var(--sl-tone);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--sl-tone) 55%, transparent);
     color: #0b0e14;
   }
 
   /* Round starts: a slim text tag, not an icon. */
-  .vt-marker[data-kind="round"] .vt-marker-pin {
+  .sl-marker[data-kind="round"] .sl-marker-pin {
     width: auto;
-    min-width: var(--vt-pin);
+    min-width: var(--sl-pin);
     padding-inline: 4px;
     background-color: rgb(11 14 20 / 0.7);
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
     color: rgb(243 245 248 / 0.75);
-    font-family: var(--vt-font-clock);
+    font-family: var(--sl-font-clock);
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.02em;
   }
 
-  .vt-marker[data-kind="round"][data-past] .vt-marker-pin {
+  .sl-marker[data-kind="round"][data-past] .sl-marker-pin {
     color: #fff;
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.45);
   }
 
   @media (hover: hover) {
-    .vt-marker:hover .vt-marker-pin {
+    .sl-marker:hover .sl-marker-pin {
       translate: 0 -3px;
-      box-shadow: inset 0 0 0 1px var(--vt-tone), 0 6px 14px rgb(0 0 0 / 0.45);
-      color: var(--vt-tone);
+      box-shadow: inset 0 0 0 1px var(--sl-tone), 0 6px 14px rgb(0 0 0 / 0.45);
+      color: var(--sl-tone);
     }
 
-    .vt-marker[data-type="clutch"]:hover .vt-marker-pin {
+    .sl-marker[data-type="clutch"]:hover .sl-marker-pin {
       color: #0b0e14;
     }
   }
 
-  .vt-marker:focus-visible {
+  .sl-marker:focus-visible {
     outline: none;
   }
 
-  .vt-marker:focus-visible .vt-marker-pin {
-    outline: var(--vt-focus) solid var(--vt-signal);
+  .sl-marker:focus-visible .sl-marker-pin {
+    outline: var(--sl-focus) solid var(--sl-signal);
     outline-offset: 2px;
     translate: 0 -3px;
   }
 
   /* The old shapes are gone; the tooltip carries the label. */
-  .vt-marker-tip {
+  .sl-marker-tip {
     bottom: calc(100% + 10px);
   }
 
   @container media-root (width <= 640px) {
-    .vt-timeline {
-      --vt-lane: 24px;
-      --vt-pin: 16px;
+    .sl-timeline {
+      --sl-lane: 24px;
+      --sl-pin: 16px;
     }
 
-    .vt-marker-pin svg {
+    .sl-marker-pin svg {
       width: 10px;
       height: 10px;
     }
 
-    .vt-marker[data-kind="round"] .vt-marker-pin {
+    .sl-marker[data-kind="round"] .sl-marker-pin {
       font-size: 9px;
     }
   }
 
   @media (forced-colors: active) {
-    .vt-marker-pin,
-    .vt-marker[data-past] .vt-marker-pin,
-    .vt-marker[data-type="clutch"] .vt-marker-pin,
-    .vt-marker[data-kind="round"] .vt-marker-pin,
-    .vt-marker[data-kind="round"][data-past] .vt-marker-pin {
+    .sl-marker-pin,
+    .sl-marker[data-past] .sl-marker-pin,
+    .sl-marker[data-type="clutch"] .sl-marker-pin,
+    .sl-marker[data-kind="round"] .sl-marker-pin,
+    .sl-marker[data-kind="round"][data-past] .sl-marker-pin {
       forced-color-adjust: none;
       background-color: Canvas;
       box-shadow: inset 0 0 0 1px CanvasText;
       color: CanvasText;
     }
 
-    .vt-marker[data-past] .vt-marker-pin,
-    .vt-marker[data-kind="round"][data-past] .vt-marker-pin {
+    .sl-marker[data-past] .sl-marker-pin,
+    .sl-marker[data-kind="round"][data-past] .sl-marker-pin {
       background-color: Highlight;
       color: HighlightText;
     }
 
-    .vt-round-gap {
+    .sl-round-gap {
       background-color: Canvas;
     }
 
-    .vt-timeline .vt-thumb {
+    .sl-timeline .sl-thumb {
       background-color: Highlight;
     }
   }
@@ -2080,11 +2080,11 @@
  * Buttons: a compact hover plate with a hairline border, smaller than the 44/48px hit area around it.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
-  .vt-button {
+  .sl-button {
     background: transparent;
   }
 
-  .vt-button::before {
+  .sl-button::before {
     content: "";
     position: absolute;
     inset: 7px;
@@ -2101,97 +2101,97 @@
       box-shadow 160ms ease;
   }
 
-  .vt-button > * {
+  .sl-button > * {
     position: relative;
   }
 
   @media (hover: hover) {
-    .vt-button:hover {
+    .sl-button:hover {
       background-color: transparent;
     }
 
-    .vt-button:not([aria-disabled="true"]):hover::before {
+    .sl-button:not([aria-disabled="true"]):hover::before {
       opacity: 1;
       scale: 1;
     }
   }
 
   /* Open menus and active toggles keep the plate, tinted with the signal. */
-  .vt-button[aria-expanded="true"],
-  .vt-captions[data-active],
-  .vt-multiview[aria-pressed="true"] {
+  .sl-button[aria-expanded="true"],
+  .sl-captions[data-active],
+  .sl-multiview[aria-pressed="true"] {
     background-color: transparent;
-    color: var(--vt-signal);
+    color: var(--sl-signal);
   }
 
-  .vt-button[aria-expanded="true"]::before,
-  .vt-captions[data-active]::before,
-  .vt-multiview[aria-pressed="true"]::before {
+  .sl-button[aria-expanded="true"]::before,
+  .sl-captions[data-active]::before,
+  .sl-multiview[aria-pressed="true"]::before {
     opacity: 1;
     scale: 1;
-    background-color: color-mix(in srgb, var(--vt-signal) 14%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vt-signal) 40%, transparent);
+    background-color: color-mix(in srgb, var(--sl-signal) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sl-signal) 40%, transparent);
   }
 
-  .vt-button:focus-visible {
+  .sl-button:focus-visible {
     outline: none;
   }
 
-  .vt-button:focus-visible::before {
+  .sl-button:focus-visible::before {
     opacity: 1;
     scale: 1;
     box-shadow:
       inset 0 0 0 1px rgb(255 255 255 / 0.16),
-      0 0 0 var(--vt-focus) var(--vt-signal);
+      0 0 0 var(--sl-focus) var(--sl-signal);
   }
 
-  .vt-button .vt-icon {
+  .sl-button .sl-icon {
     width: 20px;
     height: 20px;
   }
 
   /* Multiview only shows when the page offers it (data-multiview on the player root). */
-  .vt-multiview {
+  .sl-multiview {
     display: none;
   }
 
-  .vantage[data-multiview] .vt-multiview {
+  .sightline[data-multiview] .sl-multiview {
     display: inline-grid;
   }
 
-  .vt-multiview[aria-pressed="false"] .vt-multiview-enter-icon,
-  .vt-multiview[aria-pressed="true"] .vt-multiview-exit-icon {
+  .sl-multiview[aria-pressed="false"] .sl-multiview-enter-icon,
+  .sl-multiview[aria-pressed="true"] .sl-multiview-exit-icon {
     opacity: 1;
     scale: 1;
     rotate: 0deg;
   }
 
-  .vt-keys-multiview {
+  .sl-keys-multiview {
     display: none;
   }
 
-  .vantage[data-multiview] .vt-keys-multiview {
+  .sightline[data-multiview] .sl-keys-multiview {
     display: flex;
   }
 
   @container media-root (width <= 640px) {
-    .vt-replay,
-    .vt-multiview {
+    .sl-replay,
+    .sl-multiview {
       display: none;
     }
 
-    .vantage[data-multiview] .vt-multiview {
+    .sightline[data-multiview] .sl-multiview {
       display: none;
     }
   }
 
   @media (forced-colors: active) {
-    .vt-button::before {
+    .sl-button::before {
       box-shadow: inset 0 0 0 1px ButtonText;
       background-color: Canvas;
     }
 
-    .vt-button:focus-visible::before {
+    .sl-button:focus-visible::before {
       outline: 2px solid Highlight;
     }
   }
@@ -2201,72 +2201,72 @@
  * Kill feed glyphs and team colours; the instant replay badge; spoiler-free mode.
  * ------------------------------------------------------------------------------------------------------------- */
 @layer components {
-  .vt-feed-item {
-    --vt-tone: #f3f5f8;
+  .sl-feed-item {
+    --sl-tone: #f3f5f8;
   }
 
-  .vt-feed-item[data-team="a"] {
-    --vt-tone: var(--vt-signal);
+  .sl-feed-item[data-team="a"] {
+    --sl-tone: var(--sl-signal);
   }
 
-  .vt-feed-item[data-team="b"] {
-    --vt-tone: var(--vt-event);
+  .sl-feed-item[data-team="b"] {
+    --sl-tone: var(--sl-event);
   }
 
-  .vt-feed-item:first-child {
-    box-shadow: inset 0 -2px 0 var(--vt-tone);
+  .sl-feed-item:first-child {
+    box-shadow: inset 0 -2px 0 var(--sl-tone);
   }
 
-  .vt-feed-mark,
-  .vt-feed-item[data-kind="objective"] .vt-feed-mark,
-  .vt-feed-item[data-kind="round"] .vt-feed-mark {
+  .sl-feed-mark,
+  .sl-feed-item[data-kind="objective"] .sl-feed-mark,
+  .sl-feed-item[data-kind="round"] .sl-feed-mark {
     display: grid;
     place-items: center;
     width: 14px;
     height: 14px;
     border-radius: 0;
     background: none;
-    color: var(--vt-tone);
+    color: var(--sl-tone);
     rotate: none;
     transform: none;
   }
 
-  .vt-feed-mark svg {
+  .sl-feed-mark svg {
     width: 14px;
     height: 14px;
   }
 
-  .vt-feed-item[data-kind="round"] .vt-feed-mark {
+  .sl-feed-item[data-kind="round"] .sl-feed-mark {
     width: 3px;
     height: 13px;
     background: rgb(255 255 255 / 0.6);
   }
 
   /* Eliminations show the skull between the names, coloured by side. */
-  .vt-feed-duel .vt-feed-mark {
+  .sl-feed-duel .sl-feed-mark {
     display: none;
   }
 
-  .vt-feed-a {
-    color: var(--vt-tone);
+  .sl-feed-a {
+    color: var(--sl-tone);
   }
 
-  .vt-feed-item[data-team="a"] .vt-feed-b {
-    color: color-mix(in srgb, var(--vt-event) 80%, #fff);
+  .sl-feed-item[data-team="a"] .sl-feed-b {
+    color: color-mix(in srgb, var(--sl-event) 80%, #fff);
   }
 
-  .vt-feed-item[data-team="b"] .vt-feed-b {
-    color: color-mix(in srgb, var(--vt-signal) 80%, #fff);
+  .sl-feed-item[data-team="b"] .sl-feed-b {
+    color: color-mix(in srgb, var(--sl-signal) 80%, #fff);
   }
 
-  .vt-feed-x {
+  .sl-feed-x {
     color: rgb(243 245 248 / 0.85);
   }
 
   /* Instant replay: a badge at the top centre while the replay runs. */
-  .vt-replay-badge {
+  .sl-replay-badge {
     position: absolute;
-    top: calc(var(--vt-u) * 4);
+    top: calc(var(--sl-u) * 4);
     left: 50%;
     z-index: 27;
     display: flex;
@@ -2277,8 +2277,8 @@
     background-color: rgb(11 14 20 / 0.85);
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
     color: #fff;
-    font-family: var(--vt-font-label);
-    font-size: var(--vt-text-small);
+    font-family: var(--sl-font-label);
+    font-size: var(--sl-text-small);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2286,19 +2286,19 @@
     pointer-events: none;
   }
 
-  .vt-replay-badge::before {
+  .sl-replay-badge::before {
     content: "";
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--vt-round);
+    background-color: var(--sl-round);
   }
 
-  .vt-replay-badge:not([hidden]) {
-    animation: vt-badge-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
+  .sl-replay-badge:not([hidden]) {
+    animation: sl-badge-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.15);
   }
 
-  @keyframes vt-badge-in {
+  @keyframes sl-badge-in {
     from {
       opacity: 0;
       translate: -50% -8px;
@@ -2306,32 +2306,32 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .vt-replay-badge::before {
-      animation: vt-blink 1s steps(2, jump-none) infinite;
+    .sl-replay-badge::before {
+      animation: sl-blink 1s steps(2, jump-none) infinite;
     }
   }
 
-  @keyframes vt-blink {
+  @keyframes sl-blink {
     50% {
       opacity: 0.25;
     }
   }
 
   /* A replay tints the line so it reads as "not live". */
-  .vantage[data-replay] .vt-timeline .vt-fill {
-    background-color: var(--vt-round);
+  .sightline[data-replay] .sl-timeline .sl-fill {
+    background-color: var(--sl-round);
   }
 
   /* Spoiler-free: no score, no kill feed, no event pins. */
-  .vantage[data-spoilers="on"] .vt-score-teams,
-  .vantage[data-spoilers="on"] .vt-feed,
-  .vantage[data-spoilers="on"] .vt-markers,
-  .vantage[data-spoilers="on"] .vt-marker-tip {
+  .sightline[data-spoilers="on"] .sl-score-teams,
+  .sightline[data-spoilers="on"] .sl-feed,
+  .sightline[data-spoilers="on"] .sl-markers,
+  .sightline[data-spoilers="on"] .sl-marker-tip {
     display: none;
   }
 
   @media (forced-colors: active) {
-    .vt-replay-badge {
+    .sl-replay-badge {
       border: 1px solid CanvasText;
     }
   }

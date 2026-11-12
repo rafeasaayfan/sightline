@@ -1,4 +1,4 @@
-# Vantage audit
+# Sightline audit
 
 The brief's audit: *working controls, responsive layout, keyboard access, visible focus, contrast over bright and dark video, tap-friendly controls, and reduced motion.* Every item below was tested in Chrome 157 with automated browser scripts (Playwright driving real Chrome) against the demo page, plus Lighthouse 12 on the production build. Date: 2026-11-12.
 

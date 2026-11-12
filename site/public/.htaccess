@@ -1,4 +1,4 @@
-# Vantage demo on Apache hosts: serve modules, captions and streams with the right types.
+# Sightline demo on Apache hosts: serve modules, captions and streams with the right types.
 AddType text/javascript .mjs
 AddType text/javascript .js
 AddType text/vtt .vtt

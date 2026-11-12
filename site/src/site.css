@@ -1,4 +1,4 @@
-/* The Vantage demo page: the kit's broadcast language (design/reference) taken to a full product page. */
+/* The Sightline demo page: the kit's broadcast language (design/reference) taken to a full product page. */
 
 :root {
   --ground: #0a0d12;
@@ -1523,7 +1523,7 @@ input[type="range"] {
     box-shadow: none;
   }
 
-  .stage .vantage {
+  .stage .sightline {
     --media-border-radius: 0px;
   }
 
@@ -2735,5 +2735,53 @@ html[data-spoilers] .recap-rail::after {
   /* Phones stream the stage alone, so multiview has nothing to add there. */
   .deck-button[data-watch] {
     display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------------------------- Wordmark
+ * SIGHT sits on the slanted signal chip, LINE follows straight after it on the page: one word, two halves. */
+.wordmark,
+.foot .wordmark {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  background: none;
+  clip-path: none;
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.wordmark::before {
+  content: none;
+}
+
+.wordmark-in {
+  padding: 8px 12px 8px 16px;
+  background: var(--signal);
+  color: var(--ground);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+
+/* LINE starts at the chip's slanted edge; the tracking after SIGHT is the only gap, as inside one word. */
+.wordmark-out {
+  margin-inline-start: -4px;
+  padding: 8px 0 8px 4px;
+  color: var(--text);
+}
+
+.wordmark:hover .wordmark-out {
+  color: #fff;
+}
+
+@media (forced-colors: active) {
+  .wordmark-in {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
   }
 }

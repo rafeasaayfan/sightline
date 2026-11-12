@@ -1,5 +1,5 @@
 {
-  "name": "vantage",
+  "name": "sightline",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "deploy": "node apps/preview/deploy.mjs",
     "deploy:vercel": "npx --yes vercel@64 build && npx --yes vercel@64 deploy --prebuilt",
     "deploy:netlify": "npx --yes netlify-cli@27 deploy --build",
-    "deploy:cloudflare": "npm run build && npx --yes wrangler@4 pages deploy dist --project-name vantage",
+    "deploy:cloudflare": "npm run build && npx --yes wrangler@4 pages deploy dist --project-name sightline",
     "site:build": "vite build --config site/vite.config.ts",
     "site:preview": "vite preview --config site/vite.config.ts",
     "site:dev": "vite --config site/vite.config.ts --open"
