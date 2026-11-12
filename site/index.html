@@ -161,14 +161,16 @@
         <header class="block-head">
           <p class="block-num">02</p>
           <h2 id="tl-title">A timeline that knows the match</h2>
-          <p class="block-lede">Events come from a plain WebVTT file. Each kind has its own shape, so the bar reads without colour.</p>
+          <p class="block-lede">Events come from a plain WebVTT file. Each one is a pin with a glyph that says what happened, in the colour of the side that scored — readable without the colour.</p>
         </header>
         <figure class="annotated">
           <img src="./states/tooltip.jpg" width="1280" height="720" loading="lazy" decoding="async" alt="The control band with a marker tooltip open: Objective captured, 01:35, press Enter to jump." />
           <ol class="callouts">
-            <li><span class="legend legend-elim" aria-hidden="true"></span><strong>Highlights</strong> eliminations and clutches, amber diamonds</li>
-            <li><span class="legend legend-obj" aria-hidden="true"></span><strong>Objectives</strong> cyan squares</li>
-            <li><span class="legend legend-round" aria-hidden="true"></span><strong>Rounds</strong> red ticks, with alternate rounds shaded on the bar</li>
+            <li><span class="legend-pin" data-team="a" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Eliminations</strong> a skull, cyan for Azure, amber for Ember</li>
+            <li><span class="legend-pin legend-pin-solid" data-team="a" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M1.75 4.5l3.4 2.6L8 2.25l2.85 4.85 3.4-2.6-1.15 7.25H2.9ZM2.9 12.85h10.2v1.4H2.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Clutches</strong> a filled pin with a crown</li>
+            <li><span class="legend-pin" data-team="b" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 1.5h1.6v13H3ZM5.4 2.25h7.85l-1.9 3.25 1.9 3.25H5.4Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Objectives</strong> a flag</li>
+            <li><span class="legend-pin legend-pin-tag" aria-hidden="true">R2</span><strong>Rounds</strong> a tag, and a gap in the line</li>
+            <li><span class="legend-pin legend-pin-ghost" data-team="a" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></svg></span><strong>Played or ahead</strong> played events are solid, upcoming ones are outlines</li>
             <li><kbd>Tab</kbd><strong>One stop</strong> for every marker; arrows move between them, Enter jumps</li>
             <li><kbd>N</kbd><strong>Next highlight</strong> and <kbd>⇧N</kbd> previous, also as buttons</li>
           </ol>
@@ -201,13 +203,13 @@
         <ul class="states">
           <li><img src="./states/start.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Before first play: the cyan centre play button and the HUD." /><span>Before first play</span></li>
           <li><img src="./states/playing.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Playing, with the scoreboard, angle label and sync pill." /><span>Playing with HUD</span></li>
-          <li><img src="./states/toast.jpg" width="640" height="360" loading="lazy" decoding="async" alt="An elimination toast above the band." /><span>Event toast</span></li>
-          <li><img src="./states/settings.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The settings menu: speed, layout, event toasts." /><span>Settings</span></li>
+          <li><img src="./states/toast.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The kill feed at the top right: a new entry slides in with the two names in their team colours." /><span>Kill feed</span></li>
+          <li><img src="./states/settings.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The settings menu: speed, layout, kill feed, spoiler-free and captions." /><span>Settings</span></li>
           <li><img src="./states/switching.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Switching to angle 2 notice on the stage." /><span>Switching angle</span></li>
           <li><img src="./states/unavailable.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Angle 3 unavailable, staying on angle 1." /><span>Angle unavailable</span></li>
           <li><img src="./states/focus.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Keyboard focus ring on the volume thumb, band held open." /><span>Keyboard focus</span></li>
           <li><img src="./states/shortcuts.jpg" width="640" height="360" loading="lazy" decoding="async" alt="The keyboard shortcuts popover." /><span>Shortcuts</span></li>
-          <li><img src="./states/forced.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Forced colours: system colours, markers keep their shapes." /><span>Forced colours</span></li>
+          <li><img src="./states/forced.jpg" width="640" height="360" loading="lazy" decoding="async" alt="Forced colours: system colours, event pins keep their glyphs." /><span>Forced colours</span></li>
         </ul>
       </section>
 
@@ -235,7 +237,7 @@
           <fieldset class="field">
             <legend>Show</legend>
             <label class="check"><input type="checkbox" name="hud" checked /> Scoreboard HUD</label>
-            <label class="check"><input type="checkbox" name="toasts" checked /> Event toasts</label>
+            <label class="check"><input type="checkbox" name="toasts" checked /> Kill feed</label>
             <label class="check"><input type="checkbox" name="keyhints" checked /> Key hints</label>
           </fieldset>
           <div class="field snippet">
@@ -253,43 +255,64 @@
           <p class="block-lede">Everything sizes from <code>--media-scale-unit</code>, so fullscreen and host overrides scale the whole band together.</p>
         </header>
         <figure class="spec">
-          <svg viewBox="0 0 1000 300" role="img" aria-label="Technical drawing of the control band: a 24 pixel timeline row above a row of 44 pixel buttons; 4 pixel track; 16 pixel thumb growing to 20; markers 10, 9 and 2 by 16 pixels.">
-            <defs><marker id="ar" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" fill="#a7afbd" /></marker></defs>
-            <rect x="40" y="60" width="920" height="170" rx="10" fill="#12161d" stroke="rgb(255 255 255 / .14)" />
-            <text x="60" y="108" class="sv-mono">12:04</text>
-            <rect x="130" y="98" width="700" height="4" rx="2" fill="rgb(255 255 255 / .4)" />
-            <rect x="130" y="98" width="340" height="4" rx="2" fill="#38e1ff" />
-            <circle cx="470" cy="100" r="8" fill="#f3f5f8" stroke="rgb(56 225 255 / .45)" stroke-width="6" />
-            <rect x="244" y="95" width="10" height="10" fill="#ffb020" transform="rotate(45 249 100)" />
-            <rect x="590" y="95.5" width="9" height="9" rx="2" fill="#38e1ff" />
-            <rect x="700" y="92" width="2" height="16" fill="#ff4d5e" />
-            <text x="850" y="108" class="sv-mono sv-muted">24:37</text>
-            <g fill="none" stroke="rgb(255 255 255 / .35)">
-              <rect x="70" y="140" width="44" height="44" rx="8" /><rect x="118" y="140" width="44" height="44" rx="8" /><rect x="166" y="140" width="44" height="44" rx="8" /><rect x="214" y="140" width="44" height="44" rx="8" />
-              <rect x="742" y="140" width="44" height="44" rx="8" /><rect x="790" y="140" width="44" height="44" rx="8" /><rect x="838" y="140" width="44" height="44" rx="8" /><rect x="886" y="140" width="44" height="44" rx="8" />
+          <svg viewBox="0 0 1000 320" role="img" aria-label="Technical drawing of the control band: a 50 pixel timeline row, a 30 pixel lane of 20 pixel event pins with 6 pixel stems above a 4 pixel line, a 14 pixel knob, then a row of 44 pixel buttons whose hover plate is 30 pixels with a hairline border.">
+            <defs><marker id="ar" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" fill="#8b919a" /></marker></defs>
+            <rect x="40" y="60" width="920" height="200" rx="4" fill="#0f1114" stroke="rgb(255 255 255 / .16)" />
+            <text x="60" y="138" class="sv-mono">12:04</text>
+            <rect x="130" y="130" width="700" height="4" rx="2" fill="rgb(255 255 255 / .2)" />
+            <rect x="130" y="130" width="340" height="4" rx="2" fill="#38e1ff" />
+            <rect x="398.5" y="127" width="3" height="10" rx="1" fill="#0f1114" />
+            <g transform="translate(240 106)">
+              <rect width="20" height="20" rx="6" fill="rgb(56 225 255 / .18)" stroke="#38e1ff"  />
+              <g transform="translate(4 4) scale(.75)" color="#38e1ff"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></g>
+              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
             </g>
-            <line x1="70" x2="114" y1="200" y2="200" stroke="#a7afbd" marker-start="url(#ar)" marker-end="url(#ar)" />
-            <text x="92" y="218" class="sv-label" text-anchor="middle">44 · 48 touch</text>
-            <line x1="962" x2="962" y1="140" y2="184" stroke="#a7afbd" marker-start="url(#ar)" marker-end="url(#ar)" />
-            <text x="955" y="204" class="sv-label" text-anchor="end">44</text>
-            <line x1="470" x2="470" y1="40" y2="86" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="470" y="34" class="sv-label" text-anchor="middle">thumb 16 → 20 on focus</text>
-            <line x1="249" x2="249" y1="40" y2="88" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="249" y="34" class="sv-label" text-anchor="middle">◆ 10</text>
-            <text x="594" y="34" class="sv-label" text-anchor="middle">■ 9</text>
-            <line x1="594" x2="594" y1="40" y2="88" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="701" y="34" class="sv-label" text-anchor="middle">▮ 2 × 16</text>
-            <line x1="701" x2="701" y1="40" y2="88" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
-            <text x="300" y="130" class="sv-label">track 4 · hit area 24</text>
-            <text x="500" y="268" class="sv-label" text-anchor="middle">band: timeline row 24 + button row 44 · scrim ground 96% → 0 · gaps 4</text>
+            <g transform="translate(310 106)">
+              <rect width="20" height="20" rx="6" fill="#ffb020" fill-opacity=".2" stroke="#ffb020"  />
+              <g transform="translate(4 4) scale(.75)" color="#ffb020"><path d="M3 1.5h1.6v13H3ZM5.4 2.25h7.85l-1.9 3.25 1.9 3.25H5.4Z" fill="currentColor" fill-rule="evenodd"/></g>
+              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
+            </g>
+            <g transform="translate(386 106)"><rect width="28" height="20" rx="6" fill="#0b0e14" stroke="rgb(255 255 255 / .45)" /><text x="14" y="14" text-anchor="middle" class="sv-tag">R2</text><line x1="14" x2="14" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" /></g>
+            <g transform="translate(550 106)">
+              <rect width="20" height="20" rx="6" fill="#38e1ff" stroke="#38e1ff"  />
+              <g transform="translate(4 4) scale(.75)" color="#0b0e14"><path d="M1.75 4.5l3.4 2.6L8 2.25l2.85 4.85 3.4-2.6-1.15 7.25H2.9ZM2.9 12.85h10.2v1.4H2.9Z" fill="currentColor" fill-rule="evenodd"/></g>
+              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
+            </g>
+            <g transform="translate(650 106)">
+              <rect width="20" height="20" rx="6" fill="#0b0e14" stroke="#ffb020" stroke-opacity=".45" />
+              <g transform="translate(4 4) scale(.75)" color="#ffb020"><path d="M8 1.25c-3.6 0-6 2.35-6 5.5 0 1.85.85 3.2 2 4V13a1.25 1.25 0 0 0 1.25 1.25h5.5A1.25 1.25 0 0 0 12 13v-2.25c1.15-.8 2-2.15 2-4 0-3.15-2.4-5.5-6-5.5ZM5.6 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM10.4 5.6a1.65 1.65 0 1 1 0 3.3a1.65 1.65 0 1 1 0-3.3ZM8 9.4l1 1.6H7ZM6.6 12.1h.9v2.1h-.9ZM8.5 12.1h.9v2.1h-.9Z" fill="currentColor" fill-rule="evenodd"/></g>
+              <line x1="10" x2="10" y1="20" y2="26" stroke="rgb(255 255 255 / .3)" />
+            </g>
+            <line x1="470" x2="470" y1="100" y2="126" stroke="rgb(255 255 255 / .45)" />
+            <circle cx="470" cy="132" r="7" fill="#f3f5f8" stroke="rgb(56 225 255 / .45)" stroke-width="6" />
+            <text x="850" y="138" class="sv-mono sv-muted">24:37</text>
+            <g fill="none" stroke="rgb(255 255 255 / .3)" stroke-dasharray="3 3">
+              <rect x="70" y="170" width="44" height="44" rx="4" /><rect x="118" y="170" width="44" height="44" rx="4" /><rect x="166" y="170" width="44" height="44" rx="4" /><rect x="214" y="170" width="44" height="44" rx="4" />
+              <rect x="742" y="170" width="44" height="44" rx="4" /><rect x="790" y="170" width="44" height="44" rx="4" /><rect x="838" y="170" width="44" height="44" rx="4" /><rect x="886" y="170" width="44" height="44" rx="4" />
+            </g>
+            <rect x="125" y="177" width="30" height="30" rx="9" fill="rgb(255 255 255 / .07)" stroke="rgb(255 255 255 / .16)" />
+            <line x1="70" x2="114" y1="230" y2="230" stroke="#8b919a" marker-start="url(#ar)" marker-end="url(#ar)" />
+            <text x="92" y="248" class="sv-label" text-anchor="middle">44 · 48 touch</text>
+            <line x1="125" x2="155" y1="160" y2="160" stroke="#8b919a" marker-start="url(#ar)" marker-end="url(#ar)" />
+            <text x="140" y="155" class="sv-label" text-anchor="middle">plate 30</text>
+            <line x1="962" x2="962" y1="100" y2="140" stroke="#8b919a" marker-start="url(#ar)" marker-end="url(#ar)" />
+            <text x="955" y="96" class="sv-label" text-anchor="end">timeline 50</text>
+            <line x1="250" x2="250" y1="40" y2="100" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="250" y="34" class="sv-label" text-anchor="middle">pin 20 · stem 6</text>
+            <line x1="470" x2="470" y1="40" y2="96" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="470" y="34" class="sv-label" text-anchor="middle">knob 14 → 17 on focus</text>
+            <line x1="660" x2="660" y1="40" y2="100" stroke="rgb(255 255 255 / .25)" stroke-dasharray="2 3" />
+            <text x="660" y="34" class="sv-label" text-anchor="middle">upcoming: outline</text>
+            <text x="560" y="160" class="sv-label" text-anchor="middle">clutch: filled</text>
+            <text x="500" y="296" class="sv-label" text-anchor="middle">band: timeline 50 + buttons 44 · line 4 · scrim ground 96% → 0</text>
           </svg>
         </figure>
         <dl class="tokens">
           <div><dt><span class="tok" style="--c: #0a0d12"></span>Ground</dt><dd>#0A0D12</dd></div>
           <div><dt><span class="tok" style="--c: #12161d"></span>Surface</dt><dd>#12161D</dd></div>
-          <div><dt><span class="tok" style="--c: #38e1ff"></span>Signal</dt><dd>#38E1FF · accent</dd></div>
-          <div><dt><span class="tok" style="--c: #ffb020"></span>Event</dt><dd>#FFB020 · highlights</dd></div>
-          <div><dt><span class="tok" style="--c: #ff4d5e"></span>Round</dt><dd>#FF4D5E · rounds, errors</dd></div>
+          <div><dt><span class="tok" style="--c: #38e1ff"></span>Signal</dt><dd>#38E1FF · accent, first side</dd></div>
+          <div><dt><span class="tok" style="--c: #ffb020"></span>Event</dt><dd>#FFB020 · second side</dd></div>
+          <div><dt><span class="tok" style="--c: #ff4d5e"></span>Round</dt><dd>#FF4D5E · live, replay, errors</dd></div>
           <div><dt><span class="tok" style="--c: #5cf2a0"></span>Sync</dt><dd>#5CF2A0 · in sync</dd></div>
         </dl>
       </section>
@@ -313,9 +336,9 @@
         </div>
         <ul class="a11y-list">
           <li><strong>Keyboard first.</strong> Every control in visual order, one visible ring, menus close with Esc and hand focus back.</li>
-          <li><strong>Never colour alone.</strong> Markers differ by shape; "on" states change shape or label too.</li>
+          <li><strong>Never colour alone.</strong> Every event has its own glyph; "on" states change shape or label too.</li>
           <li><strong>Calm on request.</strong> Reduced motion stops the sweep, the pulse and the spinner; swaps cut instead of fade.</li>
-          <li><strong>Forced colours.</strong> System colours throughout; markers keep their shapes; focus uses Highlight.</li>
+          <li><strong>Forced colours.</strong> System colours throughout; event pins keep their glyphs; focus uses Highlight.</li>
         </ul>
       </section>
 
