@@ -3777,14 +3777,14 @@ body::after {
   align-items: center;
   height: 40px;
   background:
-    linear-gradient(var(--nav-tick), var(--nav-tick)) left top / 9px 1.5px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) left top / 1.5px 9px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) right top / 9px 1.5px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) right top / 1.5px 9px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) left bottom / 9px 1.5px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) left bottom / 1.5px 9px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) right bottom / 9px 1.5px,
-    linear-gradient(var(--nav-tick), var(--nav-tick)) right bottom / 1.5px 9px;
+    linear-gradient(var(--nav-tick), var(--nav-tick)) left top / 6px 1.5px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) left top / 1.5px 6px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) right top / 6px 1.5px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) right top / 1.5px 6px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) left bottom / 6px 1.5px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) left bottom / 1.5px 6px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) right bottom / 6px 1.5px,
+    linear-gradient(var(--nav-tick), var(--nav-tick)) right bottom / 1.5px 6px;
   background-repeat: no-repeat;
 }
 
