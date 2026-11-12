@@ -1205,8 +1205,9 @@
       padding: calc(var(--vt-u) * 2.5);
     }
 
+    /* Phones: the compact scoreboard only; the angle is in the chip row under the stage. */
     .vt-score-clock,
-    .vt-sync-label {
+    .vt-hud-end {
       display: none;
     }
 
@@ -1217,6 +1218,18 @@
 
     .vt-center-play[data-started][data-paused]:not([data-ended]) {
       display: grid;
+    }
+
+    /* Centred in the space between the HUD (about 36px) and the compact band (about 88px). */
+    .vt-center-play {
+      top: calc((100% - 88px - 36px) / 2 + 36px);
+      width: calc(var(--vt-u) * 12);
+      height: calc(var(--vt-u) * 12);
+    }
+
+    .vt-center-play-icon {
+      width: calc(var(--vt-u) * 5);
+      height: calc(var(--vt-u) * 5);
     }
   }
 

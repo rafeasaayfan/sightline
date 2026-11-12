@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0a0d12" />
+    <title>Vantage — a Video.js skin for watching play</title>
+    <meta
+      name="description"
+      content="Vantage is a Video.js 10 skin for watching play, not films: a stage with synced angles you can swap, an event timeline, and a broadcast-style HUD."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <script type="module" src="./src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#stage">Skip to the player</a>
+
+    <div class="page">
+      <header class="top">
+        <div class="brand">
+          <a class="wordmark chip" href="./" aria-label="Vantage, home">VANTAGE</a>
+          <span class="tagline">a Video.js v10 skin for watching play</span>
+        </div>
+        <nav class="nav" aria-label="Page">
+          <a href="#details">Details</a>
+          <a href="#recap">Recap</a>
+          <a href="#" data-repo-link hidden>GitHub</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="visually-hidden" data-match-title>Showmatch · Azure vs Ember</h1>
+
+        <section class="arena" aria-label="Player" data-layout="split">
+          <div class="stage" id="stage" tabindex="-1">
+            <div class="stage-player" data-stage><img class="stage-poster" src="./poster.jpg" alt="" width="1280" height="720" fetchpriority="high" decoding="async" /></div>
+          </div>
+
+          <div class="angles" data-angles-column>
+            <div class="tiles" data-tiles role="group" aria-label="Angles"></div>
+            <div class="chips" data-chips role="group" aria-label="Angles"></div>
+            <div class="angles-foot">
+              <span class="angles-hint">Click a tile to swap it onto the stage</span>
+              <button type="button" class="layout-button" data-layout-toggle aria-pressed="false">
+                Layout: <span data-layout-label>70 / 30</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="recap" id="recap" aria-labelledby="recap-title">
+          <div class="section-head">
+            <h2 id="recap-title">Match recap</h2>
+            <span class="muted">every event is a seek — click to jump</span>
+          </div>
+          <ol class="recap-list" data-recap></ol>
+        </section>
+
+        <section class="why" aria-labelledby="why-title">
+          <h2 id="why-title">Players don't watch a film. They watch a match.</h2>
+          <p>
+            Every video player is designed for a story that goes one way. Gameplay has angles, rounds and moments you
+            want to jump between. Vantage is a Video.js v10 skin built for that.
+          </p>
+          <p>
+            One stage, two synced angles you can swap with a click or the keys 1–3, and a timeline where every
+            elimination, objective and round is a marker you can seek to. Everything works by keyboard, touch and
+            mouse.
+          </p>
+        </section>
+
+        <section class="details" id="details" aria-labelledby="details-title">
+          <h2 id="details-title" class="visually-hidden">Details</h2>
+          <ul class="cards">
+            <li class="card">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--signal)" stroke-width="2"><rect x="3" y="6" width="22" height="16" rx="2" /><path d="M3 11h22" /></svg>
+              <h3>Angles are real controls</h3>
+              <p>Tiles and chips swap the source on the stage at the same timestamp. The other angles stay muted and keep in sync within a quarter second.</p>
+            </li>
+            <li class="card">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--event)" stroke-width="2"><path d="M3 14h22" /><path d="M14 8l6 6-6 6-6-6z" /></svg>
+              <h3>A timeline of moments</h3>
+              <p>Eliminations, objectives and rounds come from a WebVTT file. Markers differ by shape and colour, carry tooltips, and are one Tab stop away; N jumps to the next.</p>
+            </li>
+            <li class="card">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--text)" stroke-width="2"><rect x="4" y="8" width="20" height="12" rx="3" /><path d="M9 14h2M13 14h2M17 14h2" /></svg>
+              <h3>Keyboard like a spectator client</h3>
+              <p>1–3 angles, N next highlight, Space, M, F, arrows, and ? for the full list. Focus is always visible and the band never hides while something in it has focus.</p>
+            </li>
+            <li class="card">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--signal)" stroke-width="2"><circle cx="14" cy="14" r="9" /><path d="M14 9v5l3 3" /></svg>
+              <h3>Readable over anything</h3>
+              <p>Controls sit on a gradient scrim and the HUD on solid chips, never on raw footage. Measured over white and black frames: 4.5:1 or better for every label.</p>
+            </li>
+            <li class="card">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--event)" stroke-width="2"><rect x="5" y="3" width="18" height="22" rx="3" /><path d="M11 21h6" /></svg>
+              <h3>Phone first</h3>
+              <p>On a phone the angles become a chip row under the stage, tap targets grow to 48 px, and only the stage streams, which saves data and battery.</p>
+            </li>
+            <li class="card">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="var(--text)" stroke-width="2"><path d="M5 14h18" /><path d="M14 5v18" /></svg>
+              <h3>Calm on request</h3>
+              <p>Under reduced motion toasts and the sync pulse go still and swaps cut instead of fade. Under forced colours the markers keep their shapes.</p>
+            </li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="foot">
+        <span>
+          Built on <a href="https://videojs.org">Video.js v10</a> ·
+          <a href="#" data-footage>Footage</a>
+          <span data-mux hidden> · Video hosted on <a href="https://www.mux.com">Mux</a></span>
+          · Made in Beirut
+        </span>
+        <span>Apache 2.0</span>
+      </footer>
+    </div>
+  </body>
+</html>

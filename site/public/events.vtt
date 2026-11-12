@@ -1,0 +1,43 @@
+WEBVTT
+
+NOTE
+Match events for the Vantage demo. Each cue's text is kind|label:
+  elim    elimination  (amber diamond)
+  clutch  clutch play  (amber diamond)
+  obj     objective    (signal square)
+  round   round start  (red tick)
+Only the start time matters. These are placeholder events for the placeholder footage;
+replace them with the moments from your own match.
+
+00:00:48.000 --> 00:00:49.000
+elim|Elimination · Player 1 → Ember 3
+
+00:01:35.000 --> 00:01:36.000
+obj|Objective captured · Azure
+
+00:02:30.000 --> 00:02:31.000
+round|Round 2 starts
+
+00:03:12.000 --> 00:03:13.000
+elim|Elimination · Player 2 → Azure 1
+
+00:03:48.000 --> 00:03:49.000
+obj|Objective captured · Ember
+
+00:05:00.000 --> 00:05:01.000
+round|Round 3 starts
+
+00:05:40.000 --> 00:05:41.000
+elim|Elimination · Player 1 → Ember 2
+
+00:06:35.000 --> 00:06:36.000
+clutch|Clutch · 1v3
+
+00:07:30.000 --> 00:07:31.000
+round|Round 4 starts
+
+00:08:20.000 --> 00:08:21.000
+elim|Elimination · Player 2 → Ember 4
+
+00:09:20.000 --> 00:09:21.000
+obj|Objective captured · Azure

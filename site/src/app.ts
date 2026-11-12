@@ -1,0 +1,381 @@
+import '@videojs/html/video/player';
+import '@videojs/html/media/mux-video';
+import {
+  formatTime,
+  nextHighlight,
+  prevHighlight,
+  setAngle,
+  setLayout,
+  setScoreboard,
+  setStageState,
+  setSync,
+  type MatchEvent,
+} from '@/video/skin';
+import skinTemplate from '@/video/skin.html?raw';
+
+/* ------------------------------------------------------------------------------------------------ Data */
+
+interface Angle {
+  id: number;
+  label: string;
+  short?: string;
+  mux?: string;
+  src?: string;
+  mp4?: string;
+  crop?: { scale?: number; origin?: string };
+}
+
+interface ScoreEntry {
+  t: number;
+  round: number;
+  [team: string]: number;
+}
+
+interface Match {
+  title: string;
+  teams?: [string, string];
+  footage?: string;
+  footageUrl?: string;
+  repo?: string;
+  angles: Angle[];
+  events?: string;
+  scoreboard?: ScoreEntry[];
+}
+
+type MediaEl = HTMLMediaElement & { src: string };
+
+const MEDIA_PLACEHOLDER = '<!-- Add a compatible media component here. -->';
+const SYNC_MS = 500;
+const SEEK_DRIFT = 0.25;
+const SWITCH_NOTICE_MS = 150;
+const wide = matchMedia('(min-width: 640px)');
+
+const srcOf = (a: Angle) => (a.mux ? `https://stream.mux.com/${a.mux}.m3u8` : (a.src ?? a.mp4 ?? ''));
+const usesMux = (a: Angle) => !!a.mux;
+
+function applyCrop(media: HTMLElement, angle: Angle): void {
+  media.style.setProperty('--crop-scale', String(angle.crop?.scale ?? 1));
+  media.style.setProperty('--crop-origin', angle.crop?.origin ?? '50% 50%');
+}
+
+/* ------------------------------------------------------------------------------------------------ Stage */
+
+function createStage(slot: HTMLElement, match: Match, angle: Angle): { root: HTMLElement; media: MediaEl } {
+  const events = match.events ? `<track kind="metadata" label="events" src="./${match.events}" default>` : '';
+  const cors = usesMux(angle) ? ' crossorigin="anonymous"' : '';
+  const media = `<mux-video src="${srcOf(angle)}" playsinline preload="auto"${cors}>${events}</mux-video>`;
+  const player = document.createElement('video-player');
+  slot.replaceChildren();
+  player.innerHTML = skinTemplate.replace(MEDIA_PLACEHOLDER, media);
+  player.setAttribute('poster', './poster.jpg');
+  slot.append(player);
+
+  const root = player.querySelector<HTMLElement>('.vantage')!;
+  const el = player.querySelector<MediaEl>('mux-video')!;
+  applyCrop(el, angle);
+  return { root, media: el };
+}
+
+/* ------------------------------------------------------------------------------------------------ App */
+
+export async function start(): Promise<void> {
+  // ?match=other.json loads another match file from the same folder.
+  const file = new URLSearchParams(location.search).get('match')?.replace(/[^\w.-]/g, '') || 'match.json';
+  const match = (await fetch(`./${file}`, { cache: 'no-cache' }).then((r) => r.json())) as Match;
+  const angles = match.angles.filter((a) => srcOf(a));
+  const [teamA, teamB] = match.teams ?? ['Azure', 'Ember'];
+
+  document.querySelector('[data-match-title]')!.textContent = match.title;
+  const footage = document.querySelector<HTMLAnchorElement>('[data-footage]')!;
+  footage.textContent = match.footage ?? 'Footage';
+  footage.href = match.footageUrl ?? '#';
+  document.querySelector<HTMLElement>('[data-mux]')!.hidden = !angles.some(usesMux);
+  const repo = document.querySelector<HTMLAnchorElement>('[data-repo-link]')!;
+  repo.hidden = !match.repo;
+  repo.href = match.repo ?? '#';
+
+  const arena = document.querySelector<HTMLElement>('.arena')!;
+  const { root, media: master } = createStage(document.querySelector('[data-stage]')!, match, angles[0]!);
+  let stageAngle = angles[0]!;
+
+  // One source: an ordinary player, no angles column.
+  if (angles.length < 2) arena.dataset.single = '';
+  else root.setAttribute('data-angles', '');
+  root.setAttribute('data-layout', 'split');
+  setAngle(root, angles.length > 1 ? `Angle ${stageAngle.id} · ${stageAngle.label}` : null);
+
+  /* ---------------------------------------------------------------- Tiles and chips */
+
+  const tilesEl = document.querySelector<HTMLElement>('[data-tiles]')!;
+  const chipsEl = document.querySelector<HTMLElement>('[data-chips]')!;
+  const tiles = new Map<number, { button: HTMLButtonElement; media?: MediaEl; clock: HTMLElement; failed: boolean }>();
+
+  for (const angle of angles) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tile';
+    button.dataset.angle = String(angle.id);
+    button.setAttribute('aria-label', `Switch to angle ${angle.id}, ${angle.label}`);
+    button.setAttribute('aria-keyshortcuts', String(angle.id));
+    button.innerHTML = `
+      <span class="tile-video"></span>
+      <span class="chip tile-label"><span class="tile-num">${angle.id}</span>${angle.label}</span>
+      <span class="pill tile-muted"><span class="dot" aria-hidden="true"></span>Muted</span>
+      <span class="tile-clock">00:00</span>`;
+    button.addEventListener('click', () => swapTo(angle));
+    tilesEl.append(button);
+    tiles.set(angle.id, { button, clock: button.querySelector('.tile-clock')!, failed: false });
+
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'angle-chip';
+    chip.dataset.angle = String(angle.id);
+    chip.innerHTML = `<span class="visually-hidden">Angle </span><span class="angle-chip-num">${angle.id}</span><span class="angle-chip-label">${angle.short ?? angle.label}</span>`;
+    chip.addEventListener('click', () => swapTo(angle));
+    chipsEl.append(chip);
+  }
+
+  /** Tiles play only on wide screens with the angles column showing; phones stream the stage alone. */
+  const tilesActive = () => wide.matches && arena.dataset.layout !== 'stage' && angles.length > 1;
+
+  function ensureTileMedia(angle: Angle): MediaEl | undefined {
+    const tile = tiles.get(angle.id)!;
+    if (tile.failed) return undefined;
+    if (!tile.media) {
+      const m = document.createElement('mux-video') as unknown as MediaEl;
+      m.muted = true;
+      m.setAttribute('muted', '');
+      m.setAttribute('playsinline', '');
+      m.setAttribute('preload', 'auto');
+      m.setAttribute('aria-hidden', 'true');
+      m.tabIndex = -1;
+      m.src = srcOf(angle);
+      applyCrop(m, angle);
+      m.addEventListener('error', () => {
+        tile.failed = true;
+        tile.button.hidden = true;
+        setStageState(root, { kind: 'unavailable', text: `Angle ${angle.id} unavailable · staying on Angle ${stageAngle.id}` });
+        window.setTimeout(() => setStageState(root, null), 3000);
+      });
+      m.addEventListener('loadedmetadata', () => follow(m, true));
+      tile.button.querySelector('.tile-video')!.append(m);
+      tile.media = m;
+    }
+    return tile.media;
+  }
+
+  function renderAngles(): void {
+    for (const angle of angles) {
+      const onStage = angle.id === stageAngle.id;
+      const tile = tiles.get(angle.id)!;
+      tile.button.hidden = onStage || tile.failed;
+      const chip = chipsEl.querySelector<HTMLButtonElement>(`[data-angle="${angle.id}"]`)!;
+      chip.setAttribute('aria-pressed', String(onStage));
+      if (!onStage && tilesActive()) {
+        const m = ensureTileMedia(angle);
+        if (m) follow(m, true);
+      } else {
+        tile.media?.pause();
+      }
+    }
+  }
+
+  /** Keep one tile on the master clock: mirror play state and rate; seek when far, nudge speed when close. */
+  function follow(m: MediaEl, hard = false): number {
+    if (!tilesActive()) return 0;
+    const drift = m.currentTime - master.currentTime;
+    if (hard || Math.abs(drift) > SEEK_DRIFT) {
+      if (Math.abs(drift) > 0.05) m.currentTime = master.currentTime;
+      m.playbackRate = master.playbackRate;
+    } else {
+      m.playbackRate = master.playbackRate * Math.min(1.03, Math.max(0.97, 1 - drift));
+    }
+    if (master.paused && !m.paused) m.pause();
+    if (!master.paused && m.paused) void m.play().catch(() => undefined);
+    return Math.abs(drift);
+  }
+
+  function syncAll(hard = false): void {
+    let worst = 0;
+    for (const angle of angles) {
+      if (angle.id === stageAngle.id) continue;
+      const m = tiles.get(angle.id)?.media;
+      if (m && !tiles.get(angle.id)!.failed && m.readyState >= 1) worst = Math.max(worst, follow(m, hard));
+    }
+    setSync(root, tilesActive() ? (worst > SEEK_DRIFT ? 'drift' : 'ok') : null);
+  }
+
+  for (const type of ['play', 'pause', 'seeked', 'ratechange'] as const) master.addEventListener(type, () => syncAll(true));
+  window.setInterval(() => syncAll(), SYNC_MS);
+
+  /* ---------------------------------------------------------------- Swap */
+
+  let swapping = false;
+
+  async function swapTo(angle: Angle): Promise<void> {
+    if (swapping || angle.id === stageAngle.id || tiles.get(angle.id)?.failed) return;
+    swapping = true;
+    const previous = stageAngle;
+    const t = master.currentTime;
+    const wasPlaying = !master.paused;
+    const notice = window.setTimeout(
+      () => setStageState(root, { kind: 'switching', text: `Switching to Angle ${angle.id}…` }),
+      SWITCH_NOTICE_MS,
+    );
+
+    try {
+      if (srcOf(angle) !== master.src) {
+        await new Promise<void>((resolve, reject) => {
+          const done = () => {
+            master.removeEventListener('loadedmetadata', done);
+            master.removeEventListener('error', fail);
+            resolve();
+          };
+          const fail = () => {
+            master.removeEventListener('loadedmetadata', done);
+            reject(new Error('source failed'));
+          };
+          master.addEventListener('loadedmetadata', done, { once: true });
+          master.addEventListener('error', fail, { once: true });
+          if (usesMux(angle)) master.setAttribute('crossorigin', 'anonymous');
+          master.src = srcOf(angle);
+        });
+        master.currentTime = t;
+        if (wasPlaying) await master.play().catch(() => undefined);
+      }
+      applyCrop(master, angle);
+      stageAngle = angle;
+      setAngle(root, `Angle ${angle.id} · ${angle.label}`);
+      setStageState(root, null);
+    } catch {
+      // Stay on the angle that works and say so.
+      if (master.src !== srcOf(previous)) {
+        master.src = srcOf(previous);
+        master.addEventListener('loadedmetadata', () => {
+          master.currentTime = t;
+          if (wasPlaying) void master.play().catch(() => undefined);
+        }, { once: true });
+      }
+      tiles.get(angle.id)!.failed = true;
+      setStageState(root, { kind: 'unavailable', text: `Angle ${angle.id} unavailable · staying on Angle ${previous.id}` });
+      window.setTimeout(() => setStageState(root, null), 3000);
+    } finally {
+      window.clearTimeout(notice);
+      swapping = false;
+      renderAngles();
+      syncAll(true);
+    }
+  }
+
+  /* ---------------------------------------------------------------- Layout */
+
+  const layoutButton = document.querySelector<HTMLButtonElement>('[data-layout-toggle]')!;
+  function applyLayout(value: 'split' | 'stage'): void {
+    arena.dataset.layout = value;
+    layoutButton.setAttribute('aria-pressed', String(value === 'stage'));
+    document.querySelector('[data-layout-label]')!.textContent = value === 'stage' ? 'Stage only' : '70 / 30';
+    setLayout(root, value);
+    renderAngles();
+    syncAll(true);
+  }
+  layoutButton.addEventListener('click', () => applyLayout(arena.dataset.layout === 'stage' ? 'split' : 'stage'));
+  root.addEventListener('vantage:layout', (e) => applyLayout((e as CustomEvent<'split' | 'stage'>).detail));
+  wide.addEventListener('change', () => {
+    renderAngles();
+    syncAll(true);
+  });
+
+  /* ---------------------------------------------------------------- Keys: 1–3 anywhere on the page, N when outside the player */
+
+  document.addEventListener('keydown', (e) => {
+    const target = e.target as HTMLElement;
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (target.isContentEditable || /^(input|textarea|select)$/i.test(target.localName)) return;
+    if (target.closest('[role="menu"], [popover]')) return;
+    const angle = angles.find((a) => String(a.id) === e.key);
+    if (angle) {
+      e.preventDefault();
+      void swapTo(angle);
+      return;
+    }
+    // Inside the player the skin handles N itself.
+    if (e.key.toLowerCase() === 'n' && !root.contains(target)) {
+      e.preventDefault();
+      if (e.shiftKey) prevHighlight(root);
+      else nextHighlight(root);
+    }
+  });
+
+  /* ---------------------------------------------------------------- Scoreboard, clocks and recap */
+
+  const board = [...(match.scoreboard ?? [])].sort((a, b) => a.t - b.t);
+  const recap = document.querySelector<HTMLOListElement>('[data-recap]')!;
+  // Hide the recap only for a match without an events file; an empty list while cues load would shift the page.
+  recap.closest('section')!.hidden = !match.events;
+  let events: MatchEvent[] = [];
+
+  function renderRecap(): void {
+    recap.replaceChildren(
+      ...events.map((event, index) => {
+        const li = document.createElement('li');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'recap-item';
+        button.dataset.kind = event.kind;
+        button.dataset.index = String(index);
+        button.innerHTML = `<span class="recap-mark" aria-hidden="true"></span><span class="recap-time">${formatTime(event.time)}</span><span class="recap-label">${event.label}</span><span class="recap-now" aria-hidden="true">Now</span>`;
+        button.addEventListener('click', () => {
+          master.currentTime = event.time;
+        });
+        li.append(button);
+        return li;
+      }),
+    );
+  }
+
+  root.addEventListener('vantage:events', (e) => {
+    events = (e as CustomEvent<MatchEvent[]>).detail;
+    renderRecap();
+    tick();
+  });
+
+
+  function tick(): void {
+    const t = master.currentTime;
+
+    if (board.length) {
+      const entry = [...board].reverse().find((b) => b.t <= t) ?? board[0]!;
+      const roundStart = board.find((b) => b.round === entry.round)?.t ?? 0;
+      setScoreboard(root, {
+        round: entry.round,
+        clock: formatTime(t - roundStart),
+        teams: [
+          { name: teamA, score: entry[teamA.toLowerCase()] ?? 0 },
+          { name: teamB, score: entry[teamB.toLowerCase()] ?? 0 },
+        ],
+      });
+    }
+
+    const clock = formatTime(t);
+    for (const tile of tiles.values()) tile.clock.textContent = clock;
+
+    // The latest event at or before now is "now" in the recap.
+    let now = -1;
+    events.forEach((event, i) => {
+      if (event.time <= t + 0.25) now = i;
+    });
+    for (const button of recap.querySelectorAll<HTMLElement>('.recap-item')) {
+      const current = Number(button.dataset.index) === now;
+      if (button.hasAttribute('data-now') === current) continue;
+      button.toggleAttribute('data-now', current);
+      if (current) button.setAttribute('aria-current', 'true');
+      else button.removeAttribute('aria-current');
+    }
+  }
+
+  master.addEventListener('timeupdate', tick);
+  master.addEventListener('seeked', tick);
+  tick();
+  renderAngles();
+}
+
