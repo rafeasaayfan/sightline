@@ -2460,3 +2460,134 @@
     line-height: 1.35;
   }
 }
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Docked: a host can put the controls under the video instead of over it, and give the player a side column (for
+ * angles) next to the video. Set data-docked on the player root and put the side content in an element with the
+ * class sl-side inside it. The video keeps its 16:9 area; the HUD, feed and messages stay on the video; the band
+ * becomes a panel the full width of the player.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .sightline[data-docked] {
+    --sl-dock-gap: 14px;
+    --sl-dock-band: 124px;
+    --media-caption-controls-y: 0px;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "video side"
+      "band band";
+    gap: var(--sl-dock-gap);
+    aspect-ratio: auto;
+    overflow: visible;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .sightline[data-docked][data-layout="stage"],
+  .sightline[data-docked]:not(:has(.sl-side)) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "video"
+      "band";
+  }
+
+  .sightline[data-docked][data-layout="stage"] .sl-side {
+    display: none;
+  }
+
+  /* The video: its own 16:9 box with the player's radius. */
+  .sightline[data-docked] > :is(mux-video, video, hls-video) {
+    grid-area: video;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--media-video-border-radius);
+    background: #000;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14);
+  }
+
+  /* Everything that belongs on the picture is placed on the video's grid area (an absolutely positioned grid child
+     uses its area as the containing block). */
+  .sightline[data-docked] > :is(.media-poster, .sl-hud, .sl-state, .sl-replay-badge, .sl-cut, .sl-feed, .sl-buffering) {
+    grid-area: video;
+  }
+
+  .sightline[data-docked] > .media-poster {
+    overflow: hidden;
+    border-radius: var(--media-video-border-radius);
+  }
+
+  .sightline[data-docked] > media-error-dialog {
+    position: absolute;
+    grid-area: video;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .sightline[data-docked] > media-error-dialog > * {
+    pointer-events: auto;
+  }
+
+  .sightline[data-docked] .sl-side {
+    grid-area: side;
+    align-self: start;
+    min-width: 0;
+  }
+
+  /* The controls layer dissolves, so the centre play can sit on the video and the band in its own row. */
+  .sightline[data-docked] > media-controls,
+  .sightline[data-docked] .sl-controls,
+  .sightline[data-docked] .sl-controls > media-tooltip-group {
+    display: contents;
+  }
+
+  .sightline[data-docked] .sl-scrim {
+    display: none;
+  }
+
+  .sightline[data-docked] .sl-center-play {
+    grid-area: video;
+    top: 50%;
+    z-index: 30;
+  }
+
+  .sightline[data-docked] .sl-band,
+  .sightline[data-docked] .sl-controls:not([data-visible]) .sl-band {
+    position: relative;
+    inset: auto;
+    grid-area: band;
+    z-index: 30;
+    justify-content: center;
+    min-height: var(--sl-dock-band);
+    padding: 10px 18px 10px;
+    border-radius: var(--media-video-border-radius);
+    background: linear-gradient(rgb(20 23 28 / 0.96), rgb(13 15 19 / 0.96));
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.12),
+      0 20px 40px -24px rgb(0 0 0 / 0.9);
+    opacity: 1;
+    translate: none;
+    pointer-events: auto;
+  }
+
+  .sightline[data-docked] .sl-row-timeline {
+    padding-inline: 2px;
+  }
+
+  /* Fullscreen keeps the dock, centred on black. */
+  .sightline[data-docked]:fullscreen {
+    align-content: center;
+    padding: 16px;
+    background: #050607;
+  }
+
+  @media (forced-colors: active) {
+    .sightline[data-docked] .sl-band {
+      border: 1px solid CanvasText;
+    }
+  }
+}

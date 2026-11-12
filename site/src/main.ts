@@ -66,3 +66,26 @@ for (const range of document.querySelectorAll<HTMLInputElement>('.customizer inp
   range.addEventListener('input', paint);
   paint();
 }
+
+// The console widens to the screen once you are on it, and returns to the content width as you scroll away.
+// Hysteresis keeps it from flickering at the edges.
+const consoleEl = document.querySelector<HTMLElement>('.console');
+if (consoleEl) {
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const r = consoleEl.getBoundingClientRect();
+    const open = consoleEl.hasAttribute('data-open');
+    const vh = window.innerHeight;
+    const shouldOpen = open ? r.top < vh * 0.32 && r.bottom > vh * 0.45 : r.top < vh * 0.2 && r.bottom > vh * 0.6;
+    if (shouldOpen !== open) consoleEl.toggleAttribute('data-open', shouldOpen);
+  };
+  const queue = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+  window.addEventListener('scroll', queue, { passive: true });
+  window.addEventListener('resize', queue);
+  update();
+}

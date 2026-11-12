@@ -112,6 +112,12 @@ export async function start(): Promise<void> {
   const { root, media: master } = createStage(document.querySelector('[data-stage]')!, match, angles[0]!);
   let stageAngle = angles[0]!;
 
+  // The page docks the controls under the picture and gives the player a side column for the angles.
+  root.setAttribute('data-docked', '');
+  const side = document.querySelector<HTMLElement>('[data-angles-column]')!;
+  side.classList.add('sl-side');
+  root.querySelector('media-controls')!.after(side);
+
   // One source: an ordinary player, no angles column.
   if (angles.length < 2) arena.dataset.single = '';
   else root.setAttribute('data-angles', '');
@@ -173,7 +179,11 @@ export async function start(): Promise<void> {
         window.setTimeout(() => setStageState(root, null), 3000);
       });
       m.addEventListener('loadedmetadata', () => follow(m, true));
-      tile.button.querySelector('.tile-video')!.append(m);
+      // Each tile gets its own bare player: Video.js media attach to the nearest player, and the tiles sit inside the
+      // stage's player now, so without this they would take over its controls.
+      const holder = document.createElement('video-player');
+      holder.append(m as unknown as Node);
+      tile.button.querySelector('.tile-video')!.append(holder);
       tile.media = m;
     }
     return tile.media;

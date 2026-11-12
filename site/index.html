@@ -14,6 +14,8 @@
     <meta property="og:description" content="Multiview angles, an event timeline and a broadcast HUD for Video.js 10." />
     <meta property="og:image" content="./og.jpg" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2" />
     <script>document.documentElement.classList.add("js");</script>
     <script type="module" src="./src/main.ts"></script>
   </head>
@@ -155,8 +157,8 @@
             </div>
           </fieldset>
           <div class="field">
-            <label for="cu-radius">Corner radius <output data-radius-value>14px</output></label>
-            <input id="cu-radius" type="range" name="radius" min="0" max="28" step="2" value="14" />
+            <label for="cu-radius">Corner radius <output data-radius-value>4px</output></label>
+            <input id="cu-radius" type="range" name="radius" min="0" max="28" step="2" value="4" />
           </div>
           <fieldset class="field">
             <legend>Show</legend>
@@ -182,7 +184,7 @@
           <li><strong>100</strong><span>Lighthouse accessibility</span></li>
           <li><strong>5.28 : 1</strong><span>lowest text contrast, over a pure white frame</span></li>
           <li><strong>48 px</strong><span>touch targets on phones</span></li>
-          <li><strong>0</strong><span>layout shift while the page loads</span></li>
+          <li><strong><li><strong>0</strong><span>layout shift while the page loads</span></li>lt; 0.01</strong><span>layout shift while the page loads</span></li>
         </ul>
         <ul class="a11y-list">
           <li><strong>Keyboard first.</strong> Every control in visual order with one visible ring; menus close with Esc and hand focus back.</li>

@@ -3339,3 +3339,140 @@ html[data-spoilers] .recap-rail::after {
     padding-inline: var(--gutter);
   }
 }
+
+/* ===============================================================================================================
+ * The console opens: at the content width while it is coming into view or leaving, and the width of the screen
+ * once you are on it. No radius on the frame. The player inside is docked: stage and angles on top, controls under.
+ * =============================================================================================================== */
+
+.console {
+  width: 100%;
+  margin-inline-start: 0;
+  border-radius: 0;
+  transition:
+    width 650ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    margin-inline-start 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.console[data-open] {
+  width: calc(100vw - var(--sbw, 0px) - 2 * var(--edge));
+  margin-inline-start: calc(50% - (100vw - var(--sbw, 0px)) / 2 + var(--edge));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console {
+    transition: none;
+  }
+}
+
+.arena,
+.arena:fullscreen {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* The stage no longer draws a box: the player draws its own video, angles and control panel. */
+.stage {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.stage .sightline {
+  --media-border-radius: 4px;
+}
+
+.tile {
+  border-radius: var(--stage-radius, 4px);
+}
+
+.sl-side.angles {
+  position: static;
+}
+
+/* Before the player loads: the same shape, so nothing moves when it arrives. */
+.stage-player:not(:has(video-player)) {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 14px;
+  aspect-ratio: auto;
+  padding-bottom: calc(124px + 14px);
+  overflow: visible;
+  border-radius: 0;
+  background: none;
+}
+
+.stage-player:not(:has(video-player)) .stage-poster {
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: #000;
+}
+
+/* Multiview fullscreen: the docked player, centred. */
+.arena:fullscreen .stage {
+  width: min(100%, calc((100vh - 220px) * 16 / 9 * 3 / 2));
+  justify-self: center;
+}
+
+.arena:fullscreen[data-layout="stage"] .stage {
+  width: min(100%, calc((100vh - 220px) * 16 / 9));
+}
+
+@media (width < 640px) {
+  .console,
+  .console[data-open] {
+    width: auto;
+    margin-inline: calc(var(--gutter) * -1);
+  }
+
+  .stage .sightline[data-docked] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "video"
+      "band"
+      "side";
+  }
+
+  .stage .sightline[data-docked] > :is(mux-video, video, hls-video),
+  .stage .sightline[data-docked] .sl-band {
+    border-radius: 0;
+  }
+
+  .stage-player:not(:has(video-player)) {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: calc(124px + 14px + 78px);
+  }
+
+  .stage-player:not(:has(video-player)) .stage-poster {
+    border-radius: 0;
+  }
+}
+
+.tile-video video-player {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Clicks land on the tile button, not on the video inside it, so the player's tap gestures leave them alone. */
+.tile-video {
+  pointer-events: none;
+}
+
+/* The title never rewraps when the display font arrives: two fixed lines on narrow screens, one line on wide. */
+.hero h1 {
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif-condensed, sans-serif;
+}
+
+@media (width < 900px) {
+  .hero h1 {
+    font-size: min(11vw, 84px);
+  }
+
+  .hero h1 .line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .hero h1 .line + .line {
+    margin-inline-start: 0;
+  }
+}

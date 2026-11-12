@@ -126,7 +126,7 @@ export function initCustomizer(root: HTMLElement): void {
   const apply = () => {
     const data = new FormData(form);
     const accent = String(data.get('accent') ?? '#38e1ff');
-    const radius = Number(data.get('radius') ?? 14);
+    const radius = Number(data.get('radius') ?? 4);
     root.style.setProperty('--media-accent-color', accent);
     root.style.setProperty('--media-border-radius', `${radius}px`);
     root.closest<HTMLElement>('.stage')?.style.setProperty('--stage-radius', `${radius}px`);
