@@ -22,8 +22,16 @@ Measured by `node design/contrast.mjs` over the worst footage: a pure white fram
 | Played vs unplayed (the white thumb marks the boundary) | 2.26:1 | 3.33:1 | shape cue | Boundary carried by the thumb and halo |
 | Thumb (white) on the played range | 1.44:1 | 1.44:1 | shape cue | Boundary carried by the thumb and halo |
 | Thumb (white) on the band | 10.68:1 | 18.08:1 | 3:1 | Pass |
-| Highlight marker (amber) on the band | 6.38:1 | 10.80:1 | 3:1 | Pass |
-| Objective marker (signal) on the band | 7.43:1 | 12.58:1 | 3:1 | Pass |
-| Round marker (red) on the band | 3.60:1 | 6.09:1 | 3:1 | Pass |
+| Docked panel: clock and icons | 14.91:1 | 16.59:1 | 4.5:1 | Pass |
+| Docked panel: key hints (muted) | 7.37:1 | 8.20:1 | 4.5:1 | Pass |
+| Docked panel: timeline line (white 40%) | 3.75:1 | 3.83:1 | 3:1 | Pass |
+| Event pin glyph, played (signal) on its plate | 11.58:1 | 12.36:1 | 3:1 | Pass |
+| Event pin glyph, played (amber) on its plate | 9.94:1 | 10.61:1 | 3:1 | Pass |
+| Event pin glyph, upcoming (signal 70%) on its plate | 6.18:1 | 6.40:1 | 3:1 | Pass |
+| Event pin glyph, upcoming (amber 70%) on its plate | 5.40:1 | 5.58:1 | 3:1 | Pass |
+| Clutch pin: ink on its filled plate | 12.40:1 | 12.40:1 | 3:1 | Pass |
+| Round tag text (white 75%) on its plate | 9.67:1 | 10.09:1 | 4.5:1 | Pass |
+| Clip outline (white 85%) on the band | 8.94:1 | 14.17:1 | 3:1 | Pass |
+| Kill feed names on the feed surface | 13.43:1 | 16.86:1 | 4.5:1 | Pass |
 | Focus ring (signal) on the band | 11.48:1 | 12.44:1 | 3:1 | Pass |
 | Focus ring (signal) on its dark halo over video | 12.40:1 | 12.40:1 | 3:1 | Pass |

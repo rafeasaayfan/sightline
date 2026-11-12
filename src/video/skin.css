@@ -1818,10 +1818,11 @@
     height: var(--sl-rail);
   }
 
+  /* 40% white: the line holds 3:1 against the band over any frame (design/contrast.mjs). */
   .sl-timeline .sl-track {
     height: 4px;
     border-radius: 2px;
-    background-color: rgb(255 255 255 / 0.2);
+    background-color: rgb(255 255 255 / 0.4);
   }
 
   .sl-timeline .sl-slider[data-interactive] .sl-track {
@@ -1829,7 +1830,7 @@
   }
 
   .sl-timeline .sl-buffer {
-    background-color: rgb(255 255 255 / 0.2);
+    background-color: rgb(255 255 255 / 0.16);
   }
 
   .sl-timeline .sl-fill {

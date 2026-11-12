@@ -30,6 +30,12 @@ const chip = (f) => over(SURFACE, 0.86, f);
 const tileChip = (f) => over(SURFACE, 0.9, f);
 const solid = () => SURFACE;
 const track = (f) => over(WHITE, 0.4, bandHigh(f));
+// The docked control panel (split layout) is 96% opaque; its darkest stop is the worst case for light parts.
+const panel = (f) => over([20, 23, 28], 0.96, f);
+const panelTrack = (f) => over(WHITE, 0.4, panel(f));
+// Event pins: an 82% dark plate; upcoming glyphs are their side's colour at 70%, played ones at full strength.
+const pinPlate = (f) => over([11, 14, 20], 0.82, bandHigh(f));
+const upcoming = (tone) => (f) => over(tone, 0.7, pinPlate(f));
 
 const rows = [
   ['Clock (text) on the band, top of the time row', () => TEXT, bandHigh, 4.5],
@@ -50,9 +56,17 @@ const rows = [
   ['Played vs unplayed (the white thumb marks the boundary)', () => SIGNAL, track, 1],
   ['Thumb (white) on the played range', () => TEXT, () => SIGNAL, 1],
   ['Thumb (white) on the band', () => TEXT, bandHigh, 3],
-  ['Highlight marker (amber) on the band', () => EVENT, bandHigh, 3],
-  ['Objective marker (signal) on the band', () => SIGNAL, bandHigh, 3],
-  ['Round marker (red) on the band', () => ROUND, bandHigh, 3],
+  ['Docked panel: clock and icons', () => TEXT, panel, 4.5],
+  ['Docked panel: key hints (muted)', () => MUTED, panel, 4.5],
+  ['Docked panel: timeline line (white 40%)', panelTrack, panel, 3],
+  ['Event pin glyph, played (signal) on its plate', () => SIGNAL, pinPlate, 3],
+  ['Event pin glyph, played (amber) on its plate', () => EVENT, pinPlate, 3],
+  ['Event pin glyph, upcoming (signal 70%) on its plate', upcoming(SIGNAL), pinPlate, 3],
+  ['Event pin glyph, upcoming (amber 70%) on its plate', upcoming(EVENT), pinPlate, 3],
+  ['Clutch pin: ink on its filled plate', () => GROUND, () => SIGNAL, 3],
+  ['Round tag text (white 75%) on its plate', (f) => over(TEXT, 0.75, pinPlate(f)), pinPlate, 4.5],
+  ['Clip outline (white 85%) on the band', (f) => over(WHITE, 0.85, bandHigh(f)), bandHigh, 3],
+  ['Kill feed names on the feed surface', () => TEXT, (f) => over(SURFACE, 0.92, f), 4.5],
   ['Focus ring (signal) on the band', () => SIGNAL, bandLow, 3],
   ['Focus ring (signal) on its dark halo over video', () => SIGNAL, () => GROUND, 3],
 ];
