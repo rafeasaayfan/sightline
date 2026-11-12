@@ -126,6 +126,7 @@ function renderMarkers(state: State): void {
     button.setAttribute('aria-disabled', String(usable.length === 0));
   }
   renderRounds(root, usable, duration);
+  renderHeat(root, usable, duration);
   root.toggleAttribute('data-events', usable.length > 0);
   root.dispatchEvent(new CustomEvent('sightline:events', { detail: usable, bubbles: true }));
 }
@@ -161,6 +162,40 @@ function markPast(state: State): void {
     const event = state.events[Number(marker.dataset.index)];
     marker.toggleAttribute('data-past', !!event && event.time <= now + 0.05);
   }
+}
+
+/*
+ * Action intensity: a thin strip above the line that warms where the match is busiest. Each event adds a soft bump
+ * (kills 1, objectives 1.4, clutches 2; rounds don't count), summed over a few seconds and normalised to the
+ * busiest moment, then drawn as a gradient from clear through amber to red.
+ */
+const HEAT_WEIGHT: Record<string, number> = { elim: 1, obj: 1.4, clutch: 2 };
+const HEAT_BINS = 160;
+const HEAT_SIGMA = 4.5;
+
+function renderHeat(root: HTMLElement, events: MatchEvent[], duration: number): void {
+  const strip = root.querySelector<HTMLElement>('.sl-heat');
+  if (!strip) return;
+  const weighted = events.filter((e) => HEAT_WEIGHT[e.type]);
+  strip.hidden = weighted.length === 0 || !Number.isFinite(duration) || duration <= 0;
+  if (strip.hidden) return;
+  const values: number[] = [];
+  for (let i = 0; i <= HEAT_BINS; i++) {
+    const t = (i / HEAT_BINS) * duration;
+    let v = 0;
+    for (const e of weighted) v += HEAT_WEIGHT[e.type]! * Math.exp(-(((t - e.time) / HEAT_SIGMA) ** 2));
+    values.push(v);
+  }
+  const max = Math.max(...values) || 1;
+  const mix = (a: number, b: number, k: number) => Math.round(a + (b - a) * k);
+  const stops = values.map((raw, i) => {
+    const v = raw / max;
+    // Amber (255 176 32) warming to red (255 77 94) above 60%; transparent when quiet.
+    const k = Math.max(0, (v - 0.6) / 0.4);
+    const color = `rgb(255 ${mix(176, 77, k)} ${mix(32, 94, k)} / ${(Math.min(1, v * 1.15) * 0.95).toFixed(2)})`;
+    return `${color} ${((i / HEAT_BINS) * 100).toFixed(2)}%`;
+  });
+  strip.style.backgroundImage = `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 
 /** Shade alternate rounds on the timeline, so the bar reads as a map of the match. */
@@ -377,6 +412,22 @@ function endReplay(state: State): void {
   state.root.removeAttribute('data-replay');
   const badge = state.root.querySelector<HTMLElement>('.sl-replay-badge');
   if (badge) badge.hidden = true;
+}
+
+/**
+ * Show a clip on the timeline: a marked range from start to end (seconds), or null to clear it. The host owns the
+ * clip itself (marking, sharing, stopping at the end); the skin only draws it.
+ */
+export function setClip(root: HTMLElement, clip: { start: number; end: number } | null): void {
+  const range = root.querySelector<HTMLElement>('.sl-clip-range');
+  const duration = states.get(root)?.media?.duration ?? NaN;
+  if (!range) return;
+  range.hidden = !clip || !Number.isFinite(duration) || duration <= 0;
+  if (range.hidden || !clip) return;
+  const a = Math.max(0, Math.min(clip.start, clip.end));
+  const b = Math.min(duration, Math.max(clip.start, clip.end));
+  range.style.setProperty('--sl-from', `${(a / duration) * 100}%`);
+  range.style.setProperty('--sl-to', `${(b / duration) * 100}%`);
 }
 
 /** Reflect the page's multiview fullscreen state on the button. */

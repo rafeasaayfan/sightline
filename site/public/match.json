@@ -6,7 +6,7 @@
   ],
   "footage": "Footage: an original match rendered for Sightline (design/match)",
   "footageUrl": "#install",
-  "repo": "",
+  "repo": "https://github.com/rafeasaayfan/sightline",
   "angles": [
     {
       "id": 1,
@@ -14,7 +14,8 @@
       "short": "Player 1",
       "mux": "",
       "src": "./media/angle1.mp4",
-      "poster": "./posters/angle1.jpg"
+      "poster": "./posters/angle1.jpg",
+      "storyboard": "./storyboards/angle1.vtt"
     },
     {
       "id": 2,
@@ -22,7 +23,8 @@
       "short": "Player 2",
       "mux": "",
       "src": "./media/angle2.mp4",
-      "poster": "./posters/angle2.jpg"
+      "poster": "./posters/angle2.jpg",
+      "storyboard": "./storyboards/angle2.vtt"
     },
     {
       "id": 3,
@@ -30,7 +32,8 @@
       "short": "Map",
       "mux": "",
       "src": "./media/angle3.mp4",
-      "poster": "./posters/angle3.jpg"
+      "poster": "./posters/angle3.jpg",
+      "storyboard": "./storyboards/angle3.vtt"
     }
   ],
   "events": "events.vtt",

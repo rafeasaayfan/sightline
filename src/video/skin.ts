@@ -58,5 +58,5 @@ import './sightline';
 
 registerIcons('sightline', sightlineIcons);
 
-export { cut, formatTime, getEvents, instantReplay, nextHighlight, prevHighlight, setAngle, setLayout, setMultiview, setScoreboard, setStageState, setSync } from './sightline';
+export { cut, formatTime, getEvents, instantReplay, nextHighlight, prevHighlight, setAngle, setClip, setLayout, setMultiview, setScoreboard, setStageState, setSync } from './sightline';
 export type { EventKind, Layout, MatchEvent, Scoreboard, Team } from './sightline';
