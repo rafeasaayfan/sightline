@@ -1571,3 +1571,359 @@
     scale: 1 1.5;
   }
 }
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * The round bar: the timeline as one segment per round, an energised fill and a slanted playhead.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .vt-timeline {
+    --vt-bar: 6px;
+  }
+
+  .vt-timeline .vt-track {
+    height: var(--vt-bar);
+    border-radius: 1px;
+    background-color: rgb(255 255 255 / 0.16);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+    clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  }
+
+  .vt-timeline .vt-buffer {
+    background-color: rgb(255 255 255 / 0.18);
+    border-radius: 0;
+  }
+
+  /* Played range: a signal gradient that brightens toward the playhead, with a sheen that travels while playing. */
+  .vt-timeline .vt-fill {
+    border-radius: 0;
+    background-color: var(--vt-signal);
+    background-image:
+      linear-gradient(90deg, transparent 0 40%, rgb(255 255 255 / 0.55) 50%, transparent 60% 100%),
+      linear-gradient(90deg, color-mix(in srgb, var(--vt-signal) 45%, transparent), var(--vt-signal) 70%, color-mix(in srgb, var(--vt-signal) 60%, #fff));
+    background-size: 220px 100%, 100% 100%;
+    background-repeat: repeat-x, no-repeat;
+    background-position: -220px 0, 0 0;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--vt-signal) 55%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vantage:has(.vt-play[data-started]:not([data-paused])) .vt-timeline .vt-fill {
+      animation: vt-sheen 2.4s linear infinite;
+    }
+  }
+
+  @keyframes vt-sheen {
+    to {
+      background-position: 220px 0, 0 0;
+    }
+  }
+
+  /* Round cuts: slanted notches the colour of the band. */
+  .vt-rounds {
+    height: 18px;
+    z-index: 1;
+  }
+
+  .vt-round-band[data-odd="true"] {
+    background-color: transparent;
+  }
+
+  .vt-round-gap {
+    position: absolute;
+    top: 50%;
+    left: var(--vt-at);
+    width: 5px;
+    height: 12px;
+    background-color: #0b0e14;
+    translate: -50% -50%;
+    transform: skewX(-18deg);
+  }
+
+  /* Markers sit on the bar with a dark ring so they read on the bright fill too; round ticks become the cuts. */
+  .vt-marker-shape {
+    box-shadow: 0 0 0 2px #0b0e14;
+  }
+
+  .vt-marker[data-kind="round"] .vt-marker-shape {
+    width: 3px;
+    height: 18px;
+    border-radius: 1px;
+    transform: skewX(-18deg);
+    box-shadow: none;
+  }
+
+  /* Playhead: a slanted bar with a glow, not a dot. */
+  .vt-timeline .vt-thumb {
+    width: 6px;
+    height: 22px;
+    border-radius: 2px;
+    background-color: #fff;
+    transform: skewX(-12deg);
+    box-shadow:
+      0 0 0 2px #0b0e14,
+      0 0 16px color-mix(in srgb, var(--vt-signal) 80%, transparent);
+  }
+
+  .vt-timeline .vt-slider[data-interactive] .vt-thumb {
+    scale: 1.15 1.25;
+    box-shadow:
+      0 0 0 2px #0b0e14,
+      0 0 0 5px var(--vt-halo),
+      0 0 24px var(--vt-signal);
+  }
+
+  .vt-timeline .vt-thumb:focus-visible {
+    outline-offset: 4px;
+  }
+
+  /* Hover preview: a slanted time chip over the frame. */
+  .vt-preview-time {
+    padding: 4px 12px;
+    border-radius: 0;
+    background-color: var(--vt-signal);
+    color: var(--vt-signal-text);
+    font-weight: 600;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  }
+
+  @media (forced-colors: active) {
+    .vt-timeline .vt-fill {
+      background-image: none;
+      box-shadow: none;
+    }
+
+    .vt-round-gap {
+      background-color: Canvas;
+    }
+
+    .vt-timeline .vt-thumb {
+      background-color: Highlight;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Menus: a gliding highlight and a clear selected state.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .vt-glide {
+    position: absolute;
+    top: 0;
+    left: 6px;
+    right: 6px;
+    z-index: 0;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--vt-signal) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vt-signal) 30%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      translate 240ms cubic-bezier(0.3, 1.25, 0.5, 1),
+      height 240ms cubic-bezier(0.3, 1.25, 0.5, 1),
+      opacity 160ms ease;
+  }
+
+  .vt-glide[data-on] {
+    opacity: 1;
+  }
+
+  .vt-menu-content > :not(.vt-glide),
+  .vt-menu-group > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* The glide is the hover; rows stay transparent so it can travel under them. */
+  .vt-menu-item[data-highlighted] {
+    background-color: transparent;
+  }
+
+  .vt-menu-item {
+    min-height: 44px;
+    border-radius: 8px;
+  }
+
+  /* Selected: the label brightens and a check pops into a signal disc. */
+  .vt-menu-radio {
+    color: rgb(243 245 248 / 0.78);
+  }
+
+  .vt-menu-radio[aria-checked="true"] {
+    color: var(--vt-text);
+    font-weight: 600;
+  }
+
+  .vt-menu-indicator {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.22);
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .vt-menu-indicator::before {
+    content: "";
+    width: 9px;
+    height: 5px;
+    border-radius: 0;
+    background: none;
+    border-left: 2px solid var(--vt-signal-text);
+    border-bottom: 2px solid var(--vt-signal-text);
+    rotate: -45deg;
+    translate: 0 -1px;
+    scale: 0;
+    transition: scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .vt-menu-radio[aria-checked="true"] .vt-menu-indicator {
+    background-color: var(--vt-signal);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--vt-signal) 60%, transparent);
+  }
+
+  .vt-menu-radio[aria-checked="true"] .vt-menu-indicator::before {
+    scale: 1;
+  }
+
+  @media (forced-colors: active) {
+    .vt-glide {
+      background: Highlight;
+      opacity: 0.4;
+    }
+
+    .vt-menu-radio[aria-checked="true"] .vt-menu-indicator {
+      background-color: Highlight;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Kill feed: the game-style stack at the top right.
+ * ------------------------------------------------------------------------------------------------------------- */
+@layer components {
+  .vt-feed {
+    position: absolute;
+    top: calc(var(--vt-u) * 15);
+    right: calc(var(--vt-u) * 4);
+    z-index: 26;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+  }
+
+  .vt-feed-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 18px 7px 14px;
+    background: linear-gradient(90deg, rgb(10 13 18 / 0.55), rgb(10 13 18 / 0.92) 30%);
+    color: var(--vt-text);
+    font-family: var(--vt-font-label);
+    font-size: var(--vt-text-small);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    animation: vt-feed-in 320ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+    transition: opacity 400ms ease, translate 400ms ease;
+  }
+
+  .vt-feed-item:first-child {
+    background: linear-gradient(90deg, rgb(10 13 18 / 0.6), rgb(18 22 29 / 0.96) 30%);
+    box-shadow: inset 0 -2px 0 var(--vt-feed-tone, var(--vt-event));
+  }
+
+  .vt-feed-item[data-kind="objective"] {
+    --vt-feed-tone: var(--vt-signal);
+  }
+
+  .vt-feed-item[data-kind="round"] {
+    --vt-feed-tone: var(--vt-round);
+  }
+
+  .vt-feed-item[data-leaving] {
+    opacity: 0;
+    translate: 24px 0;
+  }
+
+  .vt-feed-mark {
+    width: 8px;
+    height: 8px;
+    background: var(--vt-feed-tone, var(--vt-event));
+    rotate: 45deg;
+  }
+
+  .vt-feed-item[data-kind="objective"] .vt-feed-mark {
+    border-radius: 2px;
+    rotate: none;
+  }
+
+  .vt-feed-item[data-kind="round"] .vt-feed-mark {
+    width: 3px;
+    height: 13px;
+    rotate: none;
+    transform: skewX(-18deg);
+  }
+
+  .vt-feed-a {
+    color: var(--vt-text);
+  }
+
+  .vt-feed-b {
+    color: var(--vt-muted);
+    text-decoration: line-through;
+    text-decoration-color: rgb(255 255 255 / 0.35);
+  }
+
+  .vt-feed-x {
+    width: 14px;
+    height: 14px;
+    color: var(--vt-event);
+  }
+
+  .vt-feed-time {
+    margin-inline-start: 4px;
+    color: var(--vt-muted);
+    font-family: var(--vt-font-clock);
+    font-size: var(--vt-text-tiny);
+    font-weight: 500;
+  }
+
+  @keyframes vt-feed-in {
+    from {
+      opacity: 0;
+      translate: 40px 0;
+    }
+  }
+
+  @container media-root (width <= 640px) {
+    .vt-feed {
+      top: calc(var(--vt-u) * 11);
+      right: calc(var(--vt-u) * 2.5);
+    }
+
+    .vt-feed-item:not(:first-child) {
+      display: none;
+    }
+
+    .vt-feed-time {
+      display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .vt-feed-item {
+      border: 1px solid CanvasText;
+    }
+
+    .vt-feed-mark {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+  }
+}

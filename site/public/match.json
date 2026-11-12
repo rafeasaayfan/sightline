@@ -4,8 +4,8 @@
     "Azure",
     "Ember"
   ],
-  "footage": "Placeholder footage: Big Buck Bunny © Blender Foundation, CC BY 3.0, as three crops of one clip",
-  "footageUrl": "https://peach.blender.org",
+  "footage": "Footage: an original match rendered for Vantage (design/match)",
+  "footageUrl": "#install",
   "repo": "",
   "angles": [
     {
@@ -13,33 +13,24 @@
       "label": "Player 1 POV",
       "short": "Player 1",
       "mux": "",
-      "src": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-      "crop": {
-        "scale": 1,
-        "origin": "50% 50%"
-      }
+      "src": "./media/angle1.mp4",
+      "poster": "./posters/angle1.jpg"
     },
     {
       "id": 2,
       "label": "Player 2 POV",
       "short": "Player 2",
       "mux": "",
-      "src": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-      "crop": {
-        "scale": 2.2,
-        "origin": "8% 75%"
-      }
+      "src": "./media/angle2.mp4",
+      "poster": "./posters/angle2.jpg"
     },
     {
       "id": 3,
       "label": "Map overview",
       "short": "Map",
       "mux": "",
-      "src": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-      "crop": {
-        "scale": 2.4,
-        "origin": "95% 12%"
-      }
+      "src": "./media/angle3.mp4",
+      "poster": "./posters/angle3.jpg"
     }
   ],
   "events": "events.vtt",
@@ -51,43 +42,43 @@
       "ember": 0
     },
     {
-      "t": 95,
+      "t": 31,
       "round": 1,
       "azure": 1,
       "ember": 0
     },
     {
-      "t": 150,
+      "t": 40,
       "round": 2,
       "azure": 1,
       "ember": 0
     },
     {
-      "t": 228,
+      "t": 71,
       "round": 2,
       "azure": 1,
       "ember": 1
     },
     {
-      "t": 300,
+      "t": 80,
       "round": 3,
       "azure": 1,
       "ember": 1
     },
     {
-      "t": 395,
+      "t": 121,
       "round": 3,
       "azure": 2,
       "ember": 1
     },
     {
-      "t": 450,
+      "t": 130,
       "round": 4,
       "azure": 2,
       "ember": 1
     },
     {
-      "t": 560,
+      "t": 158,
       "round": 4,
       "azure": 3,
       "ember": 1

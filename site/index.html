@@ -18,6 +18,7 @@
     <script type="module" src="./src/main.ts"></script>
   </head>
   <body>
+    <canvas class="ambient" data-ambient width="48" height="27" aria-hidden="true"></canvas>
     <a class="skip" href="#stage">Skip to the player</a>
 
     <header class="top">
@@ -42,11 +43,12 @@
       <!-- Hero -------------------------------------------------------------------------------------->
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="chip eyebrow-chip">Video.js v10 skin</span> for esports, gameplay and multi-camera sport</p>
+          <p class="eyebrow"><span class="chip eyebrow-chip">Spectator mode</span> a Video.js v10 skin for esports broadcasts, scrims and game VODs</p>
           <h1 id="hero-title"><span class="line"><span>Watch the match,</span></span><span class="line"><span class="signal">not the movie.</span></span></h1>
           <p class="lede">
-            Vantage gives the main angle the stage and keeps two more live beside it. The seek bar is a map of the
-            match — every elimination, objective and round is a marker you can jump to.
+            Vantage turns a Video.js player into a spectator client. One POV takes the stage, two more stay live beside it,
+            a kill feed calls the action, and the seek bar is a map of the match — every elimination, objective and round
+            is a marker you can jump to.
           </p>
           <ul class="hero-keys" aria-label="Try it">
             <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> switch angle</li>

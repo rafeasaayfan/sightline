@@ -30,7 +30,7 @@ export interface Scoreboard {
 }
 
 const KIND: Record<string, EventKind> = { elim: 'highlight', clutch: 'highlight', obj: 'objective', round: 'round' };
-const TOAST_MS = 3000;
+const TOAST_MS = 5200;
 
 interface State {
   root: HTMLElement;
@@ -122,6 +122,13 @@ function renderRounds(root: HTMLElement, events: MatchEvent[], duration: number)
     band.style.setProperty('--vt-from', `${(edges[i]! / duration) * 100}%`);
     band.style.setProperty('--vt-to', `${(edges[i + 1]! / duration) * 100}%`);
     layer.append(band);
+    // A slanted cut where each new round begins: the bar reads as one segment per round.
+    if (i > 0) {
+      const gap = document.createElement('span');
+      gap.className = 'vt-round-gap';
+      gap.style.setProperty('--vt-at', `${(edges[i]! / duration) * 100}%`);
+      layer.append(gap);
+    }
   }
 }
 
@@ -171,18 +178,43 @@ export const getEvents = (root: HTMLElement): MatchEvent[] => states.get(root)?.
 
 /* ---------------------------------------------------------------------------------------------- Toasts */
 
+const FEED_MAX = 4;
+
+function span(className: string, text: string): HTMLSpanElement {
+  const el = document.createElement('span');
+  el.className = className;
+  el.textContent = text;
+  return el;
+}
+
+/** Kill feed: game-style entries stacked at the top right. Eliminations read "A ⌖ B"; others show their label. */
 function toast(state: State, event: MatchEvent): void {
   const { root } = state;
   if (root.dataset.toasts === 'off') return;
-  const el = root.querySelector<HTMLElement>('.vt-toast');
-  if (!el) return;
-  el.dataset.kind = event.kind;
-  el.querySelector('.vt-toast-label')!.textContent = event.label;
-  el.querySelector('.vt-toast-time')!.textContent = formatTime(event.time);
-  el.hidden = false;
-  window.clearTimeout(state.toastTimer);
-  state.toastTimer = window.setTimeout(() => {
-    el.hidden = true;
+  const feed = root.querySelector<HTMLElement>('.vt-feed');
+  if (!feed) return;
+  const li = document.createElement('li');
+  li.className = 'vt-feed-item';
+  li.dataset.kind = event.kind;
+  li.append(span('vt-feed-mark', ''));
+  const duel = /^[^·]+·\s*(?:1v\d\s*·\s*)?(.+?)\s*→\s*(.+)$/.exec(event.label);
+  if (duel) {
+    li.append(span('vt-feed-a', duel[1]!));
+    li.insertAdjacentHTML(
+      'beforeend',
+      '<svg class="vt-feed-x" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 0v4M8 12v4M0 8h4M12 8h4" stroke="currentColor" stroke-width="1.6"/></svg>',
+    );
+    li.append(span('vt-visually-hidden', ' eliminated '), span('vt-feed-b', duel[2]!));
+  } else {
+    li.append(span('vt-feed-label', event.label));
+  }
+  li.append(span('vt-feed-time', formatTime(event.time)));
+  li.querySelector('.vt-feed-mark')!.setAttribute('aria-hidden', 'true');
+  feed.prepend(li);
+  while (feed.children.length > FEED_MAX) feed.lastElementChild?.remove();
+  window.setTimeout(() => {
+    li.dataset.leaving = '';
+    window.setTimeout(() => li.remove(), 420);
   }, TOAST_MS);
 }
 
@@ -349,11 +381,15 @@ function setup(root: HTMLElement): void {
     }
   });
 
+  glide(root);
+  // Menu items render after their groups fill in (speed rates, caption tracks), so glide again when they change.
+  new MutationObserver(() => glide(root)).observe(root, { childList: true, subtree: true });
+
   // Settings: event toasts on or off.
   root.querySelector('.vt-menu-toasts')?.addEventListener('checked-change', (e) => {
     const checked = (e.currentTarget as HTMLElement & { checked?: boolean }).checked;
     root.dataset.toasts = checked === false ? 'off' : 'on';
-    if (checked === false) root.querySelector<HTMLElement>('.vt-toast')?.setAttribute('hidden', '');
+    if (checked === false) root.querySelector('.vt-feed')?.replaceChildren();
   });
 
   // Settings: layout. The page owns layout; the skin reports the choice and shows the item when the page opts in
@@ -373,6 +409,36 @@ export function cut(root: HTMLElement): void {
   void root.offsetWidth;
   root.setAttribute('data-cut', '');
   window.setTimeout(() => root.removeAttribute('data-cut'), 420);
+}
+
+/*
+ * Menus: one highlight glides between items as the pointer or the arrow keys move, instead of each row lighting
+ * up on its own.
+ */
+function glide(root: HTMLElement): void {
+  for (const content of root.querySelectorAll<HTMLElement>('.vt-menu-content')) {
+    if (content.querySelector(':scope > .vt-glide')) continue;
+    const bar = document.createElement('span');
+    bar.className = 'vt-glide';
+    bar.setAttribute('aria-hidden', 'true');
+    content.prepend(bar);
+    const moveTo = (item: HTMLElement | null) => {
+      if (!item || item.parentElement === null) return;
+      const box = item.getBoundingClientRect();
+      const base = content.getBoundingClientRect();
+      bar.style.translate = `0 ${box.top - base.top + content.scrollTop}px`;
+      bar.style.height = `${box.height}px`;
+      bar.dataset.on = '';
+    };
+    const itemOf = (t: EventTarget | null) => (t as Element | null)?.closest?.<HTMLElement>('[data-item]') ?? null;
+    content.addEventListener('pointerover', (e) => moveTo(itemOf(e.target)));
+    content.addEventListener('focusin', (e) => moveTo(itemOf(e.target)));
+    content.addEventListener('pointerleave', () => {
+      const focused = itemOf(document.activeElement);
+      if (focused && content.contains(focused)) moveTo(focused);
+      else delete bar.dataset.on;
+    });
+  }
 }
 
 /** Reflect a layout chosen outside the menu (the page's own layout button) in the settings menu. */

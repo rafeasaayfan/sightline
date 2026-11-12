@@ -26,6 +26,7 @@ interface Angle {
   src?: string;
   mp4?: string;
   crop?: { scale?: number; origin?: string };
+  poster?: string;
 }
 
 interface ScoreEntry {
@@ -158,7 +159,7 @@ export async function start(): Promise<void> {
       m.setAttribute('muted', '');
       m.setAttribute('playsinline', '');
       m.setAttribute('preload', 'auto');
-      m.setAttribute('poster', './poster.jpg');
+      m.setAttribute('poster', angle.poster ?? './poster.jpg');
       m.setAttribute('aria-hidden', 'true');
       m.tabIndex = -1;
       m.src = srcOf(angle);
@@ -391,9 +392,39 @@ export async function start(): Promise<void> {
   }
 
   initCustomizer(root);
+  startAmbient(master, root);
   master.addEventListener('timeupdate', tick);
   master.addEventListener('seeked', tick);
   tick();
   renderAngles();
 }
 
+
+/*
+ * Ambient light: the page background is the stage's current frame, sampled into a tiny canvas and blurred by CSS,
+ * so the room takes its colour from the match. Drawing a frame only paints it; nothing is read back.
+ */
+function startAmbient(master: HTMLMediaElement, root: HTMLElement): void {
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-ambient]');
+  const ctx = canvas?.getContext('2d');
+  if (!canvas || !ctx) return;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const every = calm ? 1000 : 140;
+  let last = 0;
+  const frame = (now: number) => {
+    if (now - last >= every) {
+      last = now;
+      const video = (master.shadowRoot?.querySelector('video') ?? master) as HTMLVideoElement;
+      const poster = root.querySelector<HTMLImageElement>('.media-poster-image');
+      try {
+        if (video.readyState >= 2 && video.currentTime > 0.05) ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        else if (poster?.complete && poster.naturalWidth) ctx.drawImage(poster, 0, 0, canvas.width, canvas.height);
+        canvas.dataset.live = '';
+      } catch {
+        // A frame that can't be drawn yet just keeps the last one.
+      }
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+}

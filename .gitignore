@@ -7,3 +7,6 @@ dist
 .vercel
 .netlify
 .wrangler
+
+# Rendered match footage (upload to Mux; regenerate with design/match/record.mjs).
+site/public/media/

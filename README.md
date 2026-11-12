@@ -21,11 +21,21 @@ Eight numbered sections around a live multiview hero: 01 Multiview (70/30, 50/50
 - `apps/preview/`: the Video.js workbench for developing the skin.
 - `design/`: mockups, the icon generator (`design/icons/generate.mjs`) and the contrast measurement (`design/contrast.mjs`, results in `design/contrast.md`).
 
+## The demo match
+
+`design/match/script.mjs` scripts a four-round 4v4 (who eliminates whom and when, objective captures, a 1v3 clutch); `sim.js` draws it from three cameras; `record.mjs` records each camera to `site/public/media/angle1-3.mp4` and writes `events.vtt` and the scoreboard. Edit the script and re-record to change the match:
+
+```sh
+npm i --no-save playwright-core ffmpeg-static
+FFMPEG="$(node -p "require('ffmpeg-static')")" node design/match/record.mjs --views p1
+# then --views p2 and --views overview
+```
+
 ## Set your Mux playback IDs
 
 1. Upload each angle to Mux (Video → Assets → Create New Asset) with a **public** playback policy.
 2. When an asset says Ready, copy its **Playback ID**.
-3. In `site/public/match.json`, put each ID in its angle's `"mux"` field, and delete that angle's `"crop"` (crops only exist to fake three angles from one placeholder clip):
+3. In `site/public/match.json`, put each ID in its angle's `"mux"` field (upload `site/public/media/angle1.mp4` as angle 1, and so on, or your own recordings):
 
 ```json
 { "id": 1, "label": "Player 1 POV", "short": "Player 1", "mux": "YOUR_PLAYBACK_ID_1" }
@@ -78,7 +88,7 @@ Space or K play/pause · ←/→ seek 5s · ↑/↓ volume · M mute · F fullsc
 - Built on [Video.js 10](https://videojs.org) (`@videojs/html`), Apache-2.0. Started from the Video.js Scaffold skin via `@videojs/cli`.
 - Type: Space Grotesk, Inter and JetBrains Mono, SIL Open Font License 1.1, self-hosted through Fontsource.
 - Icons: drawn for Vantage by `design/icons/generate.mjs`.
-- Placeholder footage: *Big Buck Bunny* © Blender Foundation, CC BY 3.0, streamed from Mux's public test streams.
+- Footage: an original top-down match between two invented teams, rendered and recorded by `design/match/` (three cameras: Player 1 POV, Player 2 POV, map overview). Its events and scoreboard come from the same script, so the timeline matches the picture.
 - No game names, logos, characters or interface from any real game; team names are invented.
 
 ## Licence
