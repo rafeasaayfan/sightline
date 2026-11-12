@@ -125,6 +125,12 @@ export async function start(): Promise<void> {
   const repo = document.querySelector<HTMLAnchorElement>('[data-repo-link]')!;
   repo.hidden = !match.repo;
   repo.href = match.repo ?? '#';
+  // Links that leave the site open in a new tab.
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+    if (link.origin === location.origin) continue;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+  }
 
   const arena = document.querySelector<HTMLElement>('.arena')!;
   const { root, media: master } = createStage(document.querySelector('[data-stage]')!, match, angles[0]!);
