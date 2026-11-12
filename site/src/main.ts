@@ -152,6 +152,35 @@ if (frame && arenaEl) {
   }).observe(arenaEl, { attributes: true, attributeFilter: ['data-layout'] });
 }
 
+// The nav marks the section you are on: the last section whose top has passed 40% of the screen (none over the
+// hero). At the very bottom the last section wins, since a short final section never reaches that line.
+const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.nav a[href^="#"]:not([href="#"])')]
+  .map((link) => ({ link, section: document.querySelector<HTMLElement>(link.hash) }))
+  .filter((entry): entry is { link: HTMLAnchorElement; section: HTMLElement } => !!entry.section);
+if (navLinks.length) {
+  let queued = false;
+  const spy = () => {
+    queued = false;
+    const line = window.innerHeight * 0.4;
+    const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    let current: HTMLAnchorElement | null = null;
+    for (const { link, section } of navLinks) if (section.getBoundingClientRect().top <= line) current = link;
+    if (atEnd && current) current = navLinks[navLinks.length - 1]!.link;
+    for (const { link } of navLinks) {
+      if (link === current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+  };
+  const queue = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(spy);
+  };
+  window.addEventListener('scroll', queue, { passive: true });
+  window.addEventListener('resize', queue);
+  spy();
+}
+
 // The nav slides away while you scroll down and comes back as soon as you scroll up.
 const nav = document.querySelector<HTMLElement>('.top');
 if (nav) {
